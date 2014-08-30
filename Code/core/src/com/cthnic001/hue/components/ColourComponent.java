@@ -1,6 +1,6 @@
 package com.cthnic001.hue.components;
 
-import com.cthnic001.hue.valued.Colour;
+import com.cthnic001.hue.data.Colour;
 
 /**
  * Copyright Nick Cuthbert, 2014.

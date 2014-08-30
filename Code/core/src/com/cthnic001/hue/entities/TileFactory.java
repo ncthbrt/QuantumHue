@@ -1,4 +1,4 @@
-package com.cthnic001.hue.level;
+package com.cthnic001.hue.entities;
 
 import com.cthnic001.hue.Config;
 import com.cthnic001.hue.components.PortComponent;

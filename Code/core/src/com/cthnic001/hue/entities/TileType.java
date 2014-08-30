@@ -1,9 +1,6 @@
-package com.cthnic001.hue.level;
+package com.cthnic001.hue.entities;
 
-import com.cthnic001.hue.components.ColourComponent;
-import com.cthnic001.hue.components.PoolableComponent;
-import com.cthnic001.hue.components.PortComponent;
-import com.cthnic001.hue.components.VoidComponent;
+import com.cthnic001.hue.components.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +11,7 @@ import java.util.List;
  */
 public enum TileType {
 
-    WIRE(0, PortComponent.class),
+    WIRE(0, PortComponent.class, WireComponent.class),
     INVERTER(1),
     TERMINATOR(2),
     EXIT(3),

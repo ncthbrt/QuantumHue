@@ -1,8 +1,8 @@
-package com.cthnic001.hue.level;
+package com.cthnic001.hue.entities;
 
 import com.cthnic001.hue.components.Poolable;
 import com.cthnic001.hue.components.PoolableComponent;
-import com.cthnic001.hue.valued.DVector3;
+import com.cthnic001.hue.data.DVector3;
 
 import java.util.HashMap;
 import java.util.List;
