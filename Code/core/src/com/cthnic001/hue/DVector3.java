@@ -1,10 +1,7 @@
 package com.cthnic001.hue;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.utils.Pool;
-
 /**A class to store discrete coordinates in three dimensions. Especially useful for tile based games
- * Created by CTHNI_000 on 2014-08-29.
+ * Copyright Nick Cuthbert, 2014.
  */
 public class DVector3 {
     public int x, y, z;

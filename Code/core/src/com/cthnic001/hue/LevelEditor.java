@@ -11,10 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-import java.text.ParseException;
-
 /**
- * Created by CTHNI_000 on 2014-08-26.
+ * Copyright Nick Cuthbert, 2014.
  */
 public class LevelEditor implements Screen {
     private Game game;

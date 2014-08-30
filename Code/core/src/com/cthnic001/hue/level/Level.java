@@ -1,23 +1,17 @@
-package com.cthnic001.hue;
-
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
-import java.util.ArrayList;
+package com.cthnic001.hue.level;
 
 /**
- * Created by CTHNI_000 on 2014-08-26.
+ * Copyright Nick Cuthbert, 2014.
  */
 public class Level {
-
     private Tile[][][] level;
-    private ArrayList<Agent> agents;
     private final int width;
     private final int height;
     private final int depth;
 
     public Level(int width, int height, int depth){
         level=new Tile[depth][height][width];
-        agents=new ArrayList<Agent>();
+
         this.width=width;
         this.height=height;
         this.depth=depth;
@@ -30,19 +24,12 @@ public class Level {
             throw new IllegalArgumentException("You are attempting to assign a tile to a posiiton which is beyond the extent of the map");
         }
     }
-
-    public void addAgent(Agent agent){
-        agents.add(agent);
-    }
-
     public void growMap(int width, int height, int depth){
         if (width > this.width && height > this.height && depth > this.depth) {
             Tile[][][] resizedLevel = new Tile[depth][height][width];
             for (int k = 0; k < depth; k++) {
                 for (int j = 0; j < height; j++) {
-                    for (int i = 0; i < width; i++) {
-                        resizedLevel[k][j][i] = level[k][j][i];
-                    }
+                    System.arraycopy(level[k][j], 0, resizedLevel[k][j], 0, width);
                 }
             }
         }else{

@@ -1,20 +1,20 @@
 package com.cthnic001.hue.components;
 
-import com.badlogic.ashley.core.Component;
+
 import com.cthnic001.hue.DVector3;
 
 /**
- * Created by CTHNI_000 on 2014-08-29.
+ * Copyright Nick Cuthbert, 2014.
  */
-public class DPositionComponent extends Component implements com.badlogic.gdx.utils.Pool.Poolable {
+public class DPositionComponent extends PoolableComponent {
     public final DVector3 position;
 
-    public DPositionComponent(){
-        position=new DVector3();
+    public DPositionComponent() {
+        position = new DVector3();
     }
 
-    public void set(int x, int y, int z){
-        position.set(x,y,z);
+    public void set(int x, int y, int z) {
+        position.set(x, y, z);
     }
 
     @Override
