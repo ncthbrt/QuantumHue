@@ -1,7 +1,6 @@
 package com.cthnic001.hue.components;
 
 import com.cthnic001.hue.level.Tile;
-import com.cthnic001.hue.level.TileType;
 
 /**
  * Copyright Nick Cuthbert, 2014.
@@ -19,6 +18,10 @@ public class PortComponent extends PoolableComponent {
         set(ports);
     }
 
+    public PortComponent(Tile[][][] level, int x, int y, int z) {
+        this();
+        set(level, x, y, z);
+    }
 
     public void set(boolean ports[]) {
         System.arraycopy(ports, 0, this.ports, 0, 8);
@@ -29,10 +32,11 @@ public class PortComponent extends PoolableComponent {
         for (int j = y - 1; j <= y + 1; j++) {
             for (int i = x - 1; i < x + 1; i++) {
                 if (j != y || i != x) {
-                    if (level[z][j][i].conforms(TileType.WIRE)) {
-
+                    if (level[z][j][i].contains(PortComponent.class)) {
+                        ports[count] = true;
+                    } else {
+                        ports[count] = false;
                     }
-
                     count++;
                 }
             }

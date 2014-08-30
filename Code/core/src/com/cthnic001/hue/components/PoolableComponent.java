@@ -2,12 +2,7 @@ package com.cthnic001.hue.components;
 
 
 /**
- * Copyright Nick Cuthbert, 2014.
+ * Created by nick on 2014-08-30.
  */
-public class PoolableComponent implements Poolable {
-
-    @Override
-    public void reset() {
-
-    }
+public abstract class PoolableComponent implements Poolable {
 }

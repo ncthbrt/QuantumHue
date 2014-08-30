@@ -1,16 +1,19 @@
 package com.cthnic001.hue.level;
 
+import com.cthnic001.hue.components.ColourComponent;
 import com.cthnic001.hue.components.PoolableComponent;
 import com.cthnic001.hue.components.PortComponent;
 import com.cthnic001.hue.components.VoidComponent;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Copyright Nick Cuthbert, 2014.
  */
 public enum TileType {
+
     WIRE(0, PortComponent.class),
     INVERTER(1),
     TERMINATOR(2),
@@ -23,10 +26,10 @@ public enum TileType {
     GROUND(9),
     MOMENTARY_SWITCH(10),
     SWITCH(11),
-    TURNTABLE_SWITCH(12),
     VOID(13, VoidComponent.class),
     DONT_CARE(14),
-    FILTER(15);
+    FILTER(15, ColourComponent.class);
+
 
     TileType(int code, Class<? extends PoolableComponent>... compulsoryComponents) {
         this.code = code;
@@ -40,7 +43,7 @@ public enum TileType {
         return code;
     }
 
-    public final ArrayList<Class<? extends PoolableComponent>> compulsoryComponents;
+    public final List<Class<? extends PoolableComponent>> compulsoryComponents;
 
     public static TileType findMatching(int code) {
         for (TileType type : TileType.values()) {

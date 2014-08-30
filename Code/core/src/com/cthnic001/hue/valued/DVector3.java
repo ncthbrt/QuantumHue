@@ -1,4 +1,4 @@
-package com.cthnic001.hue;
+package com.cthnic001.hue.valued;
 
 /**A class to store discrete coordinates in three dimensions. Especially useful for tile based games
  * Copyright Nick Cuthbert, 2014.
