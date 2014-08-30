@@ -29,6 +29,17 @@ public class Level {
     private int height;
     private int depth;
 
+    public int width() {
+        return width;
+    }
+
+    public int height() {
+        return height;
+    }
+
+    public int depth() {
+        return depth;
+    }
 
     public Level(int width, int height, int depth) {
         level = new Tile[depth][height][width];
