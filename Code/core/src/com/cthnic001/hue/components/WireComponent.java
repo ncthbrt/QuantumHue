@@ -22,6 +22,11 @@ public class WireComponent extends PoolableComponent {
         }
     }
 
+//    public ColourVector getCombinedColourVector(int port){
+//
+//    }
+
+
     public Colour getOutgoingNexusColour() {
         Colour finalColour = new Colour();
         for (int i = 0; i < toNexus.length; i++) {
@@ -42,20 +47,18 @@ public class WireComponent extends PoolableComponent {
     }
 
     public void advance(float delta) {
-
+        Colour outgoingNexusColour = getOutgoingNexusColour();
         for (int i = 0; i < toNexus.length; i++) {
-
+            toNexus[i].advance(delta, incomingPortColours[i]);
         }
-
         for (int i = 0; i < fromNexus.length; i++) {
-
+            Colour feedColour = Colour.subtract(outgoingNexusColour, (toNexus[i].line.get(toNexus[i].line.size() - 1).colour));
+            fromNexus[i].advance(delta, feedColour);
         }
     }
 
     public void setIncomingPortColours(Colour[] colours) {
-        for (int i = 0; i < incomingPortColours.length; i++) {
-            incomingPortColours[i] = colours[i];
-        }
+        System.arraycopy(colours, 0, incomingPortColours, 0, incomingPortColours.length);
     }
 
 

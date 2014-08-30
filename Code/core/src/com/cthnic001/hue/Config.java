@@ -5,4 +5,6 @@ package com.cthnic001.hue;
  */
 public class Config {
     public static final boolean DEBUG = true;
+    public static final int TILE_SIZE = 32;
+
 }

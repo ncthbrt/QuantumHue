@@ -1,22 +1,12 @@
 package com.cthnic001.hue.components;
 
-import com.cthnic001.hue.Config;
 import com.cthnic001.hue.data.Colour;
 import com.cthnic001.hue.entities.Level;
 
-/**
+/** The wire port component lets
  * Copyright Nick Cuthbert, 2014.
  */
 public class PortComponent extends PoolableComponent {
-
-    public static final int TOP_LEFT = 0;
-    public static final int TOP_CENTRE = 1;
-    public static final int TOP_RIGHT = 2;
-    public static final int MID_LEFT = 3;
-    public static final int MID_RIGHT = 4;
-    public static final int BOTTOM_LEFT = 5;
-    public static final int BOTTOM_CENTRE = 6;
-    public static final int BOTTOM_RIGHT = 7;
 
     private final PortComponent[] neighboringPorts;
     private final Colour[] portColours;
@@ -26,6 +16,11 @@ public class PortComponent extends PoolableComponent {
         neighboringPorts = new PortComponent[8];
         portColours = new Colour[8];
         ports = new boolean[8];
+        for (int i = 0; i < 8; i++) {
+            portColours[i] = new Colour();
+            ports[i] = false;
+            neighboringPorts[i] = null;
+        }
         reset();
     }
 
@@ -43,36 +38,24 @@ public class PortComponent extends PoolableComponent {
     }
 
 
+    public Colour[] getIncomingPortColours() {
+        Colour[] incoming = new Colour[8];
+        for (int port = 0; port < 8; port++) {
+            incoming[port] = getIncomingPortColour(port);
+        }
+        return incoming;
+    }
+
     public Colour getIncomingPortColour(int port) {
         if (ports[port]) {
             return neighboringPorts[port].portColours[7 - port];
-        } else if (Config.DEBUG) {
-            throw new IllegalArgumentException("You're trying to access a non-existent port. Please check first");
         }
-        return null;
-    }
-
-    public Colour getOutgoingPortColour(int port) {
-        if (ports[port]) {
-            return portColours[port];
-        } else if (Config.DEBUG) {
-            throw new IllegalArgumentException("You're trying to access a non-existent port. Please check first");
-        }
-        return null;
+        return new Colour();
     }
 
 
     public void setOutgoingPortColours(Colour[] portColours) {
-        for (int i = 0; i < 8; i++) {
-            this.portColours[i] = portColours[i];
-        }
-    }
-
-    public void setPortColour(int port, Colour colour) {
-        if (Config.DEBUG && port < 0 || port > 7) {
-            throw new IllegalArgumentException("There are only 8 possible ports.\nYou can't set the colour for a non-existent port");
-        }
-        portColours[port] = colour;
+        System.arraycopy(portColours, 0, this.portColours, 0, 8);
     }
 
     public void setNeighboringPorts(Level level, int x, int y, int z) {
