@@ -23,6 +23,12 @@ public class ColourBracket implements Poolable {
         colour.set(colour);
     }
 
+    public ColourBracket(Colour colour, float position) {
+        this();
+        colour.set(colour);
+        this.position=position;
+    }
+
     @Override
     public void reset() {
         colour.reset();

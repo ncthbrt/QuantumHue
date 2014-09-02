@@ -55,6 +55,7 @@ public class WireRendererSystem extends System {
                 for (int i = -1; i <= 1; i++) {
                     if (j != wire.position.y || i != wire.position.y) {
                         if (wire.position.x + i < level.width() && wire.position.y < level.height()) {
+                            shapeRenderer.setColor();
                             shapeRenderer.line(wire.position.x * Config.TILE_SIZE, wire.position.y * Config.TILE_SIZE, wire.position.x * Config.TILE_SIZE + i * Config.TILE_SIZE / 2, wire.position.y * Config.TILE_SIZE - j * Config.TILE_SIZE / 2);
                         }
                         count++;
@@ -65,6 +66,9 @@ public class WireRendererSystem extends System {
             shapeRenderer.end();
         }
     }
+
+
+
 
     @Override
     public boolean checkProcessing() {
