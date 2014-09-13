@@ -11,7 +11,6 @@ import java.awt.*;
  * Created by CTHNI_000 on 2014-08-26.
  */
 public class LevelEditor {
-
     public static void main(String[] args){
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         int width = gd.getDisplayMode().getWidth();
@@ -23,5 +22,4 @@ public class LevelEditor {
         config.height=height;
         new LwjglApplication(new QuantumHue(true), config);
     }
-
 }

@@ -12,9 +12,9 @@ import java.util.List;
  */
 public class Level {
 
-    public Tile[][][] getLevel() {
-        return level;
-    }
+        public Tile[][][] getLevel() {
+            return level;
+        }
 
     public Tile get(int x, int y, int z) {
         if (x < width && y < height && depth < z) {
