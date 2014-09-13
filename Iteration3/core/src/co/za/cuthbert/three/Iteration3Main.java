@@ -13,9 +13,7 @@ public class Iteration3Main extends Game {
 	
 	@Override
 	public void create () {
-
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
         Gdx.gl.glEnable(GL20.GL_ALIASED_LINE_WIDTH_RANGE);
         LevelEditor editor=new LevelEditor(this);
         setScreen(editor);
@@ -23,7 +21,7 @@ public class Iteration3Main extends Game {
 
 	@Override
 	public void render () {
-        Gdx.gl20.glLineWidth(5);
+        Gdx.gl20.glLineWidth(2);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		super.render();

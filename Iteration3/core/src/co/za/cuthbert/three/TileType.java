@@ -16,7 +16,7 @@ public enum TileType {
     EXIT(3),
     TURN_TABLE(4),
     SLIDER(5),
-    POWER_SOURCE(6),
+    POWER_SOURCE(6, ColourComponent.class,PortComponent.class),
     ISOLATOR(7),
     TRANSISTOR(8),
     GROUND(9),

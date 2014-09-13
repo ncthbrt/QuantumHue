@@ -81,7 +81,6 @@ public class WireRendererSystem extends EntitySystem{
                 }
 
             }
-
         }
         if(attachedPorts==0){
             shapeRenderer.circle(position.x()*Config.TILE_SIZE,position.y()*Config.TILE_SIZE,Config.TILE_SIZE/2);
