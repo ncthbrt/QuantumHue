@@ -1,6 +1,7 @@
 package co.za.cuthbert.three;
 
-import co.za.cuthbert.three.leveleditor.LevelEditor;
+import co.za.cuthbert.three.screens.LevelEditor;
+import co.za.cuthbert.three.screens.TitleScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -15,13 +16,15 @@ public class Iteration3Main extends Game {
 	public void create () {
 		batch = new SpriteBatch();
         Gdx.gl.glEnable(GL20.GL_ALIASED_LINE_WIDTH_RANGE);
-        LevelEditor editor=new LevelEditor(this);
-        setScreen(editor);
+        Gdx.gl20.glLineWidth(2);
+//        LevelEditor editor=new LevelEditor(this);
+//        setScreen(editor);
+        setScreen(new TitleScreen(this));
 	}
 
 	@Override
 	public void render () {
-        Gdx.gl20.glLineWidth(2);
+
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		super.render();
