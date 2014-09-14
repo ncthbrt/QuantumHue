@@ -67,8 +67,8 @@ public class LevelEditor implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 try {
                     newDialog.hide();
-                    int width=(int)newLevelSlider.getValue();
-                    int height=(int)(width*aspectRatio);
+                    int width=(int)newLevelSlider.getValue()+2;
+                    int height=(int)(width*aspectRatio)+2;
                     engine.removeEntityListener(currentLevel);
                     engine.removeAllEntities();
                     currentLevel=new Level(width,height,1,1f);//TODO add parameter to increase depth
@@ -79,7 +79,7 @@ public class LevelEditor implements Screen {
 
                     levelCamera.position.set(levelCamera.viewportWidth/2,levelCamera.viewportHeight/2,0);
                     levelCamera.update();
-                    new FitViewport(Config.TILE_SIZE*width,Config.TILE_SIZE*height,levelCamera);
+                    //new FitViewport(Config.TILE_SIZE*width,Config.TILE_SIZE*height,levelCamera);
                    // levelCamera.update();
                     wireRendererSystem.setLevel(currentLevel);
                     System.out.println("Creating new level");

@@ -18,9 +18,11 @@ public class WireComponent extends Component implements Pool.Poolable{
         incomingPortColours = new Colour[9];
         fromNexus = new ColourVector[9];
         for (int i = 0; i < 9; i++) {
-            toNexus[i] = new ColourVector();
-            fromNexus[i] = new ColourVector();
-            incomingPortColours[i] = new Colour();
+            if(i!=4) {
+                toNexus[i] = new ColourVector();
+                fromNexus[i] = new ColourVector();
+                incomingPortColours[i] = new Colour();
+            }
         }
     }
 
@@ -32,7 +34,6 @@ public class WireComponent extends Component implements Pool.Poolable{
                 Colour colour = vector.line.get(vector.line.size() - 1).colour;
                 finalColour.add(colour);
             }
-
         }
         return finalColour;
     }
@@ -45,6 +46,12 @@ public class WireComponent extends Component implements Pool.Poolable{
             }
         }
         return outgoingPortColours;
+    }
+
+    public ColourVector getResultantVector(int port){
+        ColourVector from=fromNexus[port];
+        ColourVector to=toNexus[port];
+        return ColourVector.mergeVectors(from, to);
     }
 
     public void advance(float delta) {
@@ -61,6 +68,8 @@ public class WireComponent extends Component implements Pool.Poolable{
             }
         }
     }
+
+
 
     public void setIncomingPortColours(Colour[] colours) {
         System.arraycopy(colours, 0, incomingPortColours, 0, incomingPortColours.length);

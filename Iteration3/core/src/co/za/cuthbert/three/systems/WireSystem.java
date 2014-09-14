@@ -1,5 +1,7 @@
 package co.za.cuthbert.three.systems;
 
+import co.za.cuthbert.three.TileType;
+import co.za.cuthbert.three.components.ColourComponent;
 import co.za.cuthbert.three.components.DVector3;
 import co.za.cuthbert.three.components.PortComponent;
 import co.za.cuthbert.three.components.WireComponent;
@@ -7,6 +9,7 @@ import co.za.cuthbert.three.components.interfaces.ADVector3;
 import co.za.cuthbert.three.listeners.Level;
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.utils.Bits;
 
 /**
  * Copyright Nick Cuthbert, 2014.
@@ -16,12 +19,14 @@ public class WireSystem extends EntitySystem {
     private static final ComponentMapper<PortComponent> portMapper=ComponentMapper.getFor(PortComponent.class);
     private static final ComponentMapper<WireComponent> wireMapper=ComponentMapper.getFor(WireComponent.class);
     private static final ComponentMapper<DVector3> positionMapper=ComponentMapper.getFor(DVector3.class);
+    private static final ComponentMapper<ColourComponent> colourMapper=ComponentMapper.getFor(ColourComponent.class);
+
     private ImmutableArray<Entity> wires;
     private Family wireSystemFamily;
     private Engine engine;
     public WireSystem()
     {
-        wireSystemFamily=(Family.getFor(PortComponent.class, WireComponent.class, DVector3.class));
+        wireSystemFamily= TileType.WIRE.family;
     }
 
 
@@ -88,7 +93,6 @@ public class WireSystem extends EntitySystem {
         PortComponent port = portMapper.get(entity);
         port.cullPorts();
     }
-
 
     private void advance(Entity entity, float advance) {
         WireComponent wire = wireMapper.get(entity);

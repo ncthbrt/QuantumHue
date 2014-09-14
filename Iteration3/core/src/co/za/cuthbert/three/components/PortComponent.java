@@ -11,6 +11,16 @@ import com.badlogic.gdx.utils.Pool;
  * Copyright Nick Cuthbert, 2014.
  */
 public class PortComponent extends Component implements Pool.Poolable {
+    private boolean cullable =true;
+
+    public boolean cullable(){
+        return cullable;
+    }
+
+    public void cullable(boolean cullable){
+        this.cullable=cullable;
+    }
+
 
     private final PortComponent[] neighboringPorts;
     private final Colour[] portColours;
@@ -66,6 +76,12 @@ public class PortComponent extends Component implements Pool.Poolable {
         System.arraycopy(portColours, 0, this.portColours, 0, 9);
     }
 
+    public void setOutgoingPortColours(Colour portColour) {
+        for(int i=0; i<9; ++i){
+            this.portColours[i]=portColour;
+        }
+    }
+
     public void setNeighboringPorts(Level level, int x, int y, int z) {
         ComponentMapper<PortComponent> portMapper = ComponentMapper.getFor(PortComponent.class);
         for (int j = -1; j <= 1; ++j) {
@@ -89,28 +105,44 @@ public class PortComponent extends Component implements Pool.Poolable {
 
     public void cullPorts() {
         if (ports[5] && ports[2] && neighboringPorts[5].neighboringPorts[1] == neighboringPorts[2]) {
-            ports[2] = false;
+            if(neighboringPorts[2].cullable()) {
+                ports[2] = false;
+            }
         }
         if (ports[5] && ports[8] && neighboringPorts[5].neighboringPorts[7] == neighboringPorts[8]) {
-            ports[8] = false;
+            if(neighboringPorts[8].cullable()) {
+                ports[8] = false;
+            }
         }
         if (ports[3] && ports[0] && neighboringPorts[3].neighboringPorts[1] == neighboringPorts[0]) {
-            ports[0] = false;
+            if(neighboringPorts[0].cullable()) {
+                ports[0] = false;
+            }
         }
         if (ports[3] && ports[6] && neighboringPorts[3].neighboringPorts[7] == neighboringPorts[6]) {
-            ports[6] = false;
+            if(neighboringPorts[6].cullable()) {
+                ports[6] = false;
+            }
         }
         if (ports[1] && ports[0] && neighboringPorts[1].neighboringPorts[3] == neighboringPorts[0]) {
-            ports[0] = false;
+            if(neighboringPorts[0].cullable()) {
+                ports[0] = false;
+            }
         }
         if (ports[1] && ports[2] && neighboringPorts[1].neighboringPorts[5] == neighboringPorts[2]) {
-            ports[2] = false;
+            if(neighboringPorts[2].cullable()) {
+                ports[2] = false;
+            }
         }
         if (ports[7] && ports[6] && neighboringPorts[7].neighboringPorts[3] == neighboringPorts[6]) {
-            ports[6] = false;
+            if(neighboringPorts[6].cullable()) {
+                ports[6] = false;
+            }
         }
         if (ports[7] && ports[8] && neighboringPorts[7].neighboringPorts[5] == neighboringPorts[8]) {
-            ports[8] = false;
+            if(neighboringPorts[8].cullable()) {
+                ports[8] = false;
+            }
         }
     }
 

@@ -62,10 +62,10 @@ public class LevelEditorInputHandler extends DragListener {
         if(level!=null && !event.isHandled()){
             System.out.println("Handling touch event");
             Vector3 worldCoords=camera.unproject(new Vector3(x, Gdx.graphics.getHeight()-y,0));
-            int worldX=(int)(worldCoords.x/ Config.TILE_SIZE);
-            int worldY=(int)((worldCoords.y+0.5f)/ Config.TILE_SIZE);
+            int worldX=Math.round(worldCoords.x/ Config.TILE_SIZE);
+            int worldY=Math.round((worldCoords.y)/ Config.TILE_SIZE);
 
-            if(worldX>=0 && worldY>=0 && worldX<level.width() && worldY<level.height()) {
+            if(worldX>0 && worldY>0 && worldX<level.width() && worldY<level.height()) {
                 System.out.println("Creating tile at " + worldX + ", " + worldY);
                 Entity tile = level.get(worldX, worldY, currentDepth);
                 if (tile == null) {
@@ -83,9 +83,9 @@ public class LevelEditorInputHandler extends DragListener {
         if(level!=null && !event.isHandled()){
             System.out.println("Handling touch event");
             Vector3 worldCoords=camera.unproject(new Vector3(x, Gdx.graphics.getHeight()-y,0));
-            int worldX=(int)((worldCoords.x+0.5f)/ Config.TILE_SIZE);
-            int worldY=(int)((worldCoords.y+0.5f)/ Config.TILE_SIZE);
-            if(worldX>=0 && worldY>=0 && worldX<level.width() && worldY<level.height()) {
+            int worldX=Math.round((worldCoords.x)/ Config.TILE_SIZE);
+            int worldY=Math.round((worldCoords.y)/ Config.TILE_SIZE);
+            if(worldX>0 && worldY>0 && worldX<level.width() && worldY<level.height()) {
                 System.out.println("Creating tile at " + worldX + ", " + worldY);
                 Entity tile = level.get(worldX, worldY, currentDepth);
                 if (tile != null) {

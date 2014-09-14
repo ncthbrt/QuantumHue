@@ -21,13 +21,13 @@ public enum TileType {
     TRANSISTOR(8),
     GROUND(9),
     MOMENTARY_SWITCH(10),
-    SWITCH(11),
+    SWITCH(11, SwitchComponent.class),
     VOID(13, VoidComponent.class),
     FILTER(14, ColourComponent.class);
 
     TileType(int code, Class<? extends Component>... compulsoryComponents) {
         this.code = code;
-        this.family=Family.getFor(ComponentType.getBitsFor(compulsoryComponents), ComponentType.getBitsFor(ADVector3.class),new Bits());
+        this.family=Family.getFor(ComponentType.getBitsFor(compulsoryComponents), ComponentType.getBitsFor(DVector3.class),new Bits());
         this.requiredComponents=compulsoryComponents;
     }
 
