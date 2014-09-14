@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 /**
@@ -40,7 +41,6 @@ public class LevelEditor implements Screen {
         levelCamera.position.set(levelCamera.viewportWidth/2,levelCamera.viewportHeight/2,0);
         guiCamera=new OrthographicCamera(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         guiCamera.position.set(guiCamera.viewportWidth/2,guiCamera.viewportHeight/2,0);
-        Gdx.input.setInputProcessor(stage);
         stage.setViewport(new ScreenViewport(guiCamera));
         engine=new PooledEngine();
         wireRendererSystem=new WireRendererSystem(shapeRenderer,levelCamera);
@@ -51,7 +51,7 @@ public class LevelEditor implements Screen {
         final WireSystem wireSystem=new WireSystem();
 
         engine.addSystem(wireSystem);
-         newLevelSizeLabel=new Label("1x1",skin);
+        newLevelSizeLabel=new Label("1x1",skin);
         //New Level Dialog Box
         newLevelSlider=new Slider(1,100,1,false,skin);
         newLevelSlider.addListener(new ChangeListener() {
@@ -66,23 +66,21 @@ public class LevelEditor implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 try {
-                    int width=(int)newLevelSlider.getValue();;
-                    int height=width;
                     newDialog.hide();
+                    int width=(int)newLevelSlider.getValue();
+                    int height=(int)(width*aspectRatio);
                     engine.removeEntityListener(currentLevel);
                     engine.removeAllEntities();
                     currentLevel=new Level(width,height,1,1f);//TODO add parameter to increase depth
                     wireSystem.setLevel(currentLevel);
                     inputHandler.setLevel(currentLevel);
+                    levelCamera.viewportWidth = (Config.TILE_SIZE * (width));
+                    levelCamera.viewportHeight =(Config.TILE_SIZE * (height));
 
-
-                    levelCamera.viewportWidth = Config.TILE_SIZE * (height)/aspectRatio;
-                    levelCamera.viewportHeight =Config.TILE_SIZE * (height);
-
-                    levelCamera.position.set(levelCamera.viewportHeight/2,levelCamera.viewportHeight/2,0);
-
-                    ScreenViewport screenViewport=new ScreenViewport(levelCamera);
+                    levelCamera.position.set(levelCamera.viewportWidth/2,levelCamera.viewportHeight/2,0);
                     levelCamera.update();
+                    new FitViewport(Config.TILE_SIZE*width,Config.TILE_SIZE*height,levelCamera);
+                   // levelCamera.update();
                     wireRendererSystem.setLevel(currentLevel);
                     System.out.println("Creating new level");
                     engine.addEntityListener(currentLevel);
@@ -178,7 +176,8 @@ public class LevelEditor implements Screen {
 
     @Override
     public void show() {
-
+        Gdx.input.setInputProcessor(stage);
+        newDialog.show(stage);
     }
 
     @Override
