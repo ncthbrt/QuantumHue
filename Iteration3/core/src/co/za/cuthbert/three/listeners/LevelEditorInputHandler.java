@@ -14,8 +14,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
-
-import java.awt.dnd.DragGestureRecognizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +25,7 @@ public class LevelEditorInputHandler extends DragListener {
     private final OrthographicCamera camera;
     private final PooledEngine engine;
     private Level level;
+
     public LevelEditorInputHandler(OrthographicCamera camera, PooledEngine engine){
         this.camera=camera;
         this.engine=engine;
@@ -56,6 +55,7 @@ public class LevelEditorInputHandler extends DragListener {
 
 
     private Vector2 lastBlock=new Vector2(-1,-1);
+
     @Override
     public void touchDragged(InputEvent event, float x, float y, int pointer) {
         System.out.println("Touch Event initiated");

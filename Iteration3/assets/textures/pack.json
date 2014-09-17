@@ -1,0 +1,17 @@
+{
+    pot: true,
+    bleed: true,
+    maxWidth: 2048,
+    maxHeight: 2048,
+    alphaThreshold: 0,
+    outputFormat: png,
+    fast: true,
+    combineSubdirectories: false,
+    flattenPaths: false,
+    premultiplyAlpha: false,
+    useIndexes: true,
+    limitMemory: true,
+    grid: false,
+    scale: [ 1 ],
+    scaleSuffix: [ "" ]
+}
