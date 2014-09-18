@@ -67,7 +67,7 @@ public class PixelMaskFactory {
     public PixelMask exportMask(String resourceName){
         int index=resourceName.lastIndexOf('.');
         String bitmaskName=resourceName.substring(0, index)+"_bitmask.cim";
-        FileHandle bitmaskHandle= Gdx.files.external(bitmaskName);
+        FileHandle bitmaskHandle= Gdx.files.local(bitmaskName);
         Pixmap pixmap=new Pixmap(Gdx.files.internal(resourceName));
         Pixmap maskPixmap=convertToBitmask(pixmap);
         PixmapIO.writeCIM(bitmaskHandle, maskPixmap);

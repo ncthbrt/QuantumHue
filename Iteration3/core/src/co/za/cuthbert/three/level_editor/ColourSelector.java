@@ -38,7 +38,7 @@ public class ColourSelector implements GestureDetector.GestureListener{
     private PixelMask colourSelectorIndicatorMask;
     private Pixmap colourSelectorPixmap;
     public ColourSelector(){
-        this.camera=new OrthographicCamera(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        this.camera=new OrthographicCamera(1920,Gdx.graphics.getHeight()/(float)Gdx.graphics.getWidth()*1920);
         camera.position.set(camera.viewportWidth/2f,camera.viewportHeight/2f,0);
         camera.update();
 

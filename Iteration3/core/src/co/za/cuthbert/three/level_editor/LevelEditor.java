@@ -6,6 +6,7 @@ import co.za.cuthbert.three.value_objects.Colour;
 import co.za.cuthbert.three.value_objects.HSVColour;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -37,7 +38,10 @@ public class LevelEditor implements Screen {
 
         colourSelector=new ColourSelector();
         GestureDetector detector2=new GestureDetector(colourSelector);
-        Gdx.input.setInputProcessor(detector2);
+        InputMultiplexer multiplexer=new InputMultiplexer();
+        multiplexer.addProcessor(detector);
+        multiplexer.addProcessor(detector2);
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
     @Override
