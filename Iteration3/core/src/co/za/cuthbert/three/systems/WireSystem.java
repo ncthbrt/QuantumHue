@@ -5,11 +5,9 @@ import co.za.cuthbert.three.components.ColourComponent;
 import co.za.cuthbert.three.components.DVector3;
 import co.za.cuthbert.three.components.PortComponent;
 import co.za.cuthbert.three.components.WireComponent;
-import co.za.cuthbert.three.components.interfaces.ADVector3;
 import co.za.cuthbert.three.listeners.Level;
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.utils.Bits;
 
 /**
  * Copyright Nick Cuthbert, 2014.
@@ -79,7 +77,7 @@ public class WireSystem extends EntitySystem {
     private void synchronise(Entity entity) {
         WireComponent wire = wireMapper.get(entity);
         PortComponent port = portMapper.get(entity);
-        ADVector3 position=positionMapper.get(entity);
+        DVector3 position=positionMapper.get(entity);
         port.setNeighboringPorts(level, position.x(), position.y(), position.z());
         port.setOutgoingPortColours(wire.getOutgoingPortColours());
         wire.setIncomingPortColours(port.getIncomingPortColours());

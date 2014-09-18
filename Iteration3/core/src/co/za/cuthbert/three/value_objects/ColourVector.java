@@ -1,4 +1,4 @@
-package co.za.cuthbert.three.data;
+package co.za.cuthbert.three.value_objects;
 
 import com.badlogic.gdx.utils.Pool;
 
@@ -51,7 +51,7 @@ public class ColourVector implements Pool.Poolable {
         int j=0;
         ColourVector revToVector=reverseVector(toVector);
         List<ColourBracket> combinedLine = new ArrayList<ColourBracket>();
-        combinedLine.add(new ColourBracket(Colour.add(fromVector.line.get(i).colour,revToVector.line.get(j).colour)));
+        combinedLine.add(new ColourBracket(Colour.add(fromVector.line.get(i).colour, revToVector.line.get(j).colour)));
         while(i<fromVector.line.size()-1 && j<revToVector.line.size()-1){
             float position;
             if(fromVector.line.get(i+1).position()==revToVector.line.get(j+1).position()){
@@ -66,17 +66,17 @@ public class ColourVector implements Pool.Poolable {
                 j++;
                 position=revToVector.line.get(j).position();
             }
-            combinedLine.add(new ColourBracket(Colour.add(fromVector.line.get(i).colour,revToVector.line.get(j).colour),position));
+            combinedLine.add(new ColourBracket(Colour.add(fromVector.line.get(i).colour, revToVector.line.get(j).colour),position));
         }
         while (i<fromVector.line.size()-1){
             ++i;
             float position=fromVector.line.get(i).position();
-            combinedLine.add(new ColourBracket(Colour.add(fromVector.line.get(i).colour,revToVector.line.get(j).colour),position));
+            combinedLine.add(new ColourBracket(Colour.add(fromVector.line.get(i).colour, revToVector.line.get(j).colour),position));
         }
         while (j<revToVector.line.size()-1){
             ++j;
             float position=revToVector.line.get(j).position();
-            combinedLine.add(new ColourBracket(Colour.add(fromVector.line.get(i).colour,revToVector.line.get(j).colour),position));
+            combinedLine.add(new ColourBracket(Colour.add(fromVector.line.get(i).colour, revToVector.line.get(j).colour),position));
         }
 
         return new ColourVector(combinedLine);

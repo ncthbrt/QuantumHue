@@ -1,4 +1,4 @@
-package co.za.cuthbert.three.data;
+package co.za.cuthbert.three.value_objects;
 
 
 import com.badlogic.gdx.utils.Pool;
@@ -11,6 +11,48 @@ public class Colour implements Pool.Poolable {
 
     public int toRGBA() {
         return colour;
+    }
+
+    public HSVColour toHSV(){
+        float h=0,s,v;
+
+        float a=alpha()/255f;
+
+        float r=red()/255f;
+        float g=green()/255f;
+        float b=blue()/255f;
+
+        float min=Math.min(Math.min(r,g),b);
+        float max=Math.max(Math.max(r, g), b);
+        float delta=max-min;
+
+        v=max;
+        if(delta==0){
+            h=0;
+            s=0;
+        }else{
+            s=delta/max;
+
+            float deltaR = ((( max - r )/6)+ (max/2))/max;
+            float deltaG= ((( max - g)/6)+ (max/2))/max;
+            float deltaB= ((( max - b)/6)+ (max/2))/max;
+
+            if(r==max){
+                h=deltaB-deltaG;
+            }else if(g==max){
+                h=(1/3f)+deltaR-deltaB;
+            }else if(b==max){
+                h=(2/3f)+deltaG-deltaR;
+            }
+
+            if(h<0){
+                h+=1f;
+            }else if(h>1){
+                h-=1f;
+            }
+
+        }
+        return new HSVColour(h,s,v,a);
     }
 
     public static int red(int colour) {
@@ -47,6 +89,10 @@ public class Colour implements Pool.Poolable {
 
     public Colour() {
         reset();
+    }
+
+    public Colour(HSVColour colour){
+        this.colour=colour.toRGB().colour;
     }
 
     public Colour(int rbga) {

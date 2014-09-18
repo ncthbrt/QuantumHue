@@ -1,16 +1,16 @@
-package co.za.cuthbert.three.screens;
+package co.za.cuthbert.three;
 
+import co.za.cuthbert.three.level_editor.LevelEditor;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 /**
  * Created by CTHNI_000 on 2014-09-13.
@@ -18,31 +18,29 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class TitleScreen implements Screen {
     SpriteBatch batch;
     Game game;
-    Texture titleBackground;
     Sprite createButton;
     Sprite playButton;
     Sprite avatar;
     Sprite logo;
     Camera camera;
-
+    TextureAtlas atlas;
     float menuWidth;
     float menuHeight;
-    public  TitleScreen(Game game){
+    public TitleScreen(Game game, TextureAtlas atlas){
         this.batch=new SpriteBatch();
+        this.atlas=atlas;
         this.game=game;
 //        titleBackground=new Texture(Gdx.files.internal("title_background.png"));
 
-        createButton=new Sprite(new Texture(Gdx.files.internal("create_button.png")));
+        createButton=atlas.createSprite("button_create");
 
-        playButton=new Sprite(new Texture(Gdx.files.internal("play_button.png")));
-        logo=new Sprite(new Texture(Gdx.files.internal("logo.png")));
-        avatar=new Sprite(new Texture(Gdx.files.internal("avatar.png")));
+        playButton=atlas.createSprite(("button_play"));
+        logo=atlas.createSprite(("logo"));
+        avatar=atlas.createSprite("avatar");
         menuWidth=avatar.getWidth()+logo.getWidth();
         menuHeight=avatar.getHeight();
         menuWidth=1920;
         menuHeight=1080;
-        titleBackground=new Texture(Gdx.files.internal("avatar.png"));
-
 
         camera=new OrthographicCamera(menuWidth,menuHeight);
         camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
@@ -65,7 +63,7 @@ public class TitleScreen implements Screen {
             if(playButton.getBoundingRectangle().contains(world.x,world.y)){
 
             }else if(createButton.getBoundingRectangle().contains(world.x,world.y)){
-                nextScreen=new LevelEditor(game);
+                nextScreen=new LevelEditor(game,atlas);
                 fade=true;
             }
         }

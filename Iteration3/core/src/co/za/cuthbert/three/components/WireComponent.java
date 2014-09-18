@@ -1,7 +1,7 @@
 package co.za.cuthbert.three.components;
 
-import co.za.cuthbert.three.data.Colour;
-import co.za.cuthbert.three.data.ColourVector;
+import co.za.cuthbert.three.value_objects.Colour;
+import co.za.cuthbert.three.value_objects.ColourVector;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool;
 

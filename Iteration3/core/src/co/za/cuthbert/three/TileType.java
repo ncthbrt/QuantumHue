@@ -1,7 +1,6 @@
 package co.za.cuthbert.three;
 
 import co.za.cuthbert.three.components.*;
-import co.za.cuthbert.three.components.interfaces.ADVector3;
 import com.badlogic.ashley.core.*;
 import com.badlogic.gdx.utils.Bits;
 

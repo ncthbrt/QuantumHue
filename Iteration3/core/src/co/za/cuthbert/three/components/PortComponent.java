@@ -2,7 +2,7 @@ package co.za.cuthbert.three.components;
 
 
 import co.za.cuthbert.three.listeners.Level;
-import co.za.cuthbert.three.data.Colour;
+import co.za.cuthbert.three.value_objects.Colour;
 import com.badlogic.ashley.core.*;
 import com.badlogic.gdx.utils.Pool;
 

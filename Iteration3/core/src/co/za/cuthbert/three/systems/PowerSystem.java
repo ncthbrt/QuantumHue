@@ -5,13 +5,12 @@ import co.za.cuthbert.three.components.ColourComponent;
 import co.za.cuthbert.three.components.DVector3;
 import co.za.cuthbert.three.components.PortComponent;
 import co.za.cuthbert.three.components.SwitchComponent;
-import co.za.cuthbert.three.data.Colour;
+import co.za.cuthbert.three.value_objects.Colour;
 import co.za.cuthbert.three.listeners.Level;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
 
 
 /**

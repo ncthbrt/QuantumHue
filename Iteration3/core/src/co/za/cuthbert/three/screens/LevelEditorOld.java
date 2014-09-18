@@ -24,7 +24,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 /**
  * Copyright Nick Cuthbert, 2014.
  */
-public class LevelEditor implements Screen {
+public class LevelEditorOld implements Screen {
     private Game game;
     private PooledEngine engine;
     private Level currentLevel=null;
@@ -34,7 +34,7 @@ public class LevelEditor implements Screen {
     private final ShapeRenderer shapeRenderer=new ShapeRenderer();
     private final WireRendererSystem wireRendererSystem;
     private float aspectRatio=1;
-    public LevelEditor(Game game){
+    public LevelEditorOld(Game game){
         this.game=game;
         stage=new Stage();
         levelCamera=new OrthographicCamera(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());

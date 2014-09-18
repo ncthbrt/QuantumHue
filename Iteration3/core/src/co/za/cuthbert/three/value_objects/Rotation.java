@@ -1,15 +1,17 @@
-package co.za.cuthbert.three.data;
+package co.za.cuthbert.three.value_objects;
 
 
 public class Rotation {
+
+
     /**
      * This class provides services for discrete rotations
      */
-    public final Rotation ZERO = new Rotation(0, 1, 0, 0, 1);//Identity Matrix
-    public final Rotation NINETY = new Rotation((float) Math.PI / 2f, 0, -1, 1, 0); //90 degree clockwise rotation matrix
-    public final Rotation ONE_EIGHTY = new Rotation((float) Math.PI, -1, 0, 0, -1);//180 Degree rotation Matrix
-    public final Rotation TWO_SEVENTY = new Rotation(((float) Math.PI * (1.5f)), 0, 1, -1, 0);//270 Degree rotation Matrix
-    public final Rotation NULL = new Rotation(0, 0, 0, 0, 0); //Null Matrix
+    public static final Rotation ZERO = new Rotation(0, 1, 0, 0, 1);//Identity Matrix
+    public static final Rotation NINETY = new Rotation((float) Math.PI / 2f, 0, -1, 1, 0); //90 degree clockwise rotation matrix
+    public static final Rotation ONE_EIGHTY = new Rotation((float) Math.PI, -1, 0, 0, -1);//180 Degree rotation Matrix
+    public static final Rotation TWO_SEVENTY = new Rotation(((float) Math.PI * (1.5f)), 0, 1, -1, 0);//270 Degree rotation Matrix
+    public static final Rotation NULL = new Rotation(0, 0, 0, 0, 0); //Null Matrix
 
     /**
      * m1 is the first row and column of the transformation, n2 is the last

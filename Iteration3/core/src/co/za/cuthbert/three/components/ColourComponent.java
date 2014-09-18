@@ -1,14 +1,14 @@
 package co.za.cuthbert.three.components;
 
-import co.za.cuthbert.three.components.interfaces.AColourComponent;
-import co.za.cuthbert.three.data.Colour;
-import com.badlogic.gdx.utils.Pool;
 
+import co.za.cuthbert.three.value_objects.Colour;
+import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.utils.Pool;
 
 /**
  * Copyright Nick Cuthbert, 2014.
  */
-public class ColourComponent extends AColourComponent implements Pool.Poolable {
+public class ColourComponent extends Component implements Pool.Poolable {
     private final Colour colour;
 
     public Colour colour() {
@@ -22,12 +22,6 @@ public class ColourComponent extends AColourComponent implements Pool.Poolable {
     @Override
     public void reset() {
         colour.reset();
-    }
-
-    public static final String TYPE_NAME="colour";
-    @Override
-    public String getComponentName() {
-        return TYPE_NAME;
     }
 }
 

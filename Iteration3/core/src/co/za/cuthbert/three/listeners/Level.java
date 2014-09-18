@@ -3,8 +3,6 @@ package co.za.cuthbert.three.listeners;
 import co.za.cuthbert.three.TileType;
 import co.za.cuthbert.three.components.DVector3;
 import co.za.cuthbert.three.components.TileTypeComponent;
-import co.za.cuthbert.three.components.interfaces.ADVector3;
-import co.za.cuthbert.three.components.interfaces.ATileTypeComponent;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
@@ -47,7 +45,7 @@ public class Level implements EntityListener, Iterable<Entity>{
     @Override
     public void entityRemoved(Entity entity) {
         if(TileType.isTile(entity) && positionMapper.has(entity)){
-            ADVector3 position=positionMapper.get(entity);
+            DVector3 position=positionMapper.get(entity);
             level[position.z()][position.y()][position.x()]=null;
         }
     }

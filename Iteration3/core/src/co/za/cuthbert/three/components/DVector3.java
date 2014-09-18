@@ -1,16 +1,13 @@
 package co.za.cuthbert.three.components;
-
-
-import co.za.cuthbert.three.components.interfaces.ADVector3;
+import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool;
 
 /**
  * A class to store discrete coordinates in three dimensions. Especially useful for tile based games
  * Copyright Nick Cuthbert, 2014.
  */
-public class DVector3 extends ADVector3 implements Pool.Poolable{
+public class DVector3 extends Component implements Pool.Poolable{
     public static final String TYPE_NAME="discrete-position";
-    @Override
     public String getComponentName() {
         return TYPE_NAME;
     }
@@ -26,32 +23,32 @@ public class DVector3 extends ADVector3 implements Pool.Poolable{
         reset();
     }
 
-    @Override
+
     public int x() {
         return x;
     }
 
-    @Override
+
     public int y() {
         return y;
     }
 
-    @Override
+
     public int z() {
         return z;
     }
 
-    @Override
+
     public void x(int x) {
         this.x=x;
     }
 
-    @Override
+
     public void y(int y) {
         this.y=y;
     }
 
-    @Override
+
     public void z(int z) {
         this.z=z;
     }

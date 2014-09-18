@@ -1,4 +1,4 @@
-package co.za.cuthbert.three.data;
+package co.za.cuthbert.three.value_objects;
 import com.badlogic.gdx.utils.Pool;
 
 /**

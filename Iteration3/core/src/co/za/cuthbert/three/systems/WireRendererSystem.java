@@ -5,19 +5,17 @@ import co.za.cuthbert.three.TileType;
 import co.za.cuthbert.three.components.DVector3;
 import co.za.cuthbert.three.components.PortComponent;
 import co.za.cuthbert.three.components.WireComponent;
-import co.za.cuthbert.three.components.interfaces.ADVector3;
-import co.za.cuthbert.three.data.Colour;
-import co.za.cuthbert.three.data.ColourBracket;
-import co.za.cuthbert.three.data.ColourVector;
+
+import co.za.cuthbert.three.value_objects.Colour;
+import co.za.cuthbert.three.value_objects.ColourBracket;
+import co.za.cuthbert.three.value_objects.ColourVector;
 import co.za.cuthbert.three.listeners.Level;
-import co.za.cuthbert.three.utils.Iteration3Math;
 import com.badlogic.ashley.core.*;
-import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Interpolation;
 
 
 /**
@@ -73,7 +71,7 @@ public class WireRendererSystem extends EntitySystem{
 
         PortComponent ports = portMapper.get(wire);
         WireComponent wireComponent = wireComponentMapper.get(wire);
-        ADVector3 position=discretePositionMapper.get(wire);
+        DVector3 position=discretePositionMapper.get(wire);
 
         boolean[] portMap = ports.getPortMap();
 
@@ -95,7 +93,7 @@ public class WireRendererSystem extends EntitySystem{
                             }else{
                                 shapeRenderer.setColor(start.colour.red()/255f, start.colour.green()/255f, start.colour.blue()/255f, 1f);
                             }
-                            float point =Iteration3Math.lerp(0,Config.TILE_SIZE / 2,end.position());
+                            float point = Interpolation.linear.apply(0, Config.TILE_SIZE / 2, end.position());
                             shapeRenderer.line(position.x() * Config.TILE_SIZE+ i * lastPoint, position.y() * Config.TILE_SIZE+ j * lastPoint, position.x() * Config.TILE_SIZE + i * point, position.y() * Config.TILE_SIZE + j * point);
                             lastPoint=point;
                         }

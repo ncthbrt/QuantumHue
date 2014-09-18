@@ -5,7 +5,7 @@ import co.za.cuthbert.three.TileType;
 import co.za.cuthbert.three.components.ColourComponent;
 import co.za.cuthbert.three.components.DVector3;
 import co.za.cuthbert.three.components.SwitchComponent;
-import co.za.cuthbert.three.data.Colour;
+import co.za.cuthbert.three.value_objects.Colour;
 import co.za.cuthbert.three.listeners.Level;
 import com.badlogic.ashley.core.*;
 import com.badlogic.gdx.Gdx;

@@ -1,4 +1,4 @@
-package co.za.cuthbert.three.factories;
+package co.za.cuthbert.three;
 
 import co.za.cuthbert.three.TileType;
 import co.za.cuthbert.three.components.DVector3;

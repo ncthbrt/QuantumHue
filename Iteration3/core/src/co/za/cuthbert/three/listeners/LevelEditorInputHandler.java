@@ -2,8 +2,7 @@ package co.za.cuthbert.three.listeners;
 
 import co.za.cuthbert.three.Config;
 import co.za.cuthbert.three.TileType;
-import co.za.cuthbert.three.factories.TileFactory;
-import co.za.cuthbert.three.listeners.Level;
+import co.za.cuthbert.three.TileFactory;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 
@@ -12,10 +11,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
