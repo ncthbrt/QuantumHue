@@ -1,6 +1,8 @@
 package co.za.cuthbert.three.level_editor;
 
+import co.za.cuthbert.three.Iteration3Main;
 import co.za.cuthbert.three.TileType;
+import co.za.cuthbert.three.value_objects.Colour;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;

@@ -23,7 +23,7 @@ import com.badlogic.gdx.math.Interpolation;
  */
 public class WireRendererSystem extends EntitySystem{
     private final ShapeRenderer shapeRenderer;
-    private OrthographicCamera camera;
+
     private Engine engine;
     private Level level;
     private Family family;
@@ -31,7 +31,6 @@ public class WireRendererSystem extends EntitySystem{
         super(3);
         this.family=TileType.WIRE.family;
         this.shapeRenderer=shapeRenderer;
-        this.camera=camera;
     }
 
     public void setLevel(Level level){
@@ -39,26 +38,23 @@ public class WireRendererSystem extends EntitySystem{
     }
 
 
-    public void setCamera(OrthographicCamera camera) {
-        this.camera=camera;
-    }
+
 
     @Override
     public void update(float deltaTime) {
-
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         if(level!=null){
+            shapeRenderer.setProjectionMatrix(level.camera().combined);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
             for(Entity entity: level){
                 if(entity!=null){
                     processEntity(entity,deltaTime);
                 }
             }
+            shapeRenderer.end();
+            Gdx.gl.glDisable(GL20.GL_BLEND);
         }
-        shapeRenderer.end();
-        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
 

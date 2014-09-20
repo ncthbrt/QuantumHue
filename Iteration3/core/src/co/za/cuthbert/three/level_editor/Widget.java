@@ -5,5 +5,5 @@ package co.za.cuthbert.three.level_editor;
  */
 public interface Widget {
 
-    public boolean inWidget(float worldX, float worldY);
+    public boolean inWidget(float worldX, float worldY, float objX, float objY);
 }

@@ -6,6 +6,9 @@ import co.za.cuthbert.three.components.TileTypeComponent;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
+import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 
 import java.util.Iterator;
 
@@ -17,6 +20,14 @@ public class Level implements EntityListener, Iterable<Entity>{
     private int width, height, depth;
     private static final ComponentMapper<TileTypeComponent> tileTypeMapper=ComponentMapper.getFor(TileTypeComponent.class);
     private static final ComponentMapper<DVector3> positionMapper=ComponentMapper.getFor(DVector3.class);
+
+
+    private final OrthographicCamera camera;
+    private final PooledEngine engine;
+
+    public OrthographicCamera camera(){
+        return camera;
+    }
     public float advancementRate;
     public Entity get(int x, int y, int z) {
         return level[z][y][x];
@@ -24,8 +35,11 @@ public class Level implements EntityListener, Iterable<Entity>{
 
 
 
-    public Level(int width, int height, int depth, float advancementRate){
+    public Level(PooledEngine engine, int width, int height, int depth, float advancementRate){
+        camera=new OrthographicCamera(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
         level=new Entity[depth][height][width];
+        this.engine=engine;
         this.width=width;
         this.height=height;
         this.depth=depth;
@@ -36,7 +50,6 @@ public class Level implements EntityListener, Iterable<Entity>{
     @Override
     public void entityAdded(Entity entity) {
         if(TileType.isTile(entity) && positionMapper.has(entity)){
-            System.out.println("Adding entity");
             DVector3 position=positionMapper.get(entity);
             level[position.z()][position.y()][position.x()]=entity;
         }

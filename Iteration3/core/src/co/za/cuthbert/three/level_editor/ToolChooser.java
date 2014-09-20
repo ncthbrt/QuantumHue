@@ -34,7 +34,6 @@ public class ToolChooser implements GestureDetector.GestureListener {
     private final ArrayList<ToolChooserWidget> tools;
     private OrthographicCamera camera;
 
-
     private ToolChooserWidget currentTool=null;
     private float toolHeight=0;
     private float toolWidth=0;

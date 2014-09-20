@@ -71,7 +71,7 @@ public class LevelEditorOld implements Screen {
                     int height=(int)(width*aspectRatio)+2;
                     engine.removeEntityListener(currentLevel);
                     engine.removeAllEntities();
-                    currentLevel=new Level(width,height,1,1f);//TODO add parameter to increase depth
+                    currentLevel=new Level(engine,width,height,1,1f);//TODO add parameter to increase depth
                     wireSystem.setLevel(currentLevel);
                     inputHandler.setLevel(currentLevel);
                     levelCamera.viewportWidth = (Config.TILE_SIZE * (width));

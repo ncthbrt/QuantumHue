@@ -1,5 +1,6 @@
 package co.za.cuthbert.three.level_editor;
 
+import co.za.cuthbert.three.Iteration3Main;
 import co.za.cuthbert.three.collision.PixelMask;
 import co.za.cuthbert.three.collision.PixelMaskFactory;
 import co.za.cuthbert.three.value_objects.Colour;
@@ -24,11 +25,13 @@ public class ColourSelector implements GestureDetector.GestureListener{
     private float maximumExposure;
 
     private boolean selected=false;
+    private boolean panning=false;
+
     private final float slideTime=0.4f;
     private float slide=0;
 
     private Pixmap pixmap;
-    private final Colour currentColour=new Colour(255,0,0,255);
+    private final Colour currentColour=new Colour(255,255,255,255);
     public Colour currentColour(){
         return currentColour;
     }
@@ -36,6 +39,7 @@ public class ColourSelector implements GestureDetector.GestureListener{
     private final OrthographicCamera camera;
     private final Sprite border, colourSelector,indicator;
     private PixelMask colourSelectorIndicatorMask;
+    private PixelMask colourSelectorMask;
     private Pixmap colourSelectorPixmap;
     public ColourSelector(){
         this.camera=new OrthographicCamera(1920,Gdx.graphics.getHeight()/(float)Gdx.graphics.getWidth()*1920);
@@ -46,30 +50,41 @@ public class ColourSelector implements GestureDetector.GestureListener{
         PixelMaskFactory factory=new PixelMaskFactory();
         colourSelectorIndicatorMask=factory.getPixelMask("colour_selector_indicator.png");
         indicator=new Sprite(new Texture(Gdx.files.internal("colour_selector_indicator.png")));
+
         colourSelectorPixmap=factory.getPixmap("colour_selector.png");
+        colourSelectorMask=factory.getPixelMask("colour_selector.png");
         colourSelector=new Sprite(new Texture(Gdx.files.internal("colour_selector.png"))); //Unfortunate double loading of textures
+
         maximumExposure=border.getHeight();
     }
 
     public void render(SpriteBatch batch,float deltaTime){
         batch.setProjectionMatrix(camera.combined);
-        if(slide<1 && selected){
-            slide+=(deltaTime/slideTime);
-            slide=Math.min(1, slide);
-        }else if(slide>0 && !selected){
-            slide-=(deltaTime/slideTime);
-            slide=Math.max(0, slide);
+        if(!panning) {
+            if (slide < 1 && selected) {
+                slide += (deltaTime / slideTime);
+                slide = Math.min(1, slide);
+            } else if (slide > 0 && !selected) {
+                slide -= (deltaTime / slideTime);
+                slide = Math.max(0, slide);
+            }
         }
+
+
         float currentExposure= Interpolation.pow3.apply(minimumExposure, maximumExposure, slide);
         float y=camera.viewportHeight-currentExposure;
         float x=camera.viewportWidth-border.getRegionWidth();
+
         border.setPosition(x,y);
         border.draw(batch);
+
+        colourSelectorIndicatorMask.setPosition((int)x,(int)y);
         indicator.setPosition(x, y);
         indicator.setColor(currentColour.red() / 255f, currentColour.green() / 255f, currentColour.blue() / 255f, currentColour.alpha() / 255f);
         indicator.draw(batch);
+
         colourSelector.setPosition(x, y);
-        colourSelectorIndicatorMask.setPosition((int)x,(int)y);
+        colourSelectorMask.setPosition((int)x,(int)y);
         colourSelector.draw(batch);
     }
 
@@ -82,10 +97,23 @@ public class ColourSelector implements GestureDetector.GestureListener{
     @Override
     public boolean tap(float x, float y, int count, int button) {
         Vector3 world=camera.unproject(new Vector3(x,y,0));
-        System.out.println("Tapping");
         if(colourSelectorIndicatorMask.isAt((int)world.x,(int)world.y)) {
-            System.out.println("Pressed");
             selected=!selected;
+            return true;
+        }else if(colourSelectorMask.isAt((int)world.x,(int)world.y)){
+            System.out.println("Colour selector mask true");
+            int i=(int)world.x-colourSelectorMask.x;
+            int j=colourSelectorMask.height-((int)world.y-colourSelectorMask.y);
+            Colour colour=new Colour(colourSelectorPixmap.getPixel(i,j));
+            int r=colour.red();
+            int g=colour.green();
+            int b=colour.blue();
+            r=r>200?255:0;
+            g=g>200?255:0;
+            b=b>200?255:0;
+            if(r==255 || g==255 || b==255){
+                currentColour.set(r,g,b,255);
+            }
             return true;
         }
         return false;
@@ -101,13 +129,36 @@ public class ColourSelector implements GestureDetector.GestureListener{
         return false;
     }
 
+
     @Override
     public boolean pan(float x, float y, float deltaX, float deltaY) {
+        Vector3 worldXY=camera.unproject(new Vector3(x,y,0));
+        if(!panning && colourSelectorIndicatorMask.isAt((int)worldXY.x,(int)worldXY.y)) {
+            panning=true;
+        }
+        if(panning){
+            float delta=(deltaY/(maximumExposure-minimumExposure));
+            slide+=delta;
+            slide+=delta;
+            slide=slide>1?1:slide;
+            slide=slide<0?0:slide;
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean panStop(float x, float y, int pointer, int button) {
+        if (panning) {
+            if(slide>0.5){
+                selected=true;
+            }else{
+                selected=false;
+            }
+            panning = false;
+
+            return true;
+        }
         return false;
     }
 

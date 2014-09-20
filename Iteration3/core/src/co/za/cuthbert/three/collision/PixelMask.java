@@ -22,8 +22,7 @@ public class PixelMask {
     }
 
     public boolean isAt(int i, int j){
-        System.out.println("Testing");
-        if(i>=x && i<=x+width && y<=j && y+height>=j) {
+        if(i-x>=0 && i-x<width && height-(j-y)>=0 && height-(j-y)<height) {
             i=i-x;
             j=height-(j-y);
             return mask[j][i];

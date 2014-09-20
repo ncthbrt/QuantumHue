@@ -46,8 +46,8 @@ public class PowerRendererSystem extends EntitySystem {
 
     @Override
     public void update(float deltaTime) {
-
         if(level!=null){
+            batch.setProjectionMatrix(level.camera().combined);
             Gdx.gl.glEnable(GL20.GL_BLEND);
             for (Entity entity : level) {
                 if(entity!=null && powerPortFamily.matches(entity)) {

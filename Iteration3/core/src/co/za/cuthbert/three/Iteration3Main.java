@@ -6,6 +6,7 @@ import co.za.cuthbert.three.value_objects.HSVColour;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
@@ -21,7 +22,8 @@ public class Iteration3Main extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-        Gdx.gl.glEnable(GL20.GL_ALIASED_LINE_WIDTH_RANGE);
+
+
         Gdx.gl20.glLineWidth(2);
         atlas=new TextureAtlas(Gdx.files.internal("global.atlas"));
        // setScreen(new TitleScreen(this,atlas));
