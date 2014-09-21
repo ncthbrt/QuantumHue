@@ -2,7 +2,7 @@ package co.za.cuthbert.three.systems;
 
 import co.za.cuthbert.three.Config;
 import co.za.cuthbert.three.TileType;
-import co.za.cuthbert.three.components.DVector3;
+import co.za.cuthbert.three.components.DVector2;
 import co.za.cuthbert.three.components.PortComponent;
 import co.za.cuthbert.three.components.WireComponent;
 
@@ -26,10 +26,9 @@ public class WireRendererSystem extends EntitySystem{
 
     private Engine engine;
     private Level level;
-    private Family family;
+
     public WireRendererSystem(ShapeRenderer shapeRenderer,OrthographicCamera camera) {
         super(3);
-        this.family=TileType.WIRE.family;
         this.shapeRenderer=shapeRenderer;
     }
 
@@ -60,19 +59,17 @@ public class WireRendererSystem extends EntitySystem{
 
     private static final ComponentMapper<WireComponent> wireComponentMapper=ComponentMapper.getFor(WireComponent.class);
     private static final ComponentMapper<PortComponent> portMapper=ComponentMapper.getFor(PortComponent.class);
-    private static final ComponentMapper<DVector3> discretePositionMapper=ComponentMapper.getFor(DVector3.class);
+    private static final ComponentMapper<DVector2> discretePositionMapper=ComponentMapper.getFor(DVector2.class);
 
 
     public void processEntity(Entity wire, float deltaTime) {
 
         PortComponent ports = portMapper.get(wire);
         WireComponent wireComponent = wireComponentMapper.get(wire);
-        DVector3 position=discretePositionMapper.get(wire);
+        DVector2 position=discretePositionMapper.get(wire);
 
         boolean[] portMap = ports.getPortMap();
 
-
-        shapeRenderer.setColor(1, 1, 1, 1);
         int attachedPorts=0;
 
         for (int j = 1; j >= -1; --j) {

@@ -39,9 +39,9 @@ public class PortComponent extends Component implements Pool.Poolable {
     }
 
 
-    public PortComponent(Level level, int x, int y, int z) {
+    public PortComponent(Level level, int x, int y) {
         this();
-        setNeighboringPorts(level, x, y, z);
+        setNeighboringPorts(level, x, y);
     }
 
 
@@ -82,13 +82,13 @@ public class PortComponent extends Component implements Pool.Poolable {
         }
     }
 
-    public void setNeighboringPorts(Level level, int x, int y, int z) {
+    public void setNeighboringPorts(Level level, int x, int y) {
         ComponentMapper<PortComponent> portMapper = ComponentMapper.getFor(PortComponent.class);
         for (int j = -1; j <= 1; ++j) {
             for (int i = -1; i <= 1; ++i) {
                 if (j != 0 || i != 0) {
                     if (x + i >= 0 && y + j >= 0 && x + i < level.width() && y + j < level.height()) {
-                        Entity entity = level.get(x + i, y + j, z);
+                        Entity entity = level.get(x + i, y + j);
                         if (entity != null && portMapper.has(entity)) {
                             PortComponent port = portMapper.get(entity);
                             neighboringPorts[(j + 1) * 3 + i + 1] = port;

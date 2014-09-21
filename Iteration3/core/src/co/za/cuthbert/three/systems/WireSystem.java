@@ -2,7 +2,7 @@ package co.za.cuthbert.three.systems;
 
 import co.za.cuthbert.three.TileType;
 import co.za.cuthbert.three.components.ColourComponent;
-import co.za.cuthbert.three.components.DVector3;
+import co.za.cuthbert.three.components.DVector2;
 import co.za.cuthbert.three.components.PortComponent;
 import co.za.cuthbert.three.components.WireComponent;
 import co.za.cuthbert.three.listeners.Level;
@@ -16,7 +16,7 @@ public class WireSystem extends EntitySystem {
     private Level level;
     private static final ComponentMapper<PortComponent> portMapper=ComponentMapper.getFor(PortComponent.class);
     private static final ComponentMapper<WireComponent> wireMapper=ComponentMapper.getFor(WireComponent.class);
-    private static final ComponentMapper<DVector3> positionMapper=ComponentMapper.getFor(DVector3.class);
+    private static final ComponentMapper<DVector2> positionMapper=ComponentMapper.getFor(DVector2.class);
     private static final ComponentMapper<ColourComponent> colourMapper=ComponentMapper.getFor(ColourComponent.class);
 
     private ImmutableArray<Entity> wires;
@@ -41,7 +41,7 @@ public class WireSystem extends EntitySystem {
 
     @Override
     public void update(float deltaTime) {
-        if(level!=null) {
+        if(level!=null && level.stepping()) {
             final float advance = deltaTime * level.advancementRate;
 
             //Update colours
@@ -77,8 +77,8 @@ public class WireSystem extends EntitySystem {
     private void synchronise(Entity entity) {
         WireComponent wire = wireMapper.get(entity);
         PortComponent port = portMapper.get(entity);
-        DVector3 position=positionMapper.get(entity);
-        port.setNeighboringPorts(level, position.x(), position.y(), position.z());
+        DVector2 position=positionMapper.get(entity);
+        port.setNeighboringPorts(level, position.x(), position.y());
         port.setOutgoingPortColours(wire.getOutgoingPortColours());
         wire.setIncomingPortColours(port.getIncomingPortColours());
     }

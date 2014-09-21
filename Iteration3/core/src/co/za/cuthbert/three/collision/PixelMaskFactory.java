@@ -26,8 +26,7 @@ public class PixelMaskFactory {
         FileHandle bitmaskHandle= Gdx.files.external(bitmaskName);
         PixelMask mask;
         if(bitmaskHandle.exists()){
-            PixelMask pixelMask=toPixelMask(PixmapIO.readCIM(bitmaskHandle));
-            return pixelMask;
+            return toPixelMask(PixmapIO.readCIM(bitmaskHandle));
         }else{
             return exportMask(resourceName);
         }

@@ -30,15 +30,6 @@ public class LevelEditorInputHandler extends DragListener {
         this.level=level;
     }
 
-    private int currentDepth=0;
-
-    public int currentDepth() {
-        return currentDepth;
-    }
-    public void currentDepth(int currentDepth) {
-        this.currentDepth = currentDepth;
-    }
-
     private TileType tool=TileType.WIRE;
 
     public void tool(TileType tool) {
@@ -63,9 +54,9 @@ public class LevelEditorInputHandler extends DragListener {
 
             if(worldX>0 && worldY>0 && worldX<level.width() && worldY<level.height()) {
                 System.out.println("Creating tile at " + worldX + ", " + worldY);
-                Entity tile = level.get(worldX, worldY, currentDepth);
+                Entity tile = level.get(worldX, worldY);
                 if (tile == null) {
-                    engine.addEntity(TileFactory.createWire(engine, worldX, worldY, currentDepth));
+                    engine.addEntity(TileFactory.createWire(engine, worldX, worldY));
                 }
                 lastBlock.set(worldX,worldY);
             }
@@ -83,11 +74,11 @@ public class LevelEditorInputHandler extends DragListener {
             int worldY=Math.round((worldCoords.y)/ Config.TILE_SIZE);
             if(worldX>0 && worldY>0 && worldX<level.width() && worldY<level.height()) {
                 System.out.println("Creating tile at " + worldX + ", " + worldY);
-                Entity tile = level.get(worldX, worldY, currentDepth);
+                Entity tile = level.get(worldX, worldY);
                 if (tile != null) {
                     engine.removeEntity(tile);
                 }else {
-                    engine.addEntity(TileFactory.createWire(engine, worldX, worldY, currentDepth));
+                    engine.addEntity(TileFactory.createWire(engine, worldX, worldY));
                 }
                 return true;
             }

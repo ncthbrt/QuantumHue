@@ -1,7 +1,6 @@
 package co.za.cuthbert.three;
 
-import co.za.cuthbert.three.TileType;
-import co.za.cuthbert.three.components.DVector3;
+import co.za.cuthbert.three.components.DVector2;
 import co.za.cuthbert.three.components.PortComponent;
 import co.za.cuthbert.three.components.TileTypeComponent;
 import co.za.cuthbert.three.components.WireComponent;
@@ -13,14 +12,14 @@ import com.badlogic.ashley.core.PooledEngine;
  */
 public class TileFactory {
 
-    public static Entity createWire(PooledEngine engine,int x, int y, int z){
+    public static Entity createWire(PooledEngine engine,int x, int y){
         Entity wire=engine.createEntity();
         TileTypeComponent tileTypeComponent= engine.createComponent(TileTypeComponent.class);
         tileTypeComponent.tileType(TileType.WIRE);
         wire.add(tileTypeComponent);
 
-        DVector3 position=engine.createComponent(DVector3.class);
-        position.set(x,y,z);
+        DVector2 position=engine.createComponent(DVector2.class);
+        position.set(x,y);
         wire.add(position);
 
         PortComponent portComponent=engine.createComponent(PortComponent.class);

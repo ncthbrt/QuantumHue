@@ -2,7 +2,7 @@ package co.za.cuthbert.three.systems;
 
 import co.za.cuthbert.three.TileType;
 import co.za.cuthbert.three.components.ColourComponent;
-import co.za.cuthbert.three.components.DVector3;
+import co.za.cuthbert.three.components.DVector2;
 import co.za.cuthbert.three.components.PortComponent;
 import co.za.cuthbert.three.components.SwitchComponent;
 import co.za.cuthbert.three.value_objects.Colour;
@@ -28,7 +28,7 @@ public class PowerSystem extends EntitySystem {
         this.level = level;
     }
 
-    private static final ComponentMapper<DVector3> discretePositionMapper=ComponentMapper.getFor(DVector3.class);
+    private static final ComponentMapper<DVector2> discretePositionMapper=ComponentMapper.getFor(DVector2.class);
     private static final ComponentMapper<ColourComponent> colourMapper=ComponentMapper.getFor(ColourComponent.class);
     private static final ComponentMapper<PortComponent> portMapper=ComponentMapper.getFor(PortComponent.class);
     private static final ComponentMapper<SwitchComponent> switchComponentMapper=ComponentMapper.getFor(SwitchComponent.class);
@@ -51,7 +51,7 @@ public class PowerSystem extends EntitySystem {
             on=switchComponentMapper.get(powerPort).on;
         }
         PortComponent port=portMapper.get(powerPort);
-        DVector3 position=discretePositionMapper.get(powerPort);
+        DVector2 position=discretePositionMapper.get(powerPort);
         Colour colour=colourMapper.get(powerPort).colour();
 
         if(on) {
@@ -59,6 +59,6 @@ public class PowerSystem extends EntitySystem {
         }else{
             port.setOutgoingPortColours(new Colour());
         }
-        port.setNeighboringPorts(level, position.x(), position.y(), position.z());
+        port.setNeighboringPorts(level, position.x(), position.y());
     }
 }

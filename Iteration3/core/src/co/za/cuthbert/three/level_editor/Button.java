@@ -1,18 +1,15 @@
 package co.za.cuthbert.three.level_editor;
 
-import co.za.cuthbert.three.Iteration3Main;
-import co.za.cuthbert.three.value_objects.Colour;
+
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-
 import java.util.ArrayList;
 
 /**
  * Copyright Nick Cuthbert, 2014
  */
 public class Button implements Widget {
-    private final Sprite icon;
+    private Sprite icon;
     private final Sprite buttonUp;
     private final Sprite buttonDown;
 
@@ -40,9 +37,13 @@ public class Button implements Widget {
         this.trigger=trigger;
     }
 
+    public void icon(Sprite icon) {
+        this.icon = icon;
+    }
+
     private  boolean pressed=false;
     public boolean pressed(){
-        return pressed();
+        return pressed;
     }
     public void pressed(boolean pressed){
         if(trigger==Trigger.EDGE || (trigger==Trigger.TRAILING_EDGE && this.pressed && !pressed)||(trigger==Trigger.LEADING_EDGE && !this.pressed && pressed)){

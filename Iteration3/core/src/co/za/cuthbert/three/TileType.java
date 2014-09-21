@@ -26,7 +26,7 @@ public enum TileType {
 
     TileType(int code, Class<? extends Component>... compulsoryComponents) {
         this.code = code;
-        this.family=Family.getFor(ComponentType.getBitsFor(compulsoryComponents), ComponentType.getBitsFor(DVector3.class),new Bits());
+        this.family=Family.getFor(ComponentType.getBitsFor(compulsoryComponents), ComponentType.getBitsFor(DVector2.class),new Bits());
         this.requiredComponents=compulsoryComponents;
     }
 
@@ -48,18 +48,12 @@ public enum TileType {
     }
 
     public  boolean conforms(Entity entity){
-        if(this==VOID || isTile(entity)){
-            return family.matches(entity);
-        }
-        return false;
+        return (this == VOID || isTile(entity)) && family.matches(entity);
     }
 
     private static final ComponentMapper<TileTypeComponent> tileTypeMapper=ComponentMapper.getFor(TileTypeComponent.class);
 
     public static boolean isTile(Entity entity){
-        if(entity!=null && !VOID.family.matches(entity)){
-            return tileTypeMapper.has(entity);
-        }
-        return false;
+        return entity != null && !VOID.family.matches(entity) && tileTypeMapper.has(entity);
     }
 }

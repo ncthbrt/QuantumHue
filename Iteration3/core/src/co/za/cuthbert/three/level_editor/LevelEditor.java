@@ -1,9 +1,8 @@
 package co.za.cuthbert.three.level_editor;
 
 
+import co.za.cuthbert.three.Iteration3Main;
 import co.za.cuthbert.three.TileType;
-import co.za.cuthbert.three.value_objects.Colour;
-import co.za.cuthbert.three.value_objects.HSVColour;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -11,6 +10,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 
@@ -23,17 +23,16 @@ public class LevelEditor implements Screen {
     private final TextureAtlas atlas;
     private final SpriteBatch batch;
     private final Game game;
-    private OrthographicCamera uiCamera;
     private ColourSelector colourSelector;
     private ToolChooser chooser;
     private ButtonGroup group;
 
 
-    public LevelEditor(Game game, TextureAtlas textureAtlas) {
-        this.atlas=textureAtlas;
+    public LevelEditor(Game game) {
+        this.atlas= Iteration3Main.textureAtlas();
         this.batch=new SpriteBatch();
         this.game=game;
-        group=new ButtonGroup(atlas);
+        group=new ButtonGroup(new Vector2(1910,0), ButtonGroup.Direction.UP, ButtonGroup.Anchor.BOTTOM_RIGHT);
 
         chooser=new ToolChooser(atlas.createSprite("border_top"),atlas.createSprite("border_bottom"));
         chooser.addTool(TileType.WIRE,atlas.createSprite("tool_wire"));
@@ -51,13 +50,17 @@ public class LevelEditor implements Screen {
         group.addButton("save",atlas.createSprite("icon_save"),new ArrayList<ButtonAction>());
         group.addButton("new",atlas.createSprite("icon_new"),new ArrayList<ButtonAction>());
 
+        dialog=new ConfirmDialog(multiplexer,atlas.createSprite("diagram_new_consequences"), new ButtonAction());
+
         multiplexer.addProcessor(detector);
         multiplexer.addProcessor(detector2);
-        test=new DialogTest(atlas);
+
+        //Show dialog last, as the show method removes the processors from the multiplexer
+        dialog.show();
 
         Gdx.input.setInputProcessor(multiplexer);
     }
-    DialogTest test;
+    private ConfirmDialog dialog;
 
     @Override
     public void render(float delta) {
@@ -65,7 +68,7 @@ public class LevelEditor implements Screen {
         chooser.render(batch,delta);
         colourSelector.render(batch,delta);
         group.render(batch);
-        test.render(batch,delta);
+        dialog.render(batch,delta);
         batch.end();
     }
 

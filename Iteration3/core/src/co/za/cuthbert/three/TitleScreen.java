@@ -13,7 +13,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 /**
- * Created by CTHNI_000 on 2014-09-13.
+ * Copyright Nick Cuthbert, 2014
  */
 public class TitleScreen implements Screen {
     SpriteBatch batch;
@@ -30,7 +30,6 @@ public class TitleScreen implements Screen {
         this.batch=new SpriteBatch();
         this.atlas=atlas;
         this.game=game;
-//        titleBackground=new Texture(Gdx.files.internal("title_background.png"));
 
         createButton=atlas.createSprite("button_create");
 
@@ -44,7 +43,7 @@ public class TitleScreen implements Screen {
 
         camera=new OrthographicCamera(menuWidth,menuHeight);
         camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
-        FitViewport viewport=new FitViewport(menuWidth,menuHeight,camera);
+        new FitViewport(menuWidth,menuHeight,camera);
         camera.update();
     }
     private final float fadeInTime=2;
@@ -63,7 +62,7 @@ public class TitleScreen implements Screen {
             if(playButton.getBoundingRectangle().contains(world.x,world.y)){
 
             }else if(createButton.getBoundingRectangle().contains(world.x,world.y)){
-                nextScreen=new LevelEditor(game,atlas);
+                nextScreen=new LevelEditor(game);
                 fade=true;
             }
         }

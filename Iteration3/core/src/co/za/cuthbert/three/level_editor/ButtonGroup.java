@@ -1,20 +1,13 @@
 package co.za.cuthbert.three.level_editor;
 
+import co.za.cuthbert.three.Iteration3Main;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Copyright Nick Cuthbert, 2014
@@ -26,16 +19,58 @@ public class ButtonGroup {
     private final float xMargin=20f;
     private final float yMargin=10f;
     private final float buttonDownOffset=13f;
-    private Sprite buttonUp;
-    private Sprite buttonDown;
+    private static Sprite buttonUp=null;
+    private static Sprite buttonDown=null;
+    private final Vector2 anchorPoint;
+    private final Direction direction;
+    private final Anchor anchor;
 
-    public ButtonGroup (TextureAtlas atlas){
+    public Vector2 anchorPoint() {
+        return anchorPoint;
+    }
+    public void anchorPoint(float x, float y){
+        this.anchorPoint.set(x,y);
+    }
+    public ButtonGroup (Vector2 anchorPoint,Direction direction, Anchor anchor){
+
+        this.direction=direction;
+        this.anchor=anchor;
+
         buttons=new ArrayList<Button>();
-        camera=new OrthographicCamera(1080*(Gdx.graphics.getWidth()/(float)Gdx.graphics.getHeight()),1080);
+        camera=new OrthographicCamera(1920,1920/(Gdx.graphics.getWidth()/(float)Gdx.graphics.getHeight()));
+        this.anchorPoint=anchorPoint;
         camera.position.set(camera.viewportWidth/2f,camera.viewportHeight/2f,0);
         camera.update();
-        buttonDown=atlas.createSprite("button_default_down");
-        buttonUp=atlas.createSprite("button_default_up");
+        if(buttonDown==null) {
+            buttonDown = Iteration3Main.textureAtlas().createSprite("button_default_down");
+            buttonUp = Iteration3Main.textureAtlas().createSprite("button_default_up");
+        }
+    }
+
+
+    public enum Anchor{
+        TOP_LEFT(0,1), TOP_RIGHT(1,1),
+        BOTTOM_LEFT(0,0), BOTTOM_RIGHT(1,0),
+        CENTER(0.5f,0.5f);
+        Anchor(float x,float y){
+            this.xFromBottomLeft=x;
+            this.yFromBottomLeft=y;
+        }
+        public final float xFromBottomLeft;
+        public final float yFromBottomLeft;
+    }
+    public enum Direction{
+        DOWN(0,-1),
+        UP(0,1),
+        LEFT_TO_RIGHT(1,0),
+        RIGHT_TO_LEFT(-1,0);
+
+        public final int xFactor;
+        public final int yFactor;
+        Direction(int xFactor, int yFactor){
+            this.xFactor=xFactor;
+            this.yFactor=yFactor;
+        }
     }
 
     public void addButton(String actionCommand,Sprite icon,ArrayList<ButtonAction> actions){
@@ -50,18 +85,33 @@ public class ButtonGroup {
         return buttons.get(index);
     }
 
+    public Button getButton(String actionCommand) {
+        for(Button button:buttons){
+            if(actionCommand.equals(button.actionCommand)){
+                return button;
+            }
+        }
+        return null;
+    }
+    private boolean buttonPressed=false;
+    public boolean buttonPressed() {
+        return buttonPressed;
+    }
+
+
     public void render(SpriteBatch batch){
+        buttonPressed=false;
         batch.setProjectionMatrix(camera.combined);
-        float x=camera.viewportWidth-(buttonUp.getRegionWidth()+xMargin);
-        float y=yMargin;
+        float x=anchorPoint.x-anchor.xFromBottomLeft*(buttonUp.getRegionWidth());
+        float y=anchorPoint.y-anchor.yFromBottomLeft*(buttonUp.getRegionHeight());
         boolean touched=Gdx.input.isTouched();
         int touchX=Gdx.input.getX();
         int touchY=Gdx.input.getY();
         for(Button button:buttons){
-            //x=x-(buttonUp.getRegionWidth()+xMargin);
             if(touched) {
                 Vector3 world = camera.unproject(new Vector3(touchX, touchY, 0));
-                if (button.inWidget(world.x, world.y, x, y)) {
+                if (!buttonPressed && button.inWidget(world.x, world.y, x, y)) {
+                    buttonPressed=true;
                     button.pressed(true);
                 }else{
                     button.pressed(false);
@@ -70,7 +120,8 @@ public class ButtonGroup {
                 button.pressed(false);
             }
             button.render(batch,x,y);
-            y+=buttonDown.getHeight()+yMargin;
+            x+=direction.xFactor*(buttonUp.getRegionWidth()+xMargin);
+            y+=direction.yFactor*(buttonUp.getRegionHeight()+yMargin);
         }
     }
 }
