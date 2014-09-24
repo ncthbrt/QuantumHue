@@ -47,22 +47,25 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
     public OrthographicCamera camera(){
         return camera;
     }
-    public float advancementRate;
+    private static  final float defaultAdvancementRate=0.4f;
+    public float advancementRate=defaultAdvancementRate;
     public Entity get(int x, int y) {
         return level[y][x];
     }
 
 
 
-    public Level(PooledEngine engine, int width, int height,float advancementRate){
+    public Level(PooledEngine engine, int width, int height){
+
         camera=new OrthographicCamera(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
         level=new Entity[height][width];
         this.engine=engine;
         this.width=width;
         this.height=height;
-        this.advancementRate=advancementRate;
+
     }
+
 
 
     @Override
@@ -166,6 +169,10 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
         };
     }
 
+    public void update(float deltaTime){
+        engine.update(deltaTime);
+    }
+
     @Override
     public boolean touchDown(float x, float y, int pointer, int button) {
         return false;
@@ -207,5 +214,9 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
     @Override
     public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
         return false;
+    }
+
+    public void dispose(){
+        engine.removeAllEntities();
     }
 }

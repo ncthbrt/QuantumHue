@@ -3,9 +3,7 @@ package co.za.cuthbert.three.level_editor;
 /**
  * Copyright Nick Cuthbert, 2014
  */
-public class ButtonAction {
+public abstract class ButtonAction {
+    public abstract void actionPerformed(String command);
 
-
-    public void actionPerformed(String command){
-    }
 }

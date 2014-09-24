@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 /**
  * Copyright Nick Cuthbert, 2014.
  */
-public class LevelEditorInputHandler extends DragListener {
+public class LevelEditorInputHandler extends DragListener{
     private final OrthographicCamera camera;
     private final PooledEngine engine;
     private Level level;
@@ -44,15 +44,14 @@ public class LevelEditorInputHandler extends DragListener {
     private Vector2 lastBlock=new Vector2(-1,-1);
 
     @Override
-    public void touchDragged(InputEvent event, float x, float y, int pointer) {
+    public void touchDragged(InputEvent event, float x, float y, int pointer){
         System.out.println("Touch Event initiated");
         if(level!=null && !event.isHandled()){
             System.out.println("Handling touch event");
-            Vector3 worldCoords=camera.unproject(new Vector3(x, Gdx.graphics.getHeight()-y,0));
+            Vector3 worldCoords=level.camera().unproject(new Vector3(x, Gdx.graphics.getHeight()-y,0));
             int worldX=Math.round(worldCoords.x/ Config.TILE_SIZE);
             int worldY=Math.round((worldCoords.y)/ Config.TILE_SIZE);
-
-            if(worldX>0 && worldY>0 && worldX<level.width() && worldY<level.height()) {
+            if(worldX>0 && worldY>0 && worldX<level.width() && worldY<level.height()){
                 System.out.println("Creating tile at " + worldX + ", " + worldY);
                 Entity tile = level.get(worldX, worldY);
                 if (tile == null) {
@@ -61,15 +60,14 @@ public class LevelEditorInputHandler extends DragListener {
                 lastBlock.set(worldX,worldY);
             }
         }
-
     }
 
     @Override
-    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
         System.out.println("Touch Event initiated");
         if(level!=null && !event.isHandled()){
             System.out.println("Handling touch event");
-            Vector3 worldCoords=camera.unproject(new Vector3(x, Gdx.graphics.getHeight()-y,0));
+            Vector3 worldCoords=level.camera().unproject(new Vector3(x, Gdx.graphics.getHeight()-y,0));
             int worldX=Math.round((worldCoords.x)/ Config.TILE_SIZE);
             int worldY=Math.round((worldCoords.y)/ Config.TILE_SIZE);
             if(worldX>0 && worldY>0 && worldX<level.width() && worldY<level.height()) {

@@ -99,7 +99,7 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         compile "com.google.code.gson:gson:2.3"
-//        compile "com.esotericsoftware.kryo:kryo:2.24.0"
+//         compile "com.esotericsoftware.kryo:kryo:2.24.0"
     }
 }
 
