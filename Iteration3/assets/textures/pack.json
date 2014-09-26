@@ -12,6 +12,8 @@
     useIndexes: true,
     limitMemory: true,
     grid: false,
+    filterMin: Linear,
+    filterMag: Nearest,
     scale: [ 1 ],
     scaleSuffix: [ "" ]
 }

@@ -1,4 +1,4 @@
-package co.za.cuthbert.three.level_editor;
+package co.za.cuthbert.three.level_editor.actions;
 
 /**
  * Copyright Nick Cuthbert, 2014

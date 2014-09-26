@@ -2,19 +2,22 @@ package co.za.cuthbert.three.level_editor;
 
 
 import co.za.cuthbert.three.Iteration3Main;
-import co.za.cuthbert.three.TileType;
-import co.za.cuthbert.three.listeners.Level;
+import co.za.cuthbert.three.Level;
+import co.za.cuthbert.three.LevelChanger;
+import co.za.cuthbert.three.level_editor.actions.ButtonAction;
+import co.za.cuthbert.three.level_editor.actions.NewLevelAction;
+import co.za.cuthbert.three.level_editor.tools.PanTool;
+import co.za.cuthbert.three.level_editor.tools.WireTool;
+import co.za.cuthbert.three.systems.SystemFactory;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.FillViewport;
 
 import java.util.ArrayList;
 
@@ -31,39 +34,40 @@ public class LevelEditor implements Screen {
     private InputMultiplexer multiplexer;
     private final PooledEngine engine;
     private Level currentLevel;
-
     public  Level currentLevel(){
         return currentLevel;
     }
-    private GestureDetector levelGestureDetector;
+
     public void currentLevel(Level level){
         if(currentLevel!=null) {
             this.currentLevel.dispose();
-            multiplexer.removeProcessor(levelGestureDetector);
         }
         this.currentLevel=level;
-        levelGestureDetector=new GestureDetector(currentLevel);
-        multiplexer.addProcessor(levelGestureDetector);
+        changer.currentLevel(currentLevel);
+        engine.addEntityListener(currentLevel);
     }
 
+    private LevelChanger changer;
     public LevelEditor(Game game) {
         engine=new PooledEngine();
+        changer = new LevelChanger();
+        SystemFactory.addToEngine(engine, changer);
         this.atlas= Iteration3Main.textureAtlas();
         this.batch=new SpriteBatch();
         this.game=game;
         group=new ButtonGroup(new Vector2(1910,0), ButtonGroup.Direction.UP, ButtonGroup.Anchor.BOTTOM_RIGHT);
+        multiplexer = new InputMultiplexer();
+        chooser = new ToolChooser(multiplexer, atlas.createSprite("border_top"), atlas.createSprite("border_bottom"));
+        chooser.addTool(new WireTool(this), atlas.createSprite("tool_wire"));
+        chooser.addTool(new PanTool(this), atlas.createSprite("tool_power"));
+        chooser.addTool(new PanTool(this), atlas.createSprite("tool_agent"));
+        chooser.addTool(new PanTool(this), atlas.createSprite("tool_ground"));
+        chooser.addTool(new PanTool(this), atlas.createSprite("tool_pan"));
 
-        chooser=new ToolChooser(atlas.createSprite("border_top"),atlas.createSprite("border_bottom"));
-        chooser.addTool(TileType.WIRE,atlas.createSprite("tool_wire"));
-        chooser.addTool(TileType.WIRE,atlas.createSprite("tool_power"));
         GestureDetector detector=new GestureDetector(chooser);
 
         colourSelector=new ColourSelector();
         GestureDetector detector2=new GestureDetector(colourSelector);
-        multiplexer=new InputMultiplexer();
-
-        Stage stage=new Stage();
-        stage.setViewport(new FillViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight()));
 
         group.addButton("load",atlas.createSprite("icon_load"),new ArrayList<ButtonAction>());
         group.addButton("save",atlas.createSprite("icon_save"),new ArrayList<ButtonAction>());
@@ -73,22 +77,21 @@ public class LevelEditor implements Screen {
 
         multiplexer.addProcessor(detector);
         multiplexer.addProcessor(detector2);
+        multiplexer.addProcessor(group);
         newLevelAction.actionPerformed("Ok");
-        //Show dialog last, as the show method removes the processors from the multiplexer
-        //dialog.show();
 
-        Gdx.input.setInputProcessor(multiplexer);
     }
     private ConfirmDialog dialog;
 
     @Override
     public void render(float delta) {
+
+        currentLevel.update(delta);
         batch.begin();
-        chooser.render(batch,delta);
-        colourSelector.render(batch,delta);
         group.render(batch);
         dialog.render(batch,delta);
-        currentLevel.update(delta);
+        chooser.render(batch, delta);
+        colourSelector.render(batch, delta);
         batch.end();
     }
 
@@ -99,12 +102,13 @@ public class LevelEditor implements Screen {
 
     @Override
     public void show() {
-
+        chooser.init();
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
     @Override
     public void hide() {
-
+        chooser.dispose();
     }
 
     @Override

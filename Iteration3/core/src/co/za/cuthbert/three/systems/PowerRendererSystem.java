@@ -1,56 +1,59 @@
 package co.za.cuthbert.three.systems;
 
 import co.za.cuthbert.three.Config;
+import co.za.cuthbert.three.LevelChangeListener;
 import co.za.cuthbert.three.TileType;
 import co.za.cuthbert.three.components.ColourComponent;
 import co.za.cuthbert.three.components.DVector2;
 import co.za.cuthbert.three.components.SwitchComponent;
 import co.za.cuthbert.three.value_objects.Colour;
-import co.za.cuthbert.three.listeners.Level;
+import co.za.cuthbert.three.Level;
 import com.badlogic.ashley.core.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 /**
  * Copyright Nick Cuthbert, 2014.
  */
-public class PowerRendererSystem extends EntitySystem {
+public class PowerRendererSystem extends EntitySystem implements LevelChangeListener {
 
 
-    private static final ComponentMapper<DVector2> discretePositionMapper=ComponentMapper.getFor(DVector2.class);
-    private static final ComponentMapper<ColourComponent> colourMapper=ComponentMapper.getFor(ColourComponent.class);
-    private static final ComponentMapper<SwitchComponent> switchComponentMapper=ComponentMapper.getFor(SwitchComponent.class);
+    private static final ComponentMapper<DVector2> discretePositionMapper = ComponentMapper.getFor(DVector2.class);
+    private static final ComponentMapper<ColourComponent> colourMapper = ComponentMapper.getFor(ColourComponent.class);
+    private static final ComponentMapper<SwitchComponent> switchComponentMapper = ComponentMapper.getFor(SwitchComponent.class);
     private Level level;
 
     private final SpriteBatch batch;
-    private final Texture powerPort;
+    private final Sprite powerPort;
     private final Family powerPortFamily;
-    public PowerRendererSystem(SpriteBatch batch) {
-        powerPortFamily=TileType.POWER_SOURCE.family;
-        priority=2;
-        this.batch=batch;
-        powerPort=(new Texture(Gdx.files.internal("power_port.png")));
+
+    public PowerRendererSystem(SpriteBatch batch, TextureAtlas atlas) {
+        powerPortFamily = TileType.POWER_SOURCE.family;
+        priority = 2;
+        this.batch = batch;
+        powerPort = atlas.createSprite("power_port");
     }
 
-    public void setLevel(Level level) {
+    public void level(Level level) {
         this.level = level;
     }
 
     @Override
     public void removedFromEngine(Engine engine) {
         super.removedFromEngine(engine);
-        powerPort.dispose();
     }
 
     @Override
     public void update(float deltaTime) {
-        if(level!=null){
+        if (level != null) {
             batch.setProjectionMatrix(level.camera().combined);
             Gdx.gl.glEnable(GL20.GL_BLEND);
             for (Entity entity : level) {
-                if(entity!=null && powerPortFamily.matches(entity)) {
+                if (entity != null && powerPortFamily.matches(entity)) {
                     renderPowerPort(entity);
                 }
             }
@@ -59,18 +62,18 @@ public class PowerRendererSystem extends EntitySystem {
     }
 
     public void renderPowerPort(Entity powerPort) {
-        boolean on=true;
-        DVector2 position= discretePositionMapper.get(powerPort);
-        Colour colour= colourMapper.get(powerPort).colour();
-        if(switchComponentMapper.has(powerPort)){
-            SwitchComponent switchComponent=switchComponentMapper.get(powerPort);
-            on=switchComponent.on;
+        boolean on = true;
+        DVector2 position = discretePositionMapper.get(powerPort);
+        Colour colour = colourMapper.get(powerPort).colour();
+        if (switchComponentMapper.has(powerPort)) {
+            SwitchComponent switchComponent = switchComponentMapper.get(powerPort);
+            on = switchComponent.on;
         }
-        if(on){
-            batch.setColor(colour.red()/255f,colour.green()/255f,colour.blue()/255f,1f);
-        }else{
-            batch.setColor(1,1,1,0.5f);
+        if (on) {
+            batch.setColor(colour.red() / 255f, colour.green() / 255f, colour.blue() / 255f, 1f);
+        } else {
+            batch.setColor(1, 1, 1, 0.5f);
         }
-        batch.draw(this.powerPort,position.x()- Config.TILE_SIZE,position.y()- Config.TILE_SIZE);
+        batch.draw(this.powerPort, position.x() - Config.TILE_SIZE, position.y() - Config.TILE_SIZE);
     }
 }

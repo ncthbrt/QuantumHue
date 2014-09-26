@@ -1,72 +1,72 @@
 package co.za.cuthbert.three.systems;
 
+import co.za.cuthbert.three.LevelChangeListener;
 import co.za.cuthbert.three.TileType;
 import co.za.cuthbert.three.components.ColourComponent;
 import co.za.cuthbert.three.components.DVector2;
 import co.za.cuthbert.three.components.PortComponent;
 import co.za.cuthbert.three.components.WireComponent;
-import co.za.cuthbert.three.listeners.Level;
+import co.za.cuthbert.three.Level;
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
 
 /**
  * Copyright Nick Cuthbert, 2014.
  */
-public class WireSystem extends EntitySystem {
+public class WireSystem extends EntitySystem implements LevelChangeListener {
     private Level level;
-    private static final ComponentMapper<PortComponent> portMapper=ComponentMapper.getFor(PortComponent.class);
-    private static final ComponentMapper<WireComponent> wireMapper=ComponentMapper.getFor(WireComponent.class);
-    private static final ComponentMapper<DVector2> positionMapper=ComponentMapper.getFor(DVector2.class);
-    private static final ComponentMapper<ColourComponent> colourMapper=ComponentMapper.getFor(ColourComponent.class);
+    private static final ComponentMapper<PortComponent> portMapper = ComponentMapper.getFor(PortComponent.class);
+    private static final ComponentMapper<WireComponent> wireMapper = ComponentMapper.getFor(WireComponent.class);
+    private static final ComponentMapper<DVector2> positionMapper = ComponentMapper.getFor(DVector2.class);
+    private static final ComponentMapper<ColourComponent> colourMapper = ComponentMapper.getFor(ColourComponent.class);
 
     private ImmutableArray<Entity> wires;
     private Family wireSystemFamily;
     private Engine engine;
-    public WireSystem()
-    {
-        wireSystemFamily= TileType.WIRE.family;
+
+    public WireSystem() {
+        wireSystemFamily = TileType.WIRE.family;
     }
 
 
     @Override
     public void addedToEngine(Engine engine) {
-        this.engine=engine;
+        this.engine = engine;
     }
 
-    public void setLevel(Level level){
-        this.level=level;
+    public void level(Level level) {
+        this.level = level;
     }
-
 
 
     @Override
     public void update(float deltaTime) {
-        if(level!=null && level.stepping()) {
+        if (level != null && level.stepping()) {
             final float advance = deltaTime * level.advancementRate;
 
             //Update colours
             for (Entity entity : level) {
-                if(entity!=null && wireSystemFamily.matches(entity)) {
+                if (entity != null && wireSystemFamily.matches(entity)) {
                     synchronise(entity);
                 }
             }
             //Cull colours
             for (Entity entity : level) {
-                if(entity!=null && wireSystemFamily.matches(entity)) {
+                if (entity != null && wireSystemFamily.matches(entity)) {
                     cull(entity);
                 }
             }
 
             //Sanitise colours
             for (Entity entity : level) {
-                if(entity!=null && wireSystemFamily.matches(entity)) {
+                if (entity != null && wireSystemFamily.matches(entity)) {
                     sanitise(entity);
                 }
             }
 
             //Advance
             for (Entity entity : level) {
-                if(entity!=null && wireSystemFamily.matches(entity)) {
+                if (entity != null && wireSystemFamily.matches(entity)) {
                     advance(entity, advance);
                 }
             }
@@ -77,7 +77,7 @@ public class WireSystem extends EntitySystem {
     private void synchronise(Entity entity) {
         WireComponent wire = wireMapper.get(entity);
         PortComponent port = portMapper.get(entity);
-        DVector2 position=positionMapper.get(entity);
+        DVector2 position = positionMapper.get(entity);
         port.setNeighboringPorts(level, position.x(), position.y());
         port.setOutgoingPortColours(wire.getOutgoingPortColours());
         wire.setIncomingPortColours(port.getIncomingPortColours());
@@ -87,6 +87,7 @@ public class WireSystem extends EntitySystem {
         PortComponent port = portMapper.get(entity);
         port.sanitisePorts();
     }
+
     private void cull(Entity entity) {
         PortComponent port = portMapper.get(entity);
         port.cullPorts();
