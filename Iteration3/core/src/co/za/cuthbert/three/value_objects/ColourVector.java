@@ -25,14 +25,14 @@ public class ColourVector implements Pool.Poolable {
         this.line.addAll(line);
     }
 
-    public void advance(float delta, Colour portColour) {
-        if (!portColour.equals(line.get(0).colour)) {
+    public void advance(float delta, DiscreteColour portColour) {
+        if (portColour!=(line.get(0).colour)) {
             line.add(0, new ColourBracket(portColour));
         }
-        for (ColourBracket bracket : line.subList(1, line.size())) {
-            bracket.advance(delta);
-            if (bracket.position() > 1f) {
-                line.remove(bracket);
+        for (int i=1; i<line.size(); ++i){
+            line.get(i).advance(delta);
+            if (line.get(i).position() > 1f) {
+              line.remove(i--);
             }
         }
     }
@@ -53,9 +53,12 @@ public class ColourVector implements Pool.Poolable {
 
         ColourVector revToVector=reverseVector(toVector);
         List<ColourBracket> combinedLine = new ArrayList<ColourBracket>();
-
-
-        combinedLine.add(new ColourBracket(Colour.add(fromVector.line.get(0).colour, revToVector.line.get(0).colour), 0));
+        if(toVector.line.size()>1) {
+//            for(ColourBracket bracket: toVector.line){
+//                //System.out.println("Bracket - position: "+bracket.position()+", colour: "+Integer.toHexString(bracket.colour.toRGBA()));
+//            }
+        }
+        combinedLine.add(new ColourBracket(DiscreteColour.add(fromVector.line.get(0).colour, revToVector.line.get(0).colour), 0));
         int j = 0;
         int i = 0;
 
@@ -76,21 +79,21 @@ public class ColourVector implements Pool.Poolable {
                 position=revToVector.line.get(j).position();
             }
             if (!fromVector.line.get(i).colour.equals(revToVector.line.get(j))) {
-                combinedLine.add(new ColourBracket(Colour.add(fromVector.line.get(i).colour, revToVector.line.get(j).colour), position));
+                combinedLine.add(new ColourBracket(DiscreteColour.add(fromVector.line.get(i).colour, revToVector.line.get(j).colour),position));
             }
         }
         while (i<fromVector.line.size()-1){
             ++i;
             float position=fromVector.line.get(i).position();
             if (!fromVector.line.get(i).colour.equals(revToVector.line.get(j))) {
-                combinedLine.add(new ColourBracket(Colour.add(fromVector.line.get(i).colour, revToVector.line.get(j).colour), position));
+                combinedLine.add(new ColourBracket(DiscreteColour.add(fromVector.line.get(i).colour, revToVector.line.get(j).colour),position));
             }
         }
         while (j<revToVector.line.size()-1){
             ++j;
             float position=revToVector.line.get(j).position();
             if (!fromVector.line.get(i).colour.equals(revToVector.line.get(j))) {
-                combinedLine.add(new ColourBracket(Colour.add(fromVector.line.get(i).colour, revToVector.line.get(j).colour), position));
+                combinedLine.add(new ColourBracket(DiscreteColour.add(fromVector.line.get(i).colour, revToVector.line.get(j).colour), position));
             }
         }
 

@@ -2,6 +2,7 @@ package co.za.cuthbert.three;
 
 import co.za.cuthbert.three.components.*;
 import co.za.cuthbert.three.value_objects.Colour;
+import co.za.cuthbert.three.value_objects.DiscreteColour;
 import com.badlogic.ashley.core.Entity;
 
 /**
@@ -9,7 +10,7 @@ import com.badlogic.ashley.core.Entity;
  */
 public class TileFactory {
 
-    public static Entity createTile(Level level, int x, int y, TileType type, Colour currentColour) {
+    public static Entity createTile(Level level, int x, int y, TileType type, DiscreteColour currentColour) {
         if (type == TileType.WIRE) {
             return createWire(level, x, y);
         } else if (type == TileType.POWER_SOURCE) {
@@ -38,7 +39,7 @@ public class TileFactory {
 
     }
 
-    public static Entity createPowerSource(Level level, int x, int y, Colour colour) {
+    public static Entity createPowerSource(Level level, int x, int y, DiscreteColour colour) {
         Entity powerSource = level.engine().createEntity();
         TileTypeComponent tileTypeComponent = level.engine().createComponent(TileTypeComponent.class);
         tileTypeComponent.tileType(TileType.POWER_SOURCE);
@@ -52,7 +53,7 @@ public class TileFactory {
         powerSource.add(portComponent);
 
         ColourComponent colourComponent = level.engine().createComponent(ColourComponent.class);
-        colourComponent.colour().set(colour);
+        colourComponent.colour(colour);
         powerSource.add(colourComponent);
         return powerSource;
     }

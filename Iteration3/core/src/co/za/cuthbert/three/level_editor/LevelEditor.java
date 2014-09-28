@@ -12,6 +12,7 @@ import co.za.cuthbert.three.level_editor.tools.PanTool;
 import co.za.cuthbert.three.level_editor.tools.ToggleTool;
 import co.za.cuthbert.three.systems.SystemFactory;
 import co.za.cuthbert.three.value_objects.Colour;
+import co.za.cuthbert.three.value_objects.DiscreteColour;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -40,7 +41,7 @@ public class LevelEditor implements Screen {
         return currentLevel;
     }
 
-    public Colour colour() {
+    public DiscreteColour colour() {
         return colourSelector.currentColour();
     }
 

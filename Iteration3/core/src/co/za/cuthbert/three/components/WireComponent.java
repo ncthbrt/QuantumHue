@@ -2,6 +2,7 @@ package co.za.cuthbert.three.components;
 
 import co.za.cuthbert.three.value_objects.Colour;
 import co.za.cuthbert.three.value_objects.ColourVector;
+import co.za.cuthbert.three.value_objects.DiscreteColour;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool;
 
@@ -12,17 +13,17 @@ public class WireComponent extends Component implements Pool.Poolable {
 
     private final ColourVector toNexus[];
     private final ColourVector fromNexus[];
-    private Colour[] incomingPortColours;
+    private DiscreteColour[] incomingPortColours;
 
     public WireComponent() {
         toNexus = new ColourVector[9];
         fromNexus = new ColourVector[9];
-        incomingPortColours = new Colour[9];
+        incomingPortColours = new DiscreteColour[9];
         for (int i = 0; i < 9; i++) {
             if (i != 4) {
                 toNexus[i] = new ColourVector();
                 fromNexus[i] = new ColourVector();
-                incomingPortColours[i] = new Colour();
+                incomingPortColours[i] = DiscreteColour.ALPHA;
             }
         }
     }
@@ -37,65 +38,77 @@ public class WireComponent extends Component implements Pool.Poolable {
             if (vector != null)
                 vector.reset();
         }
-        for (Colour colour : incomingPortColours) {
+        for (DiscreteColour colour : incomingPortColours) {
             if (colour != null) {
-                colour.reset();
+                colour = DiscreteColour.ALPHA;
             }
         }
     }
 
-    public void incomingPortColours(Colour[] colours) {
+    public void incomingPortColours(DiscreteColour[] colours) {
         for (int i = 0; i < 9; ++i) {
             if (i != 4 && colours[i] != null) {
-                incomingPortColours[i].set(colours[i]);
+                incomingPortColours[i] = (colours[i]);
             }
         }
     }
 
-    public void incomingPortColour(int port, Colour colour) {
-        incomingPortColours[port].set(colour);
+    public void incomingPortColour(int port, DiscreteColour colour) {
+        incomingPortColours[port] = (colour);
     }
 
-    public Colour outgoingColour(int port) {
+    public DiscreteColour outgoingColour(int port) {
         return fromNexus[port].last().colour;
-
     }
 
-    public Colour[] outgoingColours() {
-        Colour[] out = new Colour[9];
+    public DiscreteColour[] outgoingColours() {
+        DiscreteColour[] out = new DiscreteColour[9];
         for (int i = 0; i < 9; ++i) {
             if (i != 4) {
                 out[i] = outgoingColour(i);
+            } else {
+                out[i] = DiscreteColour.ALPHA;
             }
         }
         return out;
     }
 
     public void advance(float delta) {
+        int portCount=0;
         for (int i = 0; i < 9; i++) {
             if (i != 4) {
-                toNexus[i].advance(delta, incomingPortColours[i]);
+                if(incomingPortColours[i]!=null) {
+                    toNexus[i].advance(delta, incomingPortColours[i]);
+                    ++portCount;
+                }
             }
         }
 
-        Colour outgoingNexusColour = outgoingNexusColour();
         for (int i = 0; i < 9; i++) {
             if (i != 4) {
-                Colour feedColour = Colour.subtract(outgoingNexusColour, (toNexus[i].last().colour));
-                fromNexus[i].advance(delta, feedColour);
+
+                DiscreteColour feedColour;
+                if(portCount>1){
+                    feedColour=outgoingNexusColour(i);
+                }else{
+                    feedColour=DiscreteColour.ALPHA;
+                }
+                fromNexus[i].advance(delta,feedColour );
             }
         }
+
     }
 
-    public Colour outgoingNexusColour() {
-        Colour finalColour = new Colour();
+
+    private DiscreteColour outgoingNexusColour(int port) {
+        DiscreteColour outgoingNexusColour = DiscreteColour.ALPHA;
         for (int i = 0; i < 9; i++) {
-            if (i != 4) {
-                Colour colour = toNexus[i].last().colour;
-                finalColour.add(colour);
+            if (i != 4 && i != port) {
+                DiscreteColour colour = toNexus[i].last().colour;
+                outgoingNexusColour = DiscreteColour.add(outgoingNexusColour, colour);
             }
         }
-        return finalColour;
+        return outgoingNexusColour;
     }
 
 
@@ -105,7 +118,7 @@ public class WireComponent extends Component implements Pool.Poolable {
         return ColourVector.mergeVectors(from, to);
     }
 
-    public Colour[] incomingPortColours() {
+    public DiscreteColour[] incomingPortColours() {
         return incomingPortColours;
     }
 }

@@ -10,6 +10,7 @@ import co.za.cuthbert.three.components.WireComponent;
 import co.za.cuthbert.three.value_objects.Colour;
 import co.za.cuthbert.three.value_objects.ColourBracket;
 import co.za.cuthbert.three.value_objects.ColourVector;
+import co.za.cuthbert.three.value_objects.DiscreteColour;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -81,20 +82,20 @@ public class WireRendererSystem extends EntitySystem implements LevelChangeListe
                         for (int k = 0; k < vector.line.size() - 1; ++k) {
                             ColourBracket end = vector.line.get(k + 1);
                             ColourBracket start = vector.line.get(k);
-                            if (start.colour.equals(new Colour())) {//If black set colour to a grey, so as to allow players to see the line on the dark background
+                            if (start.colour== DiscreteColour.ALPHA) {//If black set colour to a grey, so as to allow players to see the line on the dark background
                                 shapeRenderer.setColor(0.4f, 0.4f, 0.4f, 1f);
                             } else {
-                                shapeRenderer.setColor(start.colour.red() / 255f, start.colour.green() / 255f, start.colour.blue() / 255f, 1f);
+                                shapeRenderer.setColor(start.colour.toColour().red() / 255f, start.colour.toColour().green() / 255f, start.colour.toColour().blue() / 255f, 1f);
                             }
                             float point = Interpolation.linear.apply(0, Config.TILE_SIZE / 2f, end.position());
                             shapeRenderer.line(position.x() * Config.TILE_SIZE + i * lastPoint, position.y() * Config.TILE_SIZE + j * lastPoint, position.x() * Config.TILE_SIZE + i * point, position.y() * Config.TILE_SIZE + j * point);
                             lastPoint = point;
                         }
                         ColourBracket last = vector.line.get(vector.line.size() - 1);
-                        if (last.colour.equals(new Colour())) {//If black set colour to a grey, so as to allow players to see the line on the dark background
+                        if (last.colour==DiscreteColour.ALPHA) {//If black set colour to a grey, so as to allow players to see the line on the dark background
                             shapeRenderer.setColor(0.4f, 0.4f, 0.4f, 1f);
                         } else {
-                            shapeRenderer.setColor(last.colour.red() / 255f, last.colour.green() / 255f, last.colour.blue() / 255f, 1f);
+                            shapeRenderer.setColor(last.colour.toColour().red() / 255f, last.colour.toColour().green() / 255f, last.colour.toColour().blue() / 255f, 1f);
                         }
                         shapeRenderer.line(position.x() * Config.TILE_SIZE + i * lastPoint, position.y() * Config.TILE_SIZE + j * lastPoint, position.x() * Config.TILE_SIZE + i * Config.TILE_SIZE / 2, position.y() * Config.TILE_SIZE + j * Config.TILE_SIZE / 2);
                         ++attachedPorts;

@@ -106,21 +106,22 @@ public class Colour implements Pool.Poolable {
 
     public void add(Colour colour) {
         this.colour += colour.colour;
-        this.colour = Math.min(this.colour, 0xFFFFFFFF);
+        if(this.colour<0) {
+            this.colour=0xFFFFFFFF;
+        }
     }
 
     public void subtract(Colour colour) {
         this.colour -= colour.colour;
-        this.colour = Math.max(this.colour, 0);
+        if(this.colour<0) {
+            this.colour = 0;
+        }
     }
 
 
     public static Colour subtract(Colour colour1, Colour colour2) {
         Colour colour3 = new Colour(colour1);
         colour3.subtract(colour2);
-        if (colour3.colour < 0) {
-            colour3.colour = 0;
-        }
         return colour3;
     }
 
@@ -140,7 +141,7 @@ public class Colour implements Pool.Poolable {
     }
 
     public void set(int rgba) {
-        this.colour = rgba;
+        colour = rgba;
     }
 
     public void set(int r, int g, int b, int a) {

@@ -51,8 +51,7 @@ public class WirePortSystem extends EntitySystem implements LevelChangeListener 
 
     @Override
     public boolean checkProcessing() {
-        return true;
-        //return (level!=null && level.stepping());
+        return (level!=null && level.stepping());
     }
 
 }

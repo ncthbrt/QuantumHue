@@ -1,6 +1,7 @@
 package co.za.cuthbert.three.components;
 
 import co.za.cuthbert.three.value_objects.Colour;
+import co.za.cuthbert.three.value_objects.DiscreteColour;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool;
 
@@ -8,8 +9,8 @@ import com.badlogic.gdx.utils.Pool;
  * Copyright Nick Cuthbert, 2014
  */
 public class PortComponent extends Component implements Pool.Poolable {
-    private final Colour[] incomingPortColours;
-    private final Colour[] outgoingPortColours;
+    private final DiscreteColour[] incomingPortColours;
+    private final DiscreteColour[] outgoingPortColours;
     private final boolean[] portMask;
 
     private boolean cullable = true;
@@ -25,8 +26,8 @@ public class PortComponent extends Component implements Pool.Poolable {
 
 
     public PortComponent() {
-        incomingPortColours = new Colour[9];
-        outgoingPortColours = new Colour[9];
+        incomingPortColours = new DiscreteColour[9];
+        outgoingPortColours = new DiscreteColour[9];
         portMask = new boolean[9];
         reset();
     }
@@ -39,7 +40,7 @@ public class PortComponent extends Component implements Pool.Poolable {
         for (int i = 0; i < 9; ++i) {
             this.portMask[i] = portMask[i];
             if (!portMask[i]) {
-                incomingPortColours[i].reset();
+                incomingPortColours[i]=DiscreteColour.ALPHA;
             }
         }
     }
@@ -48,48 +49,48 @@ public class PortComponent extends Component implements Pool.Poolable {
     public void mask(int port, boolean active) {
         this.portMask[port] = active;
         if (!portMask[port]) {
-            incomingPortColours[port].reset();
+            incomingPortColours[port]=DiscreteColour.ALPHA;
         }
     }
 
-    public Colour[] incomingPortColours() {
+    public DiscreteColour[] incomingPortColours() {
         return incomingPortColours;
     }
 
-    public void incomingPortColour(int port, Colour colour) {
+    public void incomingPortColour(int port, DiscreteColour colour) {
         portMask[port] = true;
-        this.incomingPortColours[port].set(colour);
+        this.incomingPortColours[port]=(colour);
     }
 
-    public Colour incomingPortColour(int port) {
+    public DiscreteColour incomingPortColour(int port) {
         return incomingPortColours[port];
     }
 
-    public void incomingPortColours(Colour[] outgoingPortColours) {
+    public void incomingPortColours(DiscreteColour[] outgoingPortColours) {
         for (int i = 0; i < 9; ++i) {
             this.incomingPortColours[i] = outgoingPortColours[i];
         }
     }
 
-    public Colour[] outgoingPortColours() {
+    public DiscreteColour[] outgoingPortColours() {
         return outgoingPortColours;
     }
 
-    public void outgoingPortColour(int port, Colour colour) {
-        this.outgoingPortColours[port].set(colour);
+    public void outgoingPortColour(int port, DiscreteColour colour) {
+        this.outgoingPortColours[port]=(colour);
     }
 
-    public Colour outgoingPortColour(int port) {
+    public DiscreteColour outgoingPortColour(int port) {
         return outgoingPortColours[port];
     }
 
-    public void outgoingPortColours(Colour[] outgoingPortColours) {
+    public void outgoingPortColours(DiscreteColour[] outgoingPortColours) {
         for (int i = 0; i < 9; ++i) {
             this.outgoingPortColours[i] = outgoingPortColours[i];
         }
     }
 
-    public void outgoingPortColours(Colour colour) {
+    public void outgoingPortColours(DiscreteColour colour) {
         for (int i = 0; i < 9; ++i) {
             this.outgoingPortColours[i] = colour;
         }
@@ -98,8 +99,8 @@ public class PortComponent extends Component implements Pool.Poolable {
     @Override
     public void reset() {
         for (int i = 0; i < 9; i++) {
-            this.incomingPortColours[i] = new Colour();
-            this.outgoingPortColours[i] = new Colour();
+            this.incomingPortColours[i] = DiscreteColour.ALPHA;
+            this.outgoingPortColours[i] = DiscreteColour.ALPHA;
             this.portMask[i] = false;
         }
     }

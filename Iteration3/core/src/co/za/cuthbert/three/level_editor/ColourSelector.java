@@ -4,6 +4,7 @@ import co.za.cuthbert.three.Iteration3Main;
 import co.za.cuthbert.three.collision.PixelMask;
 import co.za.cuthbert.three.collision.PixelMaskFactory;
 import co.za.cuthbert.three.value_objects.Colour;
+import co.za.cuthbert.three.value_objects.DiscreteColour;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -31,8 +32,8 @@ public class ColourSelector implements GestureDetector.GestureListener{
     private float slide=0;
 
     private Pixmap pixmap;
-    private final Colour currentColour=new Colour(255,255,255,255);
-    public Colour currentColour(){
+    private DiscreteColour currentColour=DiscreteColour.WHITE;
+    public DiscreteColour currentColour(){
         return currentColour;
     }
 
@@ -80,7 +81,8 @@ public class ColourSelector implements GestureDetector.GestureListener{
 
         colourSelectorIndicatorMask.setPosition((int)x,(int)y);
         indicator.setPosition(x, y);
-        indicator.setColor(currentColour.red() / 255f, currentColour.green() / 255f, currentColour.blue() / 255f, currentColour.alpha() / 255f);
+        Colour indicatorColour=currentColour.toColour();
+        indicator.setColor(indicatorColour.red() / 255f, indicatorColour.green() / 255f, indicatorColour.blue() / 255f, indicatorColour.alpha() / 255f);
         indicator.draw(batch);
 
         colourSelector.setPosition(x, y);
@@ -101,7 +103,6 @@ public class ColourSelector implements GestureDetector.GestureListener{
             selected=!selected;
             return true;
         }else if(colourSelectorMask.isAt((int)world.x,(int)world.y)){
-            System.out.println("Colour selector mask true");
             int i=(int)world.x-colourSelectorMask.x;
             int j=colourSelectorMask.height-((int)world.y-colourSelectorMask.y);
             Colour colour=new Colour(colourSelectorPixmap.getPixel(i,j));
@@ -112,10 +113,12 @@ public class ColourSelector implements GestureDetector.GestureListener{
             g=g>200?255:0;
             b=b>200?255:0;
             if(r==255 || g==255 || b==255){
-                currentColour.set(r,g,b,255);
+                currentColour=DiscreteColour.map(new Colour(r, g, b, 255));
             }
+            System.out.println(currentColour.name());
             return true;
         }
+        System.out.println(currentColour.name());
         return false;
     }
 
