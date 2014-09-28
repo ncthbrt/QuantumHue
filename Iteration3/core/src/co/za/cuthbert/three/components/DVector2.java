@@ -64,6 +64,14 @@ public class DVector2 extends Component implements Pool.Poolable{
         return false;
     }
 
+    public static DVector2 delta(DVector2 vector1, DVector2 vector2){
+        return new DVector2(vector1.x-vector2.x,vector1.y-vector2.y);
+    }
+
+    public static int chebyshevDistance(DVector2 delta){
+        return delta.x()>delta.y()? delta.x(): delta.y();
+    }
+
     @Override
     public int hashCode() {
         return x + y * 17;

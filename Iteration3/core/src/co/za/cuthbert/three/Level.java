@@ -57,7 +57,7 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
         return camera;
     }
 
-    private static final float defaultAdvancementRate = 0.4f;
+    private static final float defaultAdvancementRate = 1f;
     public float advancementRate = defaultAdvancementRate;
 
 

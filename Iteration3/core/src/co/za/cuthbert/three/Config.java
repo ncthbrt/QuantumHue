@@ -8,8 +8,5 @@ public class Config {
     public static final boolean DEBUG = true;
 
     public static final int TOOL_CHOOSER_DEPTH = 0;
-    public static final int COLOUR_CHOOSER_DEPTH = 1;
-    public static final int TOOL_DEPTH = 2;
-
 
 }

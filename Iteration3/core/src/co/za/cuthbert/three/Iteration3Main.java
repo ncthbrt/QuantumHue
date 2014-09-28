@@ -30,7 +30,7 @@ public class Iteration3Main extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        Gdx.gl20.glLineWidth(5);
+        Gdx.gl20.glLineWidth(3);
         atlas = new TextureAtlas(Gdx.files.internal("global.atlas"));
         titleScreen = new TitleScreen(this, atlas);
         main = this;
