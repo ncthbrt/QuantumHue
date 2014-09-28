@@ -3,19 +3,16 @@ package co.za.cuthbert.three.systems;
 import co.za.cuthbert.three.Level;
 import co.za.cuthbert.three.LevelChangeListener;
 import co.za.cuthbert.three.TileType;
-import co.za.cuthbert.three.components.ColourComponent;
-import co.za.cuthbert.three.components.DVector2;
-import co.za.cuthbert.three.components.PortComponent;
-import co.za.cuthbert.three.components.WireComponent;
+import co.za.cuthbert.three.components.*;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 
 /**
- * Copyright Nick Cuthbert, 2014
+ * Copyright Nick Cuthbert, 2014.
  */
-public class WireSystem extends EntitySystem implements LevelChangeListener {
+public class WirePortSystem extends EntitySystem implements LevelChangeListener {
     private Level level;
     private static final ComponentMapper<PortComponent> portMapper = ComponentMapper.getFor(PortComponent.class);
     private static final ComponentMapper<WireComponent> wireMapper = ComponentMapper.getFor(WireComponent.class);
@@ -23,40 +20,39 @@ public class WireSystem extends EntitySystem implements LevelChangeListener {
     private static final ComponentMapper<ColourComponent> colourMapper = ComponentMapper.getFor(ColourComponent.class);
     private Family wireSystemFamily;
 
-    public WireSystem() {
-        priority = 2;
+    public WirePortSystem() {
+        priority = 1;
         wireSystemFamily = TileType.WIRE.family;
-    }
-
-    @Override
-    public void update(float deltaTime) {
-        if (level != null) {
-            if (level.stepping()) {
-                final float advance = deltaTime * level.advancementRate;
-                for (Entity entity : level) {
-                    if (entity != null && wireSystemFamily.matches(entity)) {
-                        advance(entity, advance);
-                    }
-                }
-            }
-        }
-    }
-
-
-    private void advance(Entity entity, float advance) {
-        PortComponent port = portMapper.get(entity);
-        WireComponent wire = wireMapper.get(entity);
-        wire.incomingPortColours(port.incomingPortColours());
-        wire.advance(advance);
     }
 
     public void level(Level level) {
         this.level = level;
     }
 
+
+    @Override
+    public void update(float deltaTime) {
+        if (level != null) {
+            //Update colours
+            for (Entity entity : level) {
+                if (entity != null && wireSystemFamily.matches(entity)) {
+                    synchronise(entity);
+                }
+            }
+        }
+    }
+
+
+    private void synchronise(Entity entity) {
+        PortComponent port = portMapper.get(entity);
+        WireComponent wire = wireMapper.get(entity);
+        port.outgoingPortColours(wire.outgoingColours());
+    }
+
     @Override
     public boolean checkProcessing() {
-        //return (level!=null && level.stepping());
         return true;
+        //return (level!=null && level.stepping());
     }
+
 }

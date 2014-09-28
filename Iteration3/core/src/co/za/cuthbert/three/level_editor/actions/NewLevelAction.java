@@ -20,8 +20,6 @@ public class NewLevelAction extends ButtonAction {
 
     @Override
     public void actionPerformed(String command) {
-        if (command.equals("Ok")) {
-            editor.currentLevel(new Level(engine, defaultWidth, (int) (defaultWidth * Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth())));
-        }
+        editor.currentLevel(new Level(engine, defaultWidth, (int) (defaultWidth * Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth())));
     }
 }

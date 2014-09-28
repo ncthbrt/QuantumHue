@@ -4,8 +4,7 @@ package co.za.cuthbert.three.level_editor;
 import co.za.cuthbert.three.level_editor.actions.ButtonAction;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-import java.util.ArrayList;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * Copyright Nick Cuthbert, 2014
@@ -17,10 +16,16 @@ public class Button implements Widget {
 
 
     public final String actionCommand;
-    public ArrayList<ButtonAction> actions = new ArrayList<ButtonAction>();
+    private Array<ButtonAction> actions;
 
-    public void addButtonAction(ButtonAction action) {
-        actions.add(action);
+    public void addAction(ButtonAction action) {
+        if (action != null) {
+            actions.add(action);
+        }
+    }
+
+    public void removeAction(ButtonAction action) {
+        actions.removeValue(action, true);
     }
 
     public enum Trigger {
@@ -41,7 +46,9 @@ public class Button implements Widget {
         this.downOffset = downOffset;
         this.upOffset = upOffset;
         this.trigger = trigger;
+        this.actions = new Array<ButtonAction>();
     }
+
 
     public void icon(Sprite icon) {
         this.icon = icon;
@@ -54,12 +61,14 @@ public class Button implements Widget {
     }
 
     public void pressed(boolean pressed) {
-        if (trigger == Trigger.EDGE || (trigger == Trigger.TRAILING_EDGE && this.pressed && !pressed) || (trigger == Trigger.LEADING_EDGE && !this.pressed && pressed)) {
-            for (ButtonAction action : actions) {
-                action.actionPerformed(actionCommand);
+        if ((trigger == Trigger.EDGE && pressed) || (trigger == Trigger.TRAILING_EDGE && this.pressed && !pressed) || (trigger == Trigger.LEADING_EDGE && !this.pressed && pressed)) {
+            for (int i = 0; i < actions.size; ++i) {
+                actions.get(i).actionPerformed(actionCommand);
             }
+            this.pressed = false;
+        } else {
+            this.pressed = pressed;
         }
-        this.pressed = pressed;
     }
 
     public void render(SpriteBatch batch, float x, float y) {

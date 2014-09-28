@@ -13,7 +13,7 @@
     limitMemory: true,
     grid: false,
     filterMin: Linear,
-    filterMag: Nearest,
+    filterMag: Linear,
     scale: [ 1 ],
     scaleSuffix: [ "" ]
 }

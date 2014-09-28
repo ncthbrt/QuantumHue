@@ -4,11 +4,14 @@ package co.za.cuthbert.three.level_editor;
 import co.za.cuthbert.three.Iteration3Main;
 import co.za.cuthbert.three.Level;
 import co.za.cuthbert.three.LevelChanger;
-import co.za.cuthbert.three.level_editor.actions.ButtonAction;
+import co.za.cuthbert.three.TileType;
 import co.za.cuthbert.three.level_editor.actions.NewLevelAction;
+import co.za.cuthbert.three.level_editor.actions.ShowDialogAction;
+import co.za.cuthbert.three.level_editor.tools.BrushTool;
 import co.za.cuthbert.three.level_editor.tools.PanTool;
-import co.za.cuthbert.three.level_editor.tools.WireTool;
+import co.za.cuthbert.three.level_editor.tools.ToggleTool;
 import co.za.cuthbert.three.systems.SystemFactory;
+import co.za.cuthbert.three.value_objects.Colour;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -18,8 +21,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
-
-import java.util.ArrayList;
 
 /**
  * Copyright Nick Cuthbert, 2014
@@ -34,46 +35,55 @@ public class LevelEditor implements Screen {
     private InputMultiplexer multiplexer;
     private final PooledEngine engine;
     private Level currentLevel;
-    public  Level currentLevel(){
+
+    public Level currentLevel() {
         return currentLevel;
     }
 
-    public void currentLevel(Level level){
-        if(currentLevel!=null) {
+    public Colour colour() {
+        return colourSelector.currentColour();
+    }
+
+    public void currentLevel(Level level) {
+        if (currentLevel != null) {
             this.currentLevel.dispose();
         }
-        this.currentLevel=level;
+        this.currentLevel = level;
         changer.currentLevel(currentLevel);
         engine.addEntityListener(currentLevel);
     }
 
     private LevelChanger changer;
+
     public LevelEditor(Game game) {
-        engine=new PooledEngine();
+        engine = new PooledEngine();
         changer = new LevelChanger();
-        SystemFactory.addToEngine(engine, changer);
-        this.atlas= Iteration3Main.textureAtlas();
-        this.batch=new SpriteBatch();
-        this.game=game;
-        group=new ButtonGroup(new Vector2(1910,0), ButtonGroup.Direction.UP, ButtonGroup.Anchor.BOTTOM_RIGHT);
+        this.batch = new SpriteBatch();
+        this.atlas = Iteration3Main.textureAtlas();
+        SystemFactory.addToEngine(engine, changer, batch, atlas);
+
+        this.game = game;
+        group = new ButtonGroup(new Vector2(1910, 0), ButtonGroup.Direction.UP, ButtonGroup.Anchor.BOTTOM_RIGHT);
         multiplexer = new InputMultiplexer();
         chooser = new ToolChooser(multiplexer, atlas.createSprite("border_top"), atlas.createSprite("border_bottom"));
-        chooser.addTool(new WireTool(this), atlas.createSprite("tool_wire"));
-        chooser.addTool(new PanTool(this), atlas.createSprite("tool_power"));
+        chooser.addTool(new BrushTool(this, TileType.WIRE), atlas.createSprite("tool_wire"));
+        chooser.addTool(new ToggleTool(this, TileType.POWER_SOURCE), atlas.createSprite("tool_power"));
         chooser.addTool(new PanTool(this), atlas.createSprite("tool_agent"));
         chooser.addTool(new PanTool(this), atlas.createSprite("tool_ground"));
         chooser.addTool(new PanTool(this), atlas.createSprite("tool_pan"));
 
-        GestureDetector detector=new GestureDetector(chooser);
+        GestureDetector detector = new GestureDetector(chooser);
 
-        colourSelector=new ColourSelector();
-        GestureDetector detector2=new GestureDetector(colourSelector);
+        colourSelector = new ColourSelector();
+        GestureDetector detector2 = new GestureDetector(colourSelector);
 
-        group.addButton("load",atlas.createSprite("icon_load"),new ArrayList<ButtonAction>());
-        group.addButton("save",atlas.createSprite("icon_save"),new ArrayList<ButtonAction>());
-        group.addButton("new",atlas.createSprite("icon_new"),new ArrayList<ButtonAction>());
-        NewLevelAction newLevelAction=new NewLevelAction(this,engine);
-        dialog=new ConfirmDialog(multiplexer,atlas.createSprite("diagram_new_consequences"), newLevelAction);
+        NewLevelAction newLevelAction = new NewLevelAction(this, engine);
+        dialog = new ConfirmDialog(multiplexer, atlas.createSprite("diagram_new_consequences"), newLevelAction, null);
+
+        group.addButton("load", atlas.createSprite("icon_load"));
+        group.addButton("save", atlas.createSprite("icon_save"));
+        group.addButton("new", atlas.createSprite("icon_new"), new ShowDialogAction(dialog));
+
 
         multiplexer.addProcessor(detector);
         multiplexer.addProcessor(detector2);
@@ -81,15 +91,15 @@ public class LevelEditor implements Screen {
         newLevelAction.actionPerformed("Ok");
 
     }
+
     private ConfirmDialog dialog;
 
     @Override
     public void render(float delta) {
-
         currentLevel.update(delta);
         batch.begin();
         group.render(batch);
-        dialog.render(batch,delta);
+        dialog.render(batch, delta);
         chooser.render(batch, delta);
         colourSelector.render(batch, delta);
         batch.end();

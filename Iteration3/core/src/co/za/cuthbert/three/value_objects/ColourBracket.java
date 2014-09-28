@@ -12,6 +12,10 @@ public class ColourBracket implements Pool.Poolable {
         return position;
     }
 
+    public void position(float position) {
+        this.position = position;
+    }
+
     public ColourBracket() {
         colour = new Colour();
         position = 0;

@@ -21,6 +21,12 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
     private int width, height;
 
     private boolean stepping = true;
+    private boolean levelModified = false;
+
+    public boolean levelModified() {
+        return levelModified;
+    }
+
 
     public boolean stepping() {
         return stepping;
@@ -105,7 +111,9 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
             }
             camera.update();
             level[newPosition.y()][newPosition.x()] = entity;
+            position.set(newPosition.x(), newPosition.y());
         }
+        levelModified = true;
         engine.addEntity(entity);
     }
 
@@ -123,7 +131,7 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
         for (int j = 0; j < height; j++) {
             for (int i = 0; i < width; i++) {
                 if (level[j][i] != null) {
-                    positionMapper.get(level[j][i]).set(i, j);
+                    positionMapper.get(get(i, j)).set(i, j);
                 }
             }
         }

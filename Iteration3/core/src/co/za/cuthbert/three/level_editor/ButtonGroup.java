@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
 
@@ -83,8 +84,8 @@ public class ButtonGroup extends InputAdapter {
         for (Button button : buttons) {
             Vector3 world = camera.unproject(new Vector3(screenX, Gdx.graphics.getHeight() - screenY, 0));
             if (button.inWidget(world.x, world.y, xCorner, yCorner)) {
-                buttonPressed = true;
                 button.pressed(true);
+                buttonPressed = true;
                 return true;
             } else {
                 button.pressed(false);
@@ -118,8 +119,10 @@ public class ButtonGroup extends InputAdapter {
         if (buttonPressed) {
             up();
             return true;
+        } else {
+            up();
+            return false;
         }
-        return false;
     }
 
     public enum Anchor {
@@ -151,12 +154,24 @@ public class ButtonGroup extends InputAdapter {
         }
     }
 
-    public void addButton(String actionCommand, Sprite icon, ArrayList<ButtonAction> actions) {
-        Button button = new Button(actionCommand, icon, buttonUp, buttonDown, 0, buttonDownOffset, Button.Trigger.EDGE);
+    public void addButton(String actionCommand, Sprite icon, ButtonAction action) {
+        Button button = new Button(actionCommand, icon, buttonUp, buttonDown, 0, buttonDownOffset, Button.Trigger.TRAILING_EDGE);
         buttons.add(button);
-        for (ButtonAction action : actions) {
-            button.addButtonAction(action);
+        button.addAction(action);
+    }
+
+    public void addButton(String actionCommand, Sprite icon, Array<ButtonAction> actions) {
+        Button button = new Button(actionCommand, icon, buttonUp, buttonDown, 0, buttonDownOffset, Button.Trigger.TRAILING_EDGE);
+        buttons.add(button);
+        for (int i = 0; i < actions.size; ++i) {
+            button.addAction(actions.get(i));
         }
+    }
+
+    public void addButton(String actionCommand, Sprite icon) {
+        Button button = new Button(actionCommand, icon, buttonUp, buttonDown, 0, buttonDownOffset, Button.Trigger.TRAILING_EDGE);
+        buttons.add(button);
+
     }
 
     public Button getButton(int index) {
@@ -170,6 +185,15 @@ public class ButtonGroup extends InputAdapter {
             }
         }
         return null;
+    }
+
+    public void removeButton(String actionCommand) {
+        for (Button button : buttons) {
+            if (actionCommand.equals(button.actionCommand)) {
+                buttons.remove(button);
+                return;
+            }
+        }
     }
 
     private boolean buttonPressed = false;

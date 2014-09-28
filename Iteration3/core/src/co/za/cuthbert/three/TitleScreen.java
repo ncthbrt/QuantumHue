@@ -1,7 +1,6 @@
 package co.za.cuthbert.three;
 
 import co.za.cuthbert.three.level_editor.LevelEditor;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
@@ -18,7 +17,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 public class TitleScreen implements Screen {
     private LevelEditor editor;
     SpriteBatch batch;
-    Game game;
+    Iteration3Main game;
     Sprite createButton;
     Sprite playButton;
     Sprite avatar;
@@ -28,7 +27,7 @@ public class TitleScreen implements Screen {
     float menuWidth;
     float menuHeight;
 
-    public TitleScreen(Game game, TextureAtlas atlas) {
+    public TitleScreen(Iteration3Main game, TextureAtlas atlas) {
         this.batch = new SpriteBatch();
         this.atlas = atlas;
         this.game = game;
@@ -58,6 +57,7 @@ public class TitleScreen implements Screen {
 
     @Override
     public void render(float delta) {
+
         if (Gdx.input.isTouched() && nextScreen == null) {
             int x = Gdx.input.getX();
             int y = Gdx.input.getY();
@@ -76,7 +76,6 @@ public class TitleScreen implements Screen {
                 fadeOutTimeRemaining -= delta;
             } else {
                 game.setScreen(nextScreen);
-
             }
         }
         batch.setProjectionMatrix(camera.combined);
@@ -113,7 +112,9 @@ public class TitleScreen implements Screen {
 
     @Override
     public void show() {
-
+        nextScreen = null;
+        fadeInTimeRemaining = fadeInTime;
+        fadeOutTimeRemaining = fadeOutTime;
     }
 
     @Override
@@ -138,6 +139,5 @@ public class TitleScreen implements Screen {
         createButton.getTexture().dispose();
         avatar.getTexture().dispose();
         batch.dispose();
-
     }
 }

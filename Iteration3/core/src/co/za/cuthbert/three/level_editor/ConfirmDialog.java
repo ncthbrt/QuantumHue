@@ -2,19 +2,17 @@ package co.za.cuthbert.three.level_editor;
 
 import co.za.cuthbert.three.Iteration3Main;
 import co.za.cuthbert.three.level_editor.actions.ButtonAction;
-import com.badlogic.gdx.Gdx;
+import co.za.cuthbert.three.level_editor.actions.HideDialogAction;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-
-import java.util.ArrayList;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * Copyright Nick Cuthbert, 2014
  */
 public class ConfirmDialog extends Dialog {
-    //private final ButtonGroup group;
     private final Sprite icon;
     private static Sprite okIcon;
     private static Sprite cancelIcon;
@@ -23,7 +21,7 @@ public class ConfirmDialog extends Dialog {
     private static final int buttonSpacing = 10;
     private ButtonGroup group;
 
-    public ConfirmDialog(InputMultiplexer multiplexer, Sprite icon, ButtonAction action) {
+    public ConfirmDialog(InputMultiplexer multiplexer, Sprite icon, ButtonAction confirmAction, ButtonAction cancelAction) {
         if (okIcon == null) {
             okIcon = Iteration3Main.textureAtlas().createSprite("icon_ok");
             cancelIcon = Iteration3Main.textureAtlas().createSprite("icon_cancel");
@@ -33,11 +31,23 @@ public class ConfirmDialog extends Dialog {
         offset(-okIcon.getRegionWidth() - buttonSpacing, 0);
 
         group = new ButtonGroup(buttonAnchorPoint(), ButtonGroup.Direction.DOWN, ButtonGroup.Anchor.TOP_LEFT);
-        ArrayList<ButtonAction> actions = new ArrayList<ButtonAction>();
-        actions.add(action);
-        group.addButton("Ok", okIcon, actions);
-        group.addButton("Cancel", cancelIcon, actions);
+
+        Array<ButtonAction> confirmActions = new Array<ButtonAction>();
+        confirmActions.add(confirmAction);
+        confirmActions.add(new HideDialogAction(this));
+        group.addButton("Ok", okIcon, confirmActions);
+
+        Array<ButtonAction> cancelActions = new Array<ButtonAction>();
+        cancelActions.add(cancelAction);
+        cancelActions.add(new HideDialogAction(this));
+        group.addButton("Cancel", cancelIcon, cancelActions);
         this.icon = icon;
+    }
+
+    @Override
+    public void show() {
+        super.show();
+        multiplexer.addProcessor(group);
     }
 
     private Vector2 buttonAnchorPoint() {
@@ -60,9 +70,6 @@ public class ConfirmDialog extends Dialog {
         group.render(batch);
         icon.setPosition(iconPosition.x, iconPosition.y);
         icon.draw(batch);
-        if (Gdx.input.isTouched() && (group.buttonPressed())) {
-            hide();
-        }
     }
 
 }

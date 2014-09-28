@@ -18,10 +18,11 @@ import com.badlogic.ashley.core.Family;
  * Copyright Nick Cuthbert, 2014.
  */
 public class PowerSystem extends EntitySystem implements LevelChangeListener {
-    private final Family powerPortFamily;
+    private final Family powerSourceFamily;
 
     public PowerSystem() {
-        powerPortFamily = (TileType.POWER_SOURCE.family);
+        priority = 0;
+        powerSourceFamily = (TileType.POWER_SOURCE.family);
     }
 
     private Level level;
@@ -39,7 +40,7 @@ public class PowerSystem extends EntitySystem implements LevelChangeListener {
     public void update(float deltaTime) {
         if (level != null) {
             for (Entity entity : level) {
-                if (entity != null && powerPortFamily.matches(entity)) {
+                if (entity != null && powerSourceFamily.matches(entity)) {
                     updatePowerPort(entity);
                 }
             }
@@ -48,19 +49,8 @@ public class PowerSystem extends EntitySystem implements LevelChangeListener {
 
 
     public void updatePowerPort(Entity powerPort) {
-        boolean on = true;
-        if (switchComponentMapper.has(powerPort)) {
-            on = switchComponentMapper.get(powerPort).on;
-        }
         PortComponent port = portMapper.get(powerPort);
-        DVector2 position = discretePositionMapper.get(powerPort);
         Colour colour = colourMapper.get(powerPort).colour();
-
-        if (on) {
-            port.setOutgoingPortColours(colour);
-        } else {
-            port.setOutgoingPortColours(new Colour());
-        }
-        port.setNeighboringPorts(level, position.x(), position.y());
+        port.outgoingPortColours(colour);
     }
 }

@@ -118,6 +118,9 @@ public class Colour implements Pool.Poolable {
     public static Colour subtract(Colour colour1, Colour colour2) {
         Colour colour3 = new Colour(colour1);
         colour3.subtract(colour2);
+        if (colour3.colour < 0) {
+            colour3.colour = 0;
+        }
         return colour3;
     }
 
@@ -158,7 +161,7 @@ public class Colour implements Pool.Poolable {
     public boolean equals(Object obj) {
         if (obj instanceof Colour) {
             Colour otherColour = (Colour) obj;
-            return otherColour.colour == colour;
+            return otherColour.colour == this.colour;
         }
         return false;
     }
