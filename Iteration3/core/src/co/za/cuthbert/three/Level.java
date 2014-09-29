@@ -2,7 +2,7 @@ package co.za.cuthbert.three;
 
 
 import co.za.cuthbert.three.components.DVector2;
-import co.za.cuthbert.three.components.TileTypeComponent;
+import co.za.cuthbert.three.components.EntityTypeComponent;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
@@ -41,7 +41,7 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
     }
 
 
-    private static final ComponentMapper<TileTypeComponent> tileTypeMapper = ComponentMapper.getFor(TileTypeComponent.class);
+    private static final ComponentMapper<EntityTypeComponent> tileTypeMapper = ComponentMapper.getFor(EntityTypeComponent.class);
     private static final ComponentMapper<DVector2> positionMapper = ComponentMapper.getFor(DVector2.class);
 
 
@@ -81,7 +81,7 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
 
 
     public void addTile(Entity entity) {
-        if (TileType.isTile(entity) && positionMapper.has(entity)) {
+        if (EntityType.isTile(entity) && positionMapper.has(entity)) {
             DVector2 position = positionMapper.get(entity);
             DVector2 newPosition = new DVector2();
             if (position.x() >= width) {
@@ -139,7 +139,7 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
 
     @Override
     public void entityRemoved(Entity entity) {
-        if (TileType.isTile(entity) && positionMapper.has(entity)) {
+        if (EntityType.isTile(entity) && positionMapper.has(entity)) {
             DVector2 position = positionMapper.get(entity);
             level[position.y()][position.x()] = null;
         }

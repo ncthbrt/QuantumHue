@@ -1,13 +1,12 @@
 package co.za.cuthbert.three.systems;
 
 import co.za.cuthbert.three.Config;
+import co.za.cuthbert.three.EntityType;
 import co.za.cuthbert.three.Level;
 import co.za.cuthbert.three.LevelChangeListener;
-import co.za.cuthbert.three.TileType;
 import co.za.cuthbert.three.components.DVector2;
 import co.za.cuthbert.three.components.PortComponent;
 import co.za.cuthbert.three.components.WireComponent;
-import co.za.cuthbert.three.value_objects.Colour;
 import co.za.cuthbert.three.value_objects.ColourBracket;
 import co.za.cuthbert.three.value_objects.ColourVector;
 import co.za.cuthbert.three.value_objects.DiscreteColour;
@@ -48,7 +47,7 @@ public class WireRendererSystem extends EntitySystem implements LevelChangeListe
             shapeRenderer.setProjectionMatrix(level.camera().combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             for (Entity entity : level) {
-                if (entity != null && TileType.WIRE.family.matches(entity)) {
+                if (entity != null && EntityType.WIRE.family.matches(entity)) {
                     processEntity(entity, deltaTime);
                 }
             }

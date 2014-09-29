@@ -1,14 +1,13 @@
 package co.za.cuthbert.three.systems;
 
 import co.za.cuthbert.three.Config;
+import co.za.cuthbert.three.EntityType;
 import co.za.cuthbert.three.Level;
 import co.za.cuthbert.three.LevelChangeListener;
-import co.za.cuthbert.three.TileType;
 import co.za.cuthbert.three.components.ColourComponent;
 import co.za.cuthbert.three.components.DVector2;
 import co.za.cuthbert.three.components.SwitchComponent;
 import co.za.cuthbert.three.value_objects.Colour;
-import co.za.cuthbert.three.value_objects.DiscreteColour;
 import com.badlogic.ashley.core.*;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -30,7 +29,7 @@ public class PowerRendererSystem extends EntitySystem implements LevelChangeList
     private final Family powerPortFamily;
 
     public PowerRendererSystem(SpriteBatch batch, TextureAtlas atlas) {
-        powerPortFamily = TileType.POWER_SOURCE.family;
+        powerPortFamily = EntityType.POWER_SOURCE.family;
         priority = 4;
         this.batch = batch;
         powerPortSprite = atlas.createSprite("power_source");

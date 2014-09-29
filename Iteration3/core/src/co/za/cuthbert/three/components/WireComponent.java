@@ -126,4 +126,9 @@ public class WireComponent extends Component implements Pool.Poolable,Traversabl
     public boolean traversable(Entity agent) {
         return true;
     }
+
+    @Override
+    public float movementCost(Entity agent) {
+        return 1f;
+    }
 }

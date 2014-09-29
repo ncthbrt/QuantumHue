@@ -1,8 +1,8 @@
 package co.za.cuthbert.three.systems;
 
+import co.za.cuthbert.three.EntityType;
 import co.za.cuthbert.three.Level;
 import co.za.cuthbert.three.LevelChangeListener;
-import co.za.cuthbert.three.TileType;
 import co.za.cuthbert.three.components.*;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
@@ -22,7 +22,7 @@ public class WirePortSystem extends EntitySystem implements LevelChangeListener 
 
     public WirePortSystem() {
         priority = 1;
-        wireSystemFamily = TileType.WIRE.family;
+        wireSystemFamily = EntityType.WIRE.family;
     }
 
     public void level(Level level) {

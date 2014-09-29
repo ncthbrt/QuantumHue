@@ -1,19 +1,18 @@
 package co.za.cuthbert.three;
 
 import co.za.cuthbert.three.components.*;
-import co.za.cuthbert.three.value_objects.Colour;
 import co.za.cuthbert.three.value_objects.DiscreteColour;
 import com.badlogic.ashley.core.Entity;
 
 /**
  * Copyright Nick Cuthbert, 2014.
  */
-public class TileFactory {
+public class EntityFactory {
 
-    public static Entity createTile(Level level, int x, int y, TileType type, DiscreteColour currentColour) {
-        if (type == TileType.WIRE) {
+    public static Entity createTile(Level level, int x, int y, EntityType type, DiscreteColour currentColour) {
+        if (type == EntityType.WIRE) {
             return createWire(level, x, y);
-        } else if (type == TileType.POWER_SOURCE) {
+        } else if (type == EntityType.POWER_SOURCE) {
             return createPowerSource(level, x, y, currentColour);
         } else {
             return createVoid(level, x, y);
@@ -22,8 +21,8 @@ public class TileFactory {
 
     public static Entity createWire(Level level, int x, int y) {
         Entity wire = level.engine().createEntity();
-        TileTypeComponent tileTypeComponent = level.engine().createComponent(TileTypeComponent.class);
-        tileTypeComponent.tileType(TileType.WIRE);
+        EntityTypeComponent tileTypeComponent = level.engine().createComponent(EntityTypeComponent.class);
+        tileTypeComponent.tileType(EntityType.WIRE);
         wire.add(tileTypeComponent);
 
         DVector2 position = level.engine().createComponent(DVector2.class);
@@ -41,8 +40,8 @@ public class TileFactory {
 
     public static Entity createPowerSource(Level level, int x, int y, DiscreteColour colour) {
         Entity powerSource = level.engine().createEntity();
-        TileTypeComponent tileTypeComponent = level.engine().createComponent(TileTypeComponent.class);
-        tileTypeComponent.tileType(TileType.POWER_SOURCE);
+        EntityTypeComponent tileTypeComponent = level.engine().createComponent(EntityTypeComponent.class);
+        tileTypeComponent.tileType(EntityType.POWER_SOURCE);
         powerSource.add(tileTypeComponent);
 
         DVector2 position = level.engine().createComponent(DVector2.class);
@@ -60,8 +59,8 @@ public class TileFactory {
 
     public static Entity createVoid(Level level, int x, int y) {
         Entity voidEntity = level.engine().createEntity();
-        TileTypeComponent tileTypeComponent = level.engine().createComponent(TileTypeComponent.class);
-        tileTypeComponent.tileType(TileType.VOID);
+        EntityTypeComponent tileTypeComponent = level.engine().createComponent(EntityTypeComponent.class);
+        tileTypeComponent.tileType(EntityType.VOID);
         voidEntity.add(tileTypeComponent);
 
         DVector2 position = level.engine().createComponent(DVector2.class);

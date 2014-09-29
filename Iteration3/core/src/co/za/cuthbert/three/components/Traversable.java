@@ -7,5 +7,6 @@ import com.badlogic.ashley.core.Entity;
  */
 public interface Traversable {
     public boolean traversable(Entity agent);
+    public float movementCost(Entity agent);
 }
 

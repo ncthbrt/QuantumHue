@@ -1,17 +1,16 @@
 package co.za.cuthbert.three.level_editor;
 
 
+import co.za.cuthbert.three.EntityType;
 import co.za.cuthbert.three.Iteration3Main;
 import co.za.cuthbert.three.Level;
 import co.za.cuthbert.three.LevelChanger;
-import co.za.cuthbert.three.TileType;
 import co.za.cuthbert.three.level_editor.actions.NewLevelAction;
 import co.za.cuthbert.three.level_editor.actions.ShowDialogAction;
 import co.za.cuthbert.three.level_editor.tools.BrushTool;
 import co.za.cuthbert.three.level_editor.tools.PanTool;
 import co.za.cuthbert.three.level_editor.tools.ToggleTool;
 import co.za.cuthbert.three.systems.SystemFactory;
-import co.za.cuthbert.three.value_objects.Colour;
 import co.za.cuthbert.three.value_objects.DiscreteColour;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Game;
@@ -67,8 +66,8 @@ public class LevelEditor implements Screen {
         group = new ButtonGroup(new Vector2(1910, 0), ButtonGroup.Direction.UP, ButtonGroup.Anchor.BOTTOM_RIGHT);
         multiplexer = new InputMultiplexer();
         chooser = new ToolChooser(multiplexer, atlas.createSprite("border_top"), atlas.createSprite("border_bottom"));
-        chooser.addTool(new BrushTool(this, TileType.WIRE), atlas.createSprite("tool_wire"));
-        chooser.addTool(new ToggleTool(this, TileType.POWER_SOURCE), atlas.createSprite("tool_power"));
+        chooser.addTool(new BrushTool(this, EntityType.WIRE), atlas.createSprite("tool_wire"));
+        chooser.addTool(new ToggleTool(this, EntityType.POWER_SOURCE), atlas.createSprite("tool_power"));
         chooser.addTool(new PanTool(this), atlas.createSprite("tool_agent"));
         chooser.addTool(new PanTool(this), atlas.createSprite("tool_ground"));
         chooser.addTool(new PanTool(this), atlas.createSprite("tool_pan"));

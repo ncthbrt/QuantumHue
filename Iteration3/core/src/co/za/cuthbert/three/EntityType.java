@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Bits;
 /**
  * Copyright Nick Cuthbert, 2014.
  */
-public enum TileType {
+public enum EntityType {
 
     WIRE(0, PortComponent.class, WireComponent.class),
     INVERTER(1),
@@ -22,9 +22,10 @@ public enum TileType {
     MOMENTARY_SWITCH(10),
     SWITCH(11, SwitchComponent.class),
     VOID(13, VoidComponent.class),
-    FILTER(14, ColourComponent.class);
+    FILTER(14, ColourComponent.class),
+    AGENT(15, ColourComponent.class, AgentComponent.class);
 
-    TileType(int code, Class<? extends Component>... compulsoryComponents) {
+    EntityType(int code, Class<? extends Component>... compulsoryComponents) {
         this.code = code;
         this.family=Family.getFor(ComponentType.getBitsFor(compulsoryComponents), ComponentType.getBitsFor(DVector2.class),new Bits());
         this.requiredComponents=compulsoryComponents;
@@ -38,8 +39,8 @@ public enum TileType {
 
     public final Family family;
     public final Class<? extends Component> [] requiredComponents;
-    public static TileType findMatching(int code) {
-        for (TileType type : TileType.values()) {
+    public static EntityType findMatching(int code) {
+        for (EntityType type : EntityType.values()) {
             if (type.code == code) {
                 return type;
             }
@@ -51,7 +52,7 @@ public enum TileType {
         return (this == VOID || isTile(entity)) && family.matches(entity);
     }
 
-    private static final ComponentMapper<TileTypeComponent> tileTypeMapper=ComponentMapper.getFor(TileTypeComponent.class);
+    private static final ComponentMapper<EntityTypeComponent> tileTypeMapper=ComponentMapper.getFor(EntityTypeComponent.class);
 
     public static boolean isTile(Entity entity){
         return entity != null && !VOID.family.matches(entity) && tileTypeMapper.has(entity);

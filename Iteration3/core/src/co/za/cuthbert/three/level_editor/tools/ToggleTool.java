@@ -1,8 +1,8 @@
 package co.za.cuthbert.three.level_editor.tools;
 
 import co.za.cuthbert.three.Config;
-import co.za.cuthbert.three.TileFactory;
-import co.za.cuthbert.three.TileType;
+import co.za.cuthbert.three.EntityFactory;
+import co.za.cuthbert.three.EntityType;
 import co.za.cuthbert.three.level_editor.LevelEditor;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -13,9 +13,9 @@ import com.badlogic.gdx.math.Vector3;
  * Copyright Nick Cuthbert, 2014
  */
 public class ToggleTool extends Tool {
-    private TileType type;
+    private EntityType type;
 
-    public ToggleTool(LevelEditor editor, TileType type) {
+    public ToggleTool(LevelEditor editor, EntityType type) {
         super(editor);
         this.type = type;
     }
@@ -35,7 +35,7 @@ public class ToggleTool extends Tool {
             if (tile != null) {
                 editor.currentLevel().removeTile(tile);
             } else {
-                editor.currentLevel().addTile(TileFactory.createTile(editor.currentLevel(), worldX, worldY, type, editor.colour()));
+                editor.currentLevel().addTile(EntityFactory.createTile(editor.currentLevel(), worldX, worldY, type, editor.colour()));
             }
             return true;
         }

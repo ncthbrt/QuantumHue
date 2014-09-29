@@ -1,5 +1,6 @@
 package co.za.cuthbert.three.pathing;
 
+import co.za.cuthbert.three.components.DVector2;
 import com.badlogic.ashley.core.Entity;
 
 /**
@@ -9,12 +10,13 @@ public class PathfindingNode implements Comparable<PathfindingNode>{
     Entity tile;
     private final float heuristicCost;
     private float cost;
+    public final DVector2 position;
 
-
-    public PathfindingNode(float heuristicCost, float cost,PathfindingNode predecessor){
+    public PathfindingNode(DVector2 positon, float heuristicCost, float cost,PathfindingNode predecessor){
         this.cost=cost;
         this.predecessor=predecessor;
         this.heuristicCost=heuristicCost;
+        this.position=positon;
     }
 
     private PathfindingNode predecessor=null;

@@ -1,8 +1,8 @@
 package co.za.cuthbert.three.systems;
 
+import co.za.cuthbert.three.EntityType;
 import co.za.cuthbert.three.Level;
 import co.za.cuthbert.three.LevelChangeListener;
-import co.za.cuthbert.three.TileType;
 import co.za.cuthbert.three.components.ColourComponent;
 import co.za.cuthbert.three.components.DVector2;
 import co.za.cuthbert.three.components.PortComponent;
@@ -25,7 +25,7 @@ public class WireSystem extends EntitySystem implements LevelChangeListener {
 
     public WireSystem() {
         priority = 2;
-        wireSystemFamily = TileType.WIRE.family;
+        wireSystemFamily = EntityType.WIRE.family;
     }
 
     @Override

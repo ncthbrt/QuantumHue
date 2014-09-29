@@ -1,10 +1,9 @@
 package co.za.cuthbert.three.systems;
 
+import co.za.cuthbert.three.EntityType;
 import co.za.cuthbert.three.Level;
 import co.za.cuthbert.three.LevelChangeListener;
-import co.za.cuthbert.three.TileType;
 import co.za.cuthbert.three.components.*;
-import co.za.cuthbert.three.value_objects.Colour;
 import co.za.cuthbert.three.value_objects.DiscreteColour;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
@@ -46,7 +45,7 @@ public class PortSystem extends EntitySystem implements LevelChangeListener {
     }
 
     private void updatePort(Entity entity) {
-        if (entity != null && TileType.isTile(entity) && portMapper.has(entity)) {
+        if (entity != null && EntityType.isTile(entity) && portMapper.has(entity)) {
             DVector2 position = positionMapper.get(entity);
             PortComponent port = portMapper.get(entity);
             for (int i = -1; i <= 1; ++i) {
@@ -65,7 +64,7 @@ public class PortSystem extends EntitySystem implements LevelChangeListener {
     }
 
     public void cullPort(Entity entity) {
-        if (entity != null && TileType.isTile(entity) && portMapper.has(entity)) {
+        if (entity != null && EntityType.isTile(entity) && portMapper.has(entity)) {
 
             DVector2 position = positionMapper.get(entity);
             PortComponent component = portMapper.get(entity);
