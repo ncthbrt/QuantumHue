@@ -4,93 +4,58 @@ package co.za.cuthbert.three.value_objects;
  * Copyright Nick Cuthbert, 2014.
  */
 public enum DiscreteColour {
-    RED(new Colour(255,0,0,255)),
-    YELLOW(new Colour(255,255,0,255)),
-    GREEN(new Colour(0,255,0,255)),
-    CYAN(new Colour(0,255,255,255)),
-    BLUE(new Colour(0,0,255,255)),
-    MAGENTA(new Colour(255,0,255,255)),
-    WHITE(new Colour(255,255,255,255)),
-    ALPHA(new Colour(0,0,0,0));
+    RED(true,false,false),
+    YELLOW(true,true,false),
+    GREEN(false,true,false),
+    CYAN(false,true, true),
+    BLUE(false,false,true),
+    MAGENTA(true,false,true),
+    WHITE(true,true,true),
+    ALPHA(false,false,false);
 
-    private final Colour colour;
-
-    private DiscreteColour(Colour colour){
-        this.colour=colour;
+    private  final boolean red, green, blue;
+    private DiscreteColour(boolean red, boolean green, boolean blue){
+        this.red=red;
+        this.green=green;
+        this.blue=blue;
     }
 
     public static DiscreteColour add(DiscreteColour colour1,DiscreteColour colour2) {
-        if (colour1 == ALPHA)
-            return colour2;
-
-        if (colour1 == WHITE || colour2==WHITE)
-            return WHITE;
-
-        if (colour1 == colour2)
-            return colour1;
-
-        if (colour1 == RED && colour2 == GREEN)
-            return YELLOW;
-        if (colour1 == GREEN && colour2 == BLUE)
-            return CYAN;
-
-        if (colour1 == BLUE && colour2 == RED)
-            return MAGENTA;
-
-        if((colour1==CYAN && colour2==RED)
-            ||(colour1==MAGENTA && colour2==GREEN)
-            ||(colour1==YELLOW && colour2==BLUE))
-            return WHITE;
-
-        if (colour1 == YELLOW || colour1 == CYAN || colour1 == MAGENTA)
-            return colour1;
-
-        return add(colour2, colour1);
+         boolean red=colour1.red|colour2.red;
+         boolean green=colour1.green|colour2.green;
+         boolean blue=colour1.blue|colour2.blue;
+         return map(red,green,blue);
     }
 
     public static DiscreteColour subtract(DiscreteColour colour1,DiscreteColour colour2) {
-        if(colour1==ALPHA)
-            return ALPHA;
+       boolean red=false;
+       if(colour1.red){
+           red=colour2.red?false:true;
+       }
 
-        if((colour1==RED && (colour2==RED || colour2==MAGENTA || colour2==YELLOW))
-          ||(colour1==BLUE && (colour2==BLUE || colour2==MAGENTA || colour2==CYAN))
-          ||(colour1==GREEN && (colour2==GREEN || colour2==YELLOW || colour2==CYAN))
-          || colour1==colour2)
-            return ALPHA;
+       boolean green=false;
+       if(colour1.green){
+            green=colour2.green?false:true;
+       }
 
-        if(colour1==MAGENTA) {
-            if (colour2 == RED)
-                return BLUE;
-            if(colour2 == BLUE)
-                return RED;
+        boolean blue=false;
+        if(colour1.blue){
+            blue=colour2.blue?false:true;
         }
-
-        if(colour1==CYAN){
-            if (colour2 == GREEN)
-                return BLUE;
-            if(colour2 == BLUE)
-                return GREEN;
-        }
-
-        if(colour1 == YELLOW){
-            if (colour2 == GREEN)
-                return RED;
-            if(colour2 == RED)
-                return GREEN;
-        }
-
-        return colour1;
-
+        return map(red,green,blue);
     }
 
     public Colour toColour() {
-        return colour;
+        if(red ||green || blue) {
+            return new Colour(red ? 255 : 0, green ? 255 : 0, blue ? 255 : 0, 255);
+        }else{
+            return new Colour(0,0,0,0);
+        }
     }
 
-    public static DiscreteColour map(Colour colour){
-        System.out.println("RGB: "+colour.red()+" , "+ colour.green()+" , "+ colour.blue());
+    public static DiscreteColour map(boolean red, boolean green,boolean blue){
         for(DiscreteColour discreteColour: DiscreteColour.values()){
-            if(discreteColour.toColour().equals(colour)){
+            if(discreteColour.red==red && discreteColour.green==green && discreteColour.blue==blue){
                 return discreteColour;
             }
         }

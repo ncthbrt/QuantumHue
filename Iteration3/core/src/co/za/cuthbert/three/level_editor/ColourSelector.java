@@ -1,6 +1,5 @@
 package co.za.cuthbert.three.level_editor;
 
-import co.za.cuthbert.three.Iteration3Main;
 import co.za.cuthbert.three.collision.PixelMask;
 import co.za.cuthbert.three.collision.PixelMaskFactory;
 import co.za.cuthbert.three.value_objects.Colour;
@@ -11,7 +10,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
@@ -109,11 +107,11 @@ public class ColourSelector implements GestureDetector.GestureListener{
             int r=colour.red();
             int g=colour.green();
             int b=colour.blue();
-            r=r>200?255:0;
-            g=g>200?255:0;
-            b=b>200?255:0;
+            boolean red=r>200?true:false;
+            boolean green=g>200?true:false;
+            boolean blue=b>200?true:false;
             if(r==255 || g==255 || b==255){
-                currentColour=DiscreteColour.map(new Colour(r, g, b, 255));
+                currentColour=DiscreteColour.map(red, green, blue);
             }
             System.out.println(currentColour.name());
             return true;
