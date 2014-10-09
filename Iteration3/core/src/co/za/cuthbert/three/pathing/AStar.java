@@ -35,7 +35,7 @@ public class AStar implements Pool.Poolable{
      * @param agent
      * @return
      */
-    private LinkedList<DVector2> route(DVector2 start, DVector2 end, Entity agent){
+    public LinkedList<DVector2> route(DVector2 start, DVector2 end, Entity agent){
         PathfindingNode endNode=revRoute(start,end,agent);
         if(end==null){
             return new LinkedList<DVector2>();

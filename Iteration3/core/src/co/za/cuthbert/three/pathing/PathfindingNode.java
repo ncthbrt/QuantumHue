@@ -23,7 +23,6 @@ public class PathfindingNode implements Comparable<PathfindingNode>{
     public PathfindingNode predecessor(){
         return predecessor;
     }
-
     public float estimatedCost(){
         return heuristicCost+cost;
     }

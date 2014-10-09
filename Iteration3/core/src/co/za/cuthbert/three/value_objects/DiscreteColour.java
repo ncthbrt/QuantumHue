@@ -1,5 +1,8 @@
 package co.za.cuthbert.three.value_objects;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Copyright Nick Cuthbert, 2014.
  */
@@ -13,7 +16,7 @@ public enum DiscreteColour {
     WHITE(true,true,true),
     ALPHA(false,false,false);
 
-    private  final boolean red, green, blue;
+    public final boolean red, green, blue;
     private DiscreteColour(boolean red, boolean green, boolean blue){
         this.red=red;
         this.green=green;
@@ -30,17 +33,17 @@ public enum DiscreteColour {
     public static DiscreteColour subtract(DiscreteColour colour1,DiscreteColour colour2) {
        boolean red=false;
        if(colour1.red){
-           red=colour2.red?false:true;
+           red= !colour2.red;
        }
 
        boolean green=false;
        if(colour1.green){
-            green=colour2.green?false:true;
+            green= !colour2.green;
        }
 
         boolean blue=false;
         if(colour1.blue){
-            blue=colour2.blue?false:true;
+            blue= !colour2.blue;
         }
         return map(red,green,blue);
     }
@@ -51,6 +54,20 @@ public enum DiscreteColour {
         }else{
             return new Colour(0,0,0,0);
         }
+    }
+
+    public final List<Colour> toComponentColours() {
+        List<Colour> colours=new ArrayList<Colour>();
+        if(red) {
+            colours.add(new Colour(255,0,0,255));
+        }
+        if(green) {
+            colours.add(new Colour(0,255,0,255));
+        }
+        if(blue) {
+            colours.add(new Colour(0,0,255,255));
+        }
+        return colours;
     }
 
     public static DiscreteColour map(boolean red, boolean green,boolean blue){

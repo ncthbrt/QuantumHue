@@ -19,7 +19,7 @@ public class PortSystem extends EntitySystem implements LevelChangeListener {
     private Level level = null;
 
     public PortSystem() {
-        priority = 1;
+        priority = 0;
     }
 
     @Override

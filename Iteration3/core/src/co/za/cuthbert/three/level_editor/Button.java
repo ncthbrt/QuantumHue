@@ -2,8 +2,10 @@ package co.za.cuthbert.three.level_editor;
 
 
 import co.za.cuthbert.three.level_editor.actions.ButtonAction;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 
 /**
@@ -49,6 +51,17 @@ public class Button implements Widget {
         this.actions = new Array<ButtonAction>();
     }
 
+    private static NinePatch buttonUpDefault=null;
+    private static NinePatch buttonDownDefault=null;
+    public Button(TextureAtlas atlas,String actionCommand, Sprite icon,  Trigger trigger){
+        this.actionCommand=actionCommand;
+        buttonUp=null;
+        buttonDown=null;
+        if(buttonDownDefault==null){
+            buttonDownDefault=atlas.createPatch("button_down");
+            buttonUpDefault=atlas.createPatch("button_up");
+        }
+    }
 
     public void icon(Sprite icon) {
         this.icon = icon;
@@ -73,6 +86,7 @@ public class Button implements Widget {
 
     public void render(SpriteBatch batch, float x, float y) {
         if (pressed) {
+
             buttonDown.setPosition(x, y);
             buttonDown.draw(batch);
             icon.setPosition(x, y - downOffset);

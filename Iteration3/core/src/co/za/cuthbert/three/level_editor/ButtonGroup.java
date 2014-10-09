@@ -22,7 +22,7 @@ public class ButtonGroup extends InputAdapter {
     public ArrayList<Button> buttons;
     private final float xMargin = 20f;
     private final float yMargin = 10f;
-    private final float buttonDownOffset = 13f;
+    public final float buttonDownOffset = 13f;
     private static Sprite buttonUp = null;
     private static Sprite buttonDown = null;
     private final Vector2 anchorPoint;
@@ -166,6 +166,10 @@ public class ButtonGroup extends InputAdapter {
         for (int i = 0; i < actions.size; ++i) {
             button.addAction(actions.get(i));
         }
+    }
+
+    public void addButton(Button button){
+        buttons.add(button);
     }
 
     public void addButton(String actionCommand, Sprite icon) {

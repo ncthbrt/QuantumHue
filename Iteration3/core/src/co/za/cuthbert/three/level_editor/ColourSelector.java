@@ -107,16 +107,14 @@ public class ColourSelector implements GestureDetector.GestureListener{
             int r=colour.red();
             int g=colour.green();
             int b=colour.blue();
-            boolean red=r>200?true:false;
-            boolean green=g>200?true:false;
-            boolean blue=b>200?true:false;
+            boolean red= r > 200;
+            boolean green= g > 200;
+            boolean blue= b > 200;
             if(r==255 || g==255 || b==255){
                 currentColour=DiscreteColour.map(red, green, blue);
             }
-            System.out.println(currentColour.name());
             return true;
         }
-        System.out.println(currentColour.name());
         return false;
     }
 

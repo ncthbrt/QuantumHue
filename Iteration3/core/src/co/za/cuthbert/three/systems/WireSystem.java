@@ -24,7 +24,7 @@ public class WireSystem extends EntitySystem implements LevelChangeListener {
     private Family wireSystemFamily;
 
     public WireSystem() {
-        priority = 2;
+        priority = 1;
         wireSystemFamily = EntityType.WIRE.family;
     }
 

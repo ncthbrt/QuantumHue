@@ -86,14 +86,13 @@ public class WireComponent extends Component implements Pool.Poolable,Traversabl
 
         for (int i = 0; i < 9; i++) {
             if (i != 4) {
-
                 DiscreteColour feedColour;
                 if(portCount>1){
                     feedColour=outgoingNexusColour(i);
                 }else{
                     feedColour=DiscreteColour.ALPHA;
                 }
-                fromNexus[i].advance(delta,feedColour );
+                fromNexus[i].advance(delta,feedColour);
             }
         }
 

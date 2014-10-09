@@ -1,6 +1,5 @@
 package co.za.cuthbert.three.level_editor;
 
-
 import co.za.cuthbert.three.EntityType;
 import co.za.cuthbert.three.Iteration3Main;
 import co.za.cuthbert.three.Level;
@@ -17,6 +16,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.input.GestureDetector;
@@ -79,6 +80,22 @@ public class LevelEditor implements Screen {
 
         NewLevelAction newLevelAction = new NewLevelAction(this, engine);
         dialog = new ConfirmDialog(multiplexer, atlas.createSprite("diagram_new_consequences"), newLevelAction, null);
+        NinePatch up=atlas.createPatch("button_up");
+        NinePatch down=atlas.createPatch("button_down");
+
+        Sprite start=atlas.createSprite("icon_start");
+        Sprite pause=atlas.createSprite("icon_pause");
+
+        up.setMiddleWidth(start.getWidth());
+        up.setMiddleHeight(start.getHeight());
+        down.setMiddleWidth(start.getHeight());
+
+
+        Button play=new Button("play",group.buttonDownOffset, Button.Trigger.TRAILING_EDGE);
+
+
+        group.addButton();
+
 
         group.addButton("load", atlas.createSprite("icon_load"));
         group.addButton("save", atlas.createSprite("icon_save"));
