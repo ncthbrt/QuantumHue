@@ -3,13 +3,12 @@ package co.za.cuthbert.three.components;
 import co.za.cuthbert.three.value_objects.ColourVector;
 import co.za.cuthbert.three.value_objects.DiscreteColour;
 import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Pool;
 
 /**
  * Copyright Nick Cuthbert, 2014
  */
-public class WireComponent extends Component implements Pool.Poolable,Traversable {
+public class WireComponent extends Component implements Pool.Poolable {
 
     private final ColourVector toNexus[];
     private final ColourVector fromNexus[];
@@ -121,13 +120,5 @@ public class WireComponent extends Component implements Pool.Poolable,Traversabl
         return incomingPortColours;
     }
 
-    @Override
-    public boolean traversable(Entity agent) {
-        return true;
-    }
 
-    @Override
-    public float movementCost(Entity agent) {
-        return 1f;
-    }
 }

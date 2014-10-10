@@ -30,15 +30,13 @@ public class WireSystem extends EntitySystem implements LevelChangeListener {
 
     @Override
     public void update(float deltaTime) {
-        if (level != null) {
-            if (level.stepping()) {
+        if (level != null && level.stepping()){
                 final float advance = deltaTime * level.advancementRate;
                 for (Entity entity : level) {
                     if (entity != null && wireSystemFamily.matches(entity)) {
                         advance(entity, advance);
                     }
                 }
-            }
         }
     }
 

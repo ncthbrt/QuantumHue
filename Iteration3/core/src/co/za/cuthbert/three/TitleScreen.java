@@ -1,6 +1,6 @@
 package co.za.cuthbert.three;
 
-import co.za.cuthbert.three.level_editor.LevelEditor;
+import co.za.cuthbert.three.ui.LevelEditor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;

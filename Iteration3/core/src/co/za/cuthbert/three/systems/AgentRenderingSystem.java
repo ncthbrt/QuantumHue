@@ -6,13 +6,12 @@ import co.za.cuthbert.three.Level;
 import co.za.cuthbert.three.LevelChangeListener;
 import co.za.cuthbert.three.components.AgentComponent;
 import co.za.cuthbert.three.components.ColourComponent;
+import co.za.cuthbert.three.components.DVector2;
 import co.za.cuthbert.three.value_objects.Colour;
 import co.za.cuthbert.three.value_objects.DiscreteColour;
 import com.badlogic.ashley.core.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-
-import java.util.List;
 
 /**
  * Copyright Nick Cuthbert, 2014
@@ -21,7 +20,7 @@ public class AgentRenderingSystem  extends EntitySystem implements LevelChangeLi
     private final Family agentFamily;
     private final ShapeRenderer shapeRenderer;
     public AgentRenderingSystem(ShapeRenderer shapeRenderer){
-        super.priority=5;
+        super.priority=8;
         agentFamily = EntityType.AGENT.family;
         this.shapeRenderer=shapeRenderer;
     }
@@ -43,8 +42,10 @@ public class AgentRenderingSystem  extends EntitySystem implements LevelChangeLi
         @Override
         public void update(float deltaTime) {
             if (level != null) {
+                shapeRenderer.setProjectionMatrix(level.camera().combined);
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-                for (Entity entity : level) {
+                for (Entity entity : level.agents()) {
+
                     if (entity != null && agentFamily.matches(entity)) {
                         renderAgent(entity);
                     }
@@ -58,32 +59,15 @@ public class AgentRenderingSystem  extends EntitySystem implements LevelChangeLi
             AgentComponent agentComponent=agentMapper.get(agent);
 
             Colour colour=discreteColour.toColour();
-            shapeRenderer.setColor(colour.red()/255f,colour.green()/255f,colour.blue()/255f,colour.alpha()/255f);
+            shapeRenderer.setColor(colour.red()/255f,colour.green()/255f,colour.blue()/255f,1f);
             Vector2 position=agentComponent.position();
-            shapeRenderer.circle(position.x, position.y, Config.TILE_SIZE/1.8f);
-
-            final float offsetHyp=Config.TILE_SIZE/4f;
-            final float offsetXY=(float)Math.sqrt(offsetHyp/2f);
-
-            List<Colour> componentColours=discreteColour.toComponentColours();
-
-
-            for(int i=0; i<componentColours.size(); ++i){
-                Colour component=componentColours.get(i);
-
-            }
-            if(discreteColour.red) {
-                shapeRenderer.setColor(1f, 0, 0, 1f);
-                shapeRenderer.circle(position.x-offsetXY, position.y+offsetXY, Config.TILE_SIZE/8f);
-
-            }
-            if(discreteColour.green) {
-                shapeRenderer.setColor(0, 1f, 0, 1f);
-                shapeRenderer.circle(position.x+offsetXY, position.y+offsetXY, Config.TILE_SIZE/8f);
-            }
-            if(discreteColour.blue) {
-                shapeRenderer.setColor(0, 0, 1f, 1f);
-                shapeRenderer.circle(position.x, position.y-offsetHyp, Config.TILE_SIZE/8f);
+            shapeRenderer.circle(position.x* Config.TILE_SIZE, position.y* Config.TILE_SIZE, agentComponent.radius,100);
+            if(Config.DEBUG){
+                if(agentComponent.path()!=null) {
+                    for (DVector2 point: agentComponent.path()){
+                        shapeRenderer.circle(point.x()* Config.TILE_SIZE, point.y()* Config.TILE_SIZE, agentComponent.radius/4f,20);
+                    }
+                }
             }
         }
     }

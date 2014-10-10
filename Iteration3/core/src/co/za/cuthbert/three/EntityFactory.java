@@ -9,12 +9,15 @@ import com.badlogic.ashley.core.Entity;
  */
 public class EntityFactory {
 
-    public static Entity createTile(Level level, int x, int y, EntityType type, DiscreteColour currentColour) {
+    public static Entity createEntity(Level level, int x, int y, EntityType type, DiscreteColour currentColour) {
         if (type == EntityType.WIRE) {
             return createWire(level, x, y);
         } else if (type == EntityType.POWER_SOURCE) {
             return createPowerSource(level, x, y, currentColour);
-        } else {
+        }else if (type== EntityType.AGENT){
+            return createAgent(level,x,y,currentColour);
+        }
+        else {
             return createVoid(level, x, y);
         }
     }
@@ -34,6 +37,12 @@ public class EntityFactory {
 
         WireComponent wireComponent = level.engine().createComponent(WireComponent.class);
         wire.add(wireComponent);
+
+        DigitallyTraversable digitallyTraversable=level.engine().createComponent(DigitallyTraversable.class);
+        digitallyTraversable.traversable=true;
+        digitallyTraversable.traversalCost =1;
+
+        wire.add(digitallyTraversable);
         return wire;
 
     }
@@ -54,6 +63,13 @@ public class EntityFactory {
         ColourComponent colourComponent = level.engine().createComponent(ColourComponent.class);
         colourComponent.colour(colour);
         powerSource.add(colourComponent);
+
+        DigitallyTraversable digitallyTraversable=level.engine().createComponent(DigitallyTraversable.class);
+        digitallyTraversable.traversable=false;
+        digitallyTraversable.traversalCost =0;
+
+        powerSource.add(digitallyTraversable);
+
         return powerSource;
     }
 
@@ -70,7 +86,22 @@ public class EntityFactory {
         voidEntity.add(level.engine().createComponent(VoidComponent.class));
 
         return voidEntity;
+    }
 
+    public static Entity createAgent(Level level, int x, int y, DiscreteColour colour){
+            AgentComponent agentComponent=level.engine().createComponent(AgentComponent.class);
 
+            ColourComponent colourComponent=level.engine().createComponent(ColourComponent.class);
+            colourComponent.colour(colour);
+            agentComponent.position(new DVector2(x,y));
+
+            AgentStateComponent stateComponent=level.engine().createComponent(AgentStateComponent.class);
+
+            Entity entity=level.engine().createEntity();
+            entity.add(colourComponent);
+            entity.add(agentComponent);
+            entity.add(stateComponent);
+
+            return entity;
     }
 }

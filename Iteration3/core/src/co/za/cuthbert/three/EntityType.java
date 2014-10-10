@@ -9,13 +9,13 @@ import com.badlogic.gdx.utils.Bits;
  */
 public enum EntityType {
 
-    WIRE(0, PortComponent.class, WireComponent.class),
+    WIRE(0, PortComponent.class, WireComponent.class, DigitallyTraversable.class),
     INVERTER(1),
     TERMINATOR(2),
     EXIT(3),
     TURN_TABLE(4),
     SLIDER(5),
-    POWER_SOURCE(6, ColourComponent.class, PortComponent.class),
+    POWER_SOURCE(6, ColourComponent.class, PortComponent.class, DigitallyTraversable.class),
     ISOLATOR(7),
     TRANSISTOR(8),
     GROUND(9),
@@ -23,11 +23,11 @@ public enum EntityType {
     SWITCH(11, SwitchComponent.class),
     VOID(13, VoidComponent.class),
     FILTER(14, ColourComponent.class),
-    AGENT(15, ColourComponent.class, AgentComponent.class);
+    AGENT(15, ColourComponent.class, AgentComponent.class, AgentStateComponent.class);
 
     EntityType(int code, Class<? extends Component>... compulsoryComponents) {
         this.code = code;
-        this.family=Family.getFor(ComponentType.getBitsFor(compulsoryComponents), ComponentType.getBitsFor(DVector2.class),new Bits());
+        this.family=Family.getFor(ComponentType.getBitsFor(compulsoryComponents), ComponentType.getBitsFor(DVector2.class, AgentComponent.class),new Bits());
         this.requiredComponents=compulsoryComponents;
     }
 
