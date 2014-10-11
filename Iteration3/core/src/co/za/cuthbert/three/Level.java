@@ -23,7 +23,7 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
     private Entity[][] level;
     private ArrayList<ArrayList<ArrayList<Entity>>> agentMap;
 
-    private final HashSet<Entity> agents;
+    private final ArrayList<Entity> agents;
 
     /**This method is to be called at the beginning of every frame.
      * Agents are dynamic, so it is not that inefficient to rebuild
@@ -41,7 +41,7 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
             }
     }
 
-    public HashSet<Entity> agents(){
+    public ArrayList<Entity> agents(){
         return agents;
     }
 
@@ -59,12 +59,12 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
             AgentComponent agentComponent = agentMapper.get(agent);
             DVector2 position = agentComponent.currentTile();
             agentMap.get(position.y()).get(position.x()).add(agent);
-            }
+        }
     }
 
 
-    public List<Entity> nearbyAgents(Entity agent){
-        List<Entity> results=new ArrayList<Entity>();
+    public HashSet<Entity> nearbyAgents(Entity agent){
+        HashSet<Entity> results=new HashSet<Entity>();
         AgentComponent agentComponent=agentMapper.get(agent);
         DVector2 currentTile=agentComponent.currentTile();
         for(int j=-1; j<=1; ++j){
@@ -72,6 +72,17 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
                 if(currentTile.x()+i>=0 && currentTile.x()+i<width
                    && currentTile.y()+j>=0 && currentTile.y()+j<height){
                   results.addAll(agentMap.get(currentTile.y()+j).get(currentTile.x()+i));
+                }
+            }
+        }
+        if(agentComponent.nextTile()!=null) {
+            currentTile=agentComponent.nextTile();
+            for (int j = -1; j <= 1; ++j) {
+                for (int i = -1; i <= 1; ++i) {
+                    if (currentTile.x() + i >= 0 && currentTile.x() + i < width
+                            && currentTile.y() + j >= 0 && currentTile.y() + j < height) {
+                        results.addAll(agentMap.get(currentTile.y() + j).get(currentTile.x() + i));
+                    }
                 }
             }
         }
@@ -139,7 +150,7 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
         this.width = width;
         this.height = height;
         resetAgentMapping();
-        agents=new HashSet<Entity>();
+        agents=new ArrayList<Entity>();
 
     }
 
@@ -158,7 +169,7 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
                     newPosition.x(0);
                     growMap(position.x() - 1, height);
                     reconcile();
-                    renconcileAgents(-(position.x()),0);
+                    reconcileAgents(-(position.x()), 0);
                     camera.translate(-position.x() * Config.TILE_SIZE, 0);
                 } else {
                     newPosition.x(position.x());
@@ -171,6 +182,7 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
                     newPosition.y(0);
                     growMap(width, position.y() - 1);
                     reconcile();
+                    reconcileAgents(0,-(position.y()));
                     camera.translate(0, -position.y() * Config.TILE_SIZE);
 
                 } else {
@@ -205,10 +217,10 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
         }
     }
 
-    public void renconcileAgents(int deltaWidth, int deltaHeight){
+    public void reconcileAgents(int deltaWidth, int deltaHeight){
         for(Entity agent: agents){
             AgentComponent agentComponent=agentMapper.get(agent);
-            agentComponent.shift(deltaHeight,deltaHeight);
+            agentComponent.shift(deltaWidth,deltaHeight);
         }
         resetAgentMapping();
     }

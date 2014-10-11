@@ -22,7 +22,7 @@ public class SystemFactory {
         PowerSystem powerSystem = new PowerSystem();
         PowerRendererSystem powerRendererSystem = new PowerRendererSystem(batch, atlas);
 
-        AgentRenderingSystem agentRenderingSystem=new AgentRenderingSystem(shapeRenderer);
+        AgentRenderingSystem agentRenderingSystem=new AgentRenderingSystem(shapeRenderer,batch);
         AgentSystem agentSystem=new AgentSystem();
 
         engine.addSystem(agentSystem);

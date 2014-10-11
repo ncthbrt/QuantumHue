@@ -32,9 +32,17 @@ public class PlayPauseAction extends ButtonAction implements LevelChangeListener
         }
     }
 
+
+
+
     private Level level;
     @Override
     public void level(Level level) {
         this.level=level;
+        if(level.stepping()){
+            button.icon(pauseIcon);
+        }else {
+            button.icon(playIcon);
+        }
     }
 }

@@ -40,10 +40,14 @@ public class AgentComponent extends Component implements Pool.Poolable {
     }
 
     public void shift(int deltaX, int deltaY){
-        position.set(position.x()+deltaX,position.y()+deltaX);
-        next.set(next.x()+deltaX,next.y()+deltaY);
-        for(DVector2 node:path){
-            node.set(next.x()+deltaX,next.y()+deltaY);
+        position.set(position.x()+deltaX,position.y()+deltaY);
+        if(next!=null) {
+            next.set(next.x() + deltaX, next.y() + deltaY);
+        }
+        if(path!=null) {
+            for (DVector2 node : path) {
+                node.set(node.x() + deltaX, node.y() + deltaY);
+            }
         }
     }
 
@@ -53,6 +57,10 @@ public class AgentComponent extends Component implements Pool.Poolable {
 
     public DVector2 nextTile(){
         return next;
+    }
+
+    public void nextTile(DVector2 nextTile){
+        this.next=nextTile;
     }
 
 

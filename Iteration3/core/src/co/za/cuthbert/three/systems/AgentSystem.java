@@ -15,6 +15,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -55,58 +57,72 @@ public class AgentSystem extends EntitySystem implements LevelChangeListener{
                     }
                     agentComponent.advance(deltaTime);
                 }
-            }
-           level.resetAgentMapping();
+           }
+
            level.updateAgentPositions(); //Prepare for collision detection
 
+            HashSet<Entity> removedAgents=new HashSet<Entity>();
             for (Entity agent : level.agents()) { //Collision detection
+
+                if(removedAgents.contains(agent)){
+                    continue;
+                }
                 AgentComponent agentComponent=agentMapper.get(agent);
                 for(Entity neighborAgent:level.nearbyAgents(agent)){
+                    if(removedAgents.contains(neighborAgent)){
+                        continue;
+                    }
                     AgentComponent neighborAgentComponent=agentMapper.get(neighborAgent);
                     if(overlapping(agentComponent,neighborAgentComponent)){
+                        System.out.println("Collision detected");
                         agentStateMapper.get(agent).state(AgentStateComponent.State.MERGING);
-                        if(neighborAgentComponent.nextTile()!=null && agentComponent.nextTile()!=null && neighborAgentComponent.nextTile().equals(agentComponent.nextTile())){
+                        if(agentComponent.nextTile()==null && neighborAgentComponent.nextTile()!=null && neighborAgentComponent.nextTile().equals(agentComponent.currentTile())){
+                            List<DVector2> path=new ArrayList<DVector2>();
+                            path.add(neighborAgentComponent.currentTile());
+                            path.add(agentComponent.currentTile());
+                            agentComponent.path(path);
+                        }
 
-                            float delta=neighborAgentComponent.between()-agentComponent.between();
-                            if(Math.abs(delta)<0.05f){
+                        if((neighborAgentComponent.nextTile()!=null && agentComponent.nextTile()!=null && neighborAgentComponent.nextTile().equals(agentComponent.nextTile()))){
+                            float delta=1-agentComponent.between();
+                            if(agentComponent.radius/20f>Config.TILE_SIZE*delta){
                                 DiscreteColour mergedColour = DiscreteColour.add(colourMapper.get(agent).colour(), colourMapper.get(neighborAgent).colour());
                                 colourMapper.get(agent).colour(mergedColour);
-                                level.removeAgent(neighborAgent);
+                                removedAgents.add(neighborAgent);
                                 agentStateMapper.get(agent).state(AgentStateComponent.State.NORMAL);
                             }
                             else{
-                                agentComponent.between(agentComponent.between()+delta*(deltaTime*1.2f));
+                                agentComponent.between(agentComponent.between()+(delta)* AgentComponent.movementSpeed *deltaTime*8);
                             }
-                        }else if((neighborAgentComponent.nextTile()!=null && neighborAgentComponent.nextTile().equals(agentComponent.currentTile())) ||(agentComponent.nextTile()!=null && agentComponent.nextTile().equals(neighborAgentComponent.currentTile()))){
-                            float delta=neighborAgentComponent.between()-(1-agentComponent.between());
-                            if(Math.abs(delta)<0.05f){
+                        }else if((agentComponent.nextTile()!=null && agentComponent.nextTile().equals(neighborAgentComponent.currentTile())))
+                        {
+                            float delta=(1-agentComponent.between()-neighborAgentComponent.between());
+                            if(agentComponent.radius/20f>Config.TILE_SIZE*Math.abs(delta)){
+                                System.out.println("Scenario 1");
                                 DiscreteColour mergedColour = DiscreteColour.add(colourMapper.get(agent).colour(), colourMapper.get(neighborAgent).colour());
                                 colourMapper.get(agent).colour(mergedColour);
-                                level.removeAgent(neighborAgent);
+                                removedAgents.add(neighborAgent);
                                 agentStateMapper.get(agent).state(AgentStateComponent.State.NORMAL);
                             }
                             else{
-                                agentComponent.between(agentComponent.between()+delta*(deltaTime*1.2f));
-                            }
-                        }else{
-                            float delta=neighborAgentComponent.between()-(1-agentComponent.between());
-                            if(Math.abs(delta)<0.05f) {
-                                DiscreteColour mergedColour = DiscreteColour.add(colourMapper.get(agent).colour(), colourMapper.get(neighborAgent).colour());
-                                colourMapper.get(agent).colour(mergedColour);
-                                level.removeAgent(neighborAgent);
-                                agentStateMapper.get(agent).state(AgentStateComponent.State.NORMAL);
+                                agentComponent.between(agentComponent.between()+((delta)* AgentComponent.movementSpeed *deltaTime*8));
                             }
                         }
+
                     }
 
+
                 }
+            }
+            for (Entity agent:removedAgents){
+                level.removeAgent(agent);
             }
 
         }
     }
 
     private boolean overlapping(AgentComponent agent, AgentComponent neighbor){
-        return agent.position().dst2(neighbor.position())<=4*(agent.radius*agent.radius)/(Config.TILE_SIZE*Config.TILE_SIZE);
+        return agent.position().dst(neighbor.position())*Config.TILE_SIZE<=2*(agent.radius);
     }
 
 

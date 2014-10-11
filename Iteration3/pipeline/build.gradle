@@ -1,13 +1,18 @@
 apply plugin: "java"
 sourceCompatibility = 1.8
 sourceSets.main.java.srcDirs = ["src/"]
+project.ext.assetsDir = new File("../");
 project.ext.mainClassName = "co.za.cuthbert.pipeline.PipelineMain"
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
     ignoreExitValue = true
+    workingDir = project.assetsDir
 }
+
+
+
 task dist(type: Jar) {
     from files(sourceSets.main.output.classesDir)
     from files(sourceSets.main.output.resourcesDir)
