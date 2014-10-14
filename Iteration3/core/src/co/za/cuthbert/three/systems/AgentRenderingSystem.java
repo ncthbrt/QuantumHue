@@ -11,6 +11,7 @@ import co.za.cuthbert.three.value_objects.Colour;
 import co.za.cuthbert.three.value_objects.DiscreteColour;
 import com.badlogic.ashley.core.*;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,16 +27,23 @@ public class AgentRenderingSystem  extends EntitySystem implements LevelChangeLi
     private final Family agentFamily;
     private final ShapeRenderer shapeRenderer;
     private final SpriteBatch spriteBatch;
+
     public AgentRenderingSystem(ShapeRenderer shapeRenderer, SpriteBatch spriteBatch){
         super.priority=8;
+
         agentFamily = EntityType.AGENT.family;
         this.shapeRenderer=shapeRenderer;
         this.spriteBatch=spriteBatch;
+        buffer=new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(),Gdx.graphics.getHeight(),false);
+        agentRender = new TextureRegion(buffer.getColorBufferTexture(),0,0, buffer.getWidth(),buffer.getHeight());
+        agentRender.flip(false,true);
+
+        camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
     }
-    private FrameBuffer buffer;
-
-
+    private final FrameBuffer buffer;
+    private final TextureRegion agentRender;
+    private final OrthographicCamera camera;
     private static final ComponentMapper<ColourComponent> colourMapper = ComponentMapper.getFor(ColourComponent.class);
     private static final ComponentMapper<AgentComponent> agentMapper = ComponentMapper.getFor(AgentComponent.class);
 
@@ -49,16 +57,16 @@ public class AgentRenderingSystem  extends EntitySystem implements LevelChangeLi
             super.removedFromEngine(engine);
     }
 
-        @Override
+    private void resizeBatch(int width, int height) {
+        camera.setToOrtho(false, width, height);
+        spriteBatch.setProjectionMatrix(camera.combined);
+    }
+
+    @Override
         public void update(float deltaTime) {
 
             if (level != null) {
-                buffer=new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(),Gdx.graphics.getHeight(),false);
 
-                buffer.bind();
-                buffer.begin();
-
-                shapeRenderer.setProjectionMatrix(level.camera().combined);
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                 if(Config.DEBUG){
                     for (Entity entity : level.agents()) {
@@ -66,27 +74,44 @@ public class AgentRenderingSystem  extends EntitySystem implements LevelChangeLi
                     }
                 }
 
+                shapeRenderer.end();
+                buffer.begin();
+                Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+                Gdx.gl.glEnable(GL20.GL_BLEND);
+                Gdx.gl.glBlendFunc(GL20.GL_ONE, GL20.GL_ONE);
+                shapeRenderer.setProjectionMatrix(level.camera().combined);
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
                 for (Entity entity : level.agents()) {
 
                     if (entity != null && agentFamily.matches(entity)) {
                         renderAgent(entity);
                     }
                 }
-
                 shapeRenderer.end();
+
                 buffer.end();
+
+
+                Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
                 OrthographicCamera orthographicCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
                 orthographicCamera.position.set(orthographicCamera.viewportWidth/2f,orthographicCamera.viewportHeight/2f, 0);
                 orthographicCamera.update();
-                TextureRegion agentRender = new TextureRegion(buffer.getColorBufferTexture(),0,0, buffer.getWidth(),buffer.getHeight());
-                agentRender.flip(false,true);
-                spriteBatch.setProjectionMatrix(orthographicCamera.combined);
-                spriteBatch.begin();
 
-                spriteBatch.draw(agentRender,0,0);
+                spriteBatch.setProjectionMatrix(orthographicCamera.combined);
+
+                spriteBatch.begin();
+                spriteBatch.draw(agentRender, 0, 0);
                 spriteBatch.end();
-                buffer.dispose();
+
+
+
+
+
+
             }
         }
 
@@ -113,4 +138,6 @@ public class AgentRenderingSystem  extends EntitySystem implements LevelChangeLi
         }
 
     }
+
+
 

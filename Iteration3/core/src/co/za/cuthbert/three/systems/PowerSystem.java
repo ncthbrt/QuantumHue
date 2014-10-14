@@ -38,7 +38,7 @@ public class PowerSystem extends EntitySystem implements LevelChangeListener {
 
     @Override
     public void update(float deltaTime) {
-        if (level != null) {
+        if (level != null && level.stepping()) {
             for (Entity entity : level) {
                 if (entity != null && powerSourceFamily.matches(entity)) {
                     updatePowerPort(entity);

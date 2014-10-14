@@ -15,7 +15,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -73,42 +72,31 @@ public class AgentSystem extends EntitySystem implements LevelChangeListener{
                         continue;
                     }
                     AgentComponent neighborAgentComponent=agentMapper.get(neighborAgent);
-                    if(overlapping(agentComponent,neighborAgentComponent)){
-                        System.out.println("Collision detected");
+                    if(overlapping(agentComponent,neighborAgentComponent)) {
+
                         agentStateMapper.get(agent).state(AgentStateComponent.State.MERGING);
-                        if(agentComponent.nextTile()==null && neighborAgentComponent.nextTile()!=null && neighborAgentComponent.nextTile().equals(agentComponent.currentTile())){
-                            List<DVector2> path=new ArrayList<DVector2>();
-                            path.add(neighborAgentComponent.currentTile());
-                            path.add(agentComponent.currentTile());
-                            agentComponent.path(path);
-                        }
-
-                        if((neighborAgentComponent.nextTile()!=null && agentComponent.nextTile()!=null && neighborAgentComponent.nextTile().equals(agentComponent.nextTile()))){
-                            float delta=1-agentComponent.between();
-                            if(agentComponent.radius/20f>Config.TILE_SIZE*delta){
-                                DiscreteColour mergedColour = DiscreteColour.add(colourMapper.get(agent).colour(), colourMapper.get(neighborAgent).colour());
-                                colourMapper.get(agent).colour(mergedColour);
-                                removedAgents.add(neighborAgent);
-                                agentStateMapper.get(agent).state(AgentStateComponent.State.NORMAL);
+                            if ((neighborAgentComponent.nextTile() != null && agentComponent.nextTile() != null && neighborAgentComponent.nextTile().equals(agentComponent.nextTile()))) {
+                                float delta = 1 - agentComponent.between();
+                                if (agentComponent.radius / 20f > Config.TILE_SIZE * delta) {
+                                    DiscreteColour mergedColour = DiscreteColour.add(colourMapper.get(agent).colour(), colourMapper.get(neighborAgent).colour());
+                                    colourMapper.get(agent).colour(mergedColour);
+                                    removedAgents.add(neighborAgent);
+                                    agentStateMapper.get(agent).state(AgentStateComponent.State.NORMAL);
+                                } else {
+                                    agentComponent.between(agentComponent.between() + (delta) * AgentComponent.movementSpeed * deltaTime * 8);
+                                }
+                            } else if ((agentComponent.nextTile() != null && agentComponent.nextTile().equals(neighborAgentComponent.currentTile()))) {
+                                float delta = (1 - agentComponent.between() - neighborAgentComponent.between());
+                                if (agentComponent.radius / 20f > Config.TILE_SIZE * Math.abs(delta)) {
+                                    System.out.println("Scenario 1");
+                                    DiscreteColour mergedColour = DiscreteColour.add(colourMapper.get(agent).colour(), colourMapper.get(neighborAgent).colour());
+                                    colourMapper.get(agent).colour(mergedColour);
+                                    removedAgents.add(neighborAgent);
+                                    agentStateMapper.get(agent).state(AgentStateComponent.State.NORMAL);
+                                } else {
+                                    agentComponent.between(agentComponent.between() + ((delta) * AgentComponent.movementSpeed * deltaTime * 8));
+                                }
                             }
-                            else{
-                                agentComponent.between(agentComponent.between()+(delta)* AgentComponent.movementSpeed *deltaTime*8);
-                            }
-                        }else if((agentComponent.nextTile()!=null && agentComponent.nextTile().equals(neighborAgentComponent.currentTile())))
-                        {
-                            float delta=(1-agentComponent.between()-neighborAgentComponent.between());
-                            if(agentComponent.radius/20f>Config.TILE_SIZE*Math.abs(delta)){
-                                System.out.println("Scenario 1");
-                                DiscreteColour mergedColour = DiscreteColour.add(colourMapper.get(agent).colour(), colourMapper.get(neighborAgent).colour());
-                                colourMapper.get(agent).colour(mergedColour);
-                                removedAgents.add(neighborAgent);
-                                agentStateMapper.get(agent).state(AgentStateComponent.State.NORMAL);
-                            }
-                            else{
-                                agentComponent.between(agentComponent.between()+((delta)* AgentComponent.movementSpeed *deltaTime*8));
-                            }
-                        }
-
                     }
 
 

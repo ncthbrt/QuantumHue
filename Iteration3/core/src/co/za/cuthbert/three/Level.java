@@ -254,18 +254,6 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
         if (newWidth > this.width) {
             level = new Entity[height][newWidth];
             this.width = newWidth;
-        } else if (newHeight > this.height) {
-            level = new Entity[newHeight][width];
-            for (int j = 0; j < height; j++) {
-                System.arraycopy(this.level[j], 0, level[j], 0, width);
-            }
-            this.height = newHeight;
-        } else if (newHeight < 0) {
-            level = new Entity[height - newHeight][width];
-            for (int j = 0; j < height; j++) {
-                System.arraycopy(this.level[j], 0, level[j - newHeight - 1], 0, width);
-            }
-            this.height = height - newHeight;
         } else if (newWidth < 0) {
             level = new Entity[height][width - newWidth];
             for (int j = 0; j < height; j++) {
@@ -273,6 +261,22 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
             }
             this.width = width - newWidth;
         }
+
+        if (newHeight > this.height) {
+            level = new Entity[newHeight][width];
+            for (int j = 0; j < height; j++) {
+                System.arraycopy(this.level[j], 0, level[j], 0, width);
+            }
+            this.height = newHeight;
+        }
+        else if (newHeight < 0) {
+            level = new Entity[height - newHeight][width];
+            for (int j = 0; j < height; j++) {
+                System.arraycopy(this.level[j], 0, level[j - newHeight - 1], 0, width);
+            }
+            this.height = height - newHeight;
+        }
+
         if (level != null) {
             this.level = level;
         }

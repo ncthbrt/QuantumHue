@@ -30,8 +30,6 @@ public class PortSystem extends EntitySystem implements LevelChangeListener {
     @Override
     public void update(float deltaTime) {
         if (level != null) {
-
-
             for (Entity entity : level) { //Update adjacent colours
                 updatePort(entity);
             }

@@ -15,6 +15,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -55,6 +57,9 @@ public class LevelEditor implements Screen {
     private LevelChanger changer;
 
     public LevelEditor(Game game) {
+        if(Config.DEBUG) {
+            fps = new BitmapFont();
+        }
         engine = new PooledEngine();
         changer = new LevelChanger();
         this.batch = new SpriteBatch();
@@ -105,7 +110,7 @@ public class LevelEditor implements Screen {
     }
 
     private ConfirmDialog dialog;
-
+    BitmapFont fps;
     @Override
     public void render(float delta) {
         currentLevel.update(delta);
@@ -114,6 +119,13 @@ public class LevelEditor implements Screen {
         dialog.render(batch, delta);
         chooser.render(batch, delta);
         colourSelector.render(batch, delta);
+        if(Config.DEBUG) {
+            OrthographicCamera orthographicCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            orthographicCamera.position.set(Gdx.graphics.getWidth()/2f,Gdx.graphics.getHeight()/2f,0);
+            orthographicCamera.update();
+            batch.setProjectionMatrix(orthographicCamera.combined);
+            fps.draw(batch, String.valueOf(Gdx.graphics.getFramesPerSecond()),5, Gdx.graphics.getHeight()-5);
+        }
         batch.end();
     }
 

@@ -32,7 +32,7 @@ public class WirePortSystem extends EntitySystem implements LevelChangeListener 
 
     @Override
     public void update(float deltaTime) {
-        if (level != null) {
+        if (level != null && level.stepping()) {
             //Update colours
             for (Entity entity : level) {
                 if (entity != null && wireSystemFamily.matches(entity)) {
