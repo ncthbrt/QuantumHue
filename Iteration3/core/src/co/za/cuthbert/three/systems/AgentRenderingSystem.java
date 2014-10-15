@@ -57,10 +57,6 @@ public class AgentRenderingSystem  extends EntitySystem implements LevelChangeLi
             super.removedFromEngine(engine);
     }
 
-    private void resizeBatch(int width, int height) {
-        camera.setToOrtho(false, width, height);
-        spriteBatch.setProjectionMatrix(camera.combined);
-    }
 
     @Override
         public void update(float deltaTime) {

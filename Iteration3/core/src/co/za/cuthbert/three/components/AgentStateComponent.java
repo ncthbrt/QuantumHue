@@ -13,11 +13,11 @@ public class AgentStateComponent extends Component implements Pool.Poolable{
 
     @Override
     public void reset() {
-        state = State.NORMAL;
+        state = State.POWERED;
     }
 
     public enum State {
-        NORMAL, MERGING, DYING, DEAD;
+        POWERED,UNPOWERED, MERGING, EXPLODING, EXPLODED;
     }
 
     public void state(State state){

@@ -14,6 +14,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.math.Vector2;
 
 import java.util.HashSet;
 import java.util.List;
@@ -38,6 +39,14 @@ public class AgentSystem extends EntitySystem implements LevelChangeListener{
         this.level=level;
     }
 
+    private boolean powered(AgentComponent agentComponent, ColourComponent colourComponentl){
+        Vector2 position=agentComponent.position();
+        int x=Math.round(position.x);
+        int y=Math.round(position.y);
+        level.get(x,y);
+        return true;
+    }
+
     @Override
     public void update(float deltaTime) {
         if (level != null && level.stepping()) {
@@ -45,7 +54,7 @@ public class AgentSystem extends EntitySystem implements LevelChangeListener{
 
             for (Entity agent : level.agents()) { //Update positions
                 AgentStateComponent agentState=agentStateMapper.get(agent);
-                if(agentState.state== AgentStateComponent.State.NORMAL) {
+                if(agentState.state== AgentStateComponent.State.POWERED) {
                     AgentComponent agentComponent = agentMapper.get(agent);
                     List<DVector2> path = agentComponent.path();
                     if (path != null) {
@@ -81,7 +90,7 @@ public class AgentSystem extends EntitySystem implements LevelChangeListener{
                                     DiscreteColour mergedColour = DiscreteColour.add(colourMapper.get(agent).colour(), colourMapper.get(neighborAgent).colour());
                                     colourMapper.get(agent).colour(mergedColour);
                                     removedAgents.add(neighborAgent);
-                                    agentStateMapper.get(agent).state(AgentStateComponent.State.NORMAL);
+                                    agentStateMapper.get(agent).state(AgentStateComponent.State.POWERED);
                                 } else {
                                     agentComponent.between(agentComponent.between() + (delta) * AgentComponent.movementSpeed * deltaTime * 8);
                                 }
@@ -92,7 +101,7 @@ public class AgentSystem extends EntitySystem implements LevelChangeListener{
                                     DiscreteColour mergedColour = DiscreteColour.add(colourMapper.get(agent).colour(), colourMapper.get(neighborAgent).colour());
                                     colourMapper.get(agent).colour(mergedColour);
                                     removedAgents.add(neighborAgent);
-                                    agentStateMapper.get(agent).state(AgentStateComponent.State.NORMAL);
+                                    agentStateMapper.get(agent).state(AgentStateComponent.State.POWERED);
                                 } else {
                                     agentComponent.between(agentComponent.between() + ((delta) * AgentComponent.movementSpeed * deltaTime * 8));
                                 }

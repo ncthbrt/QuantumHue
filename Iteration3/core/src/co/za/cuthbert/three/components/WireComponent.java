@@ -27,6 +27,25 @@ public class WireComponent extends Component implements Pool.Poolable {
         }
     }
 
+//    public DiscreteColour colourAtPoint(Vector2 point,DVector2 tileLocation){
+//        Vector2 delta=new Vector2(point.x-tileLocation.x(), point.y-tileLocation.y());
+//
+//        if(delta.x>0){
+//            float gradient=delta.y/delta.x;
+//
+//        }else if(delta.x<0){
+//            float gradient=delta.y/delta.x;
+//        }else{
+//            if(delta.y<0){
+//
+//            }else if(delta.y>0){
+//
+//            }else{
+//                return outgoingNexusColour(1);
+//            }
+//        }
+//    }
+
     @Override
     public void reset() {
         for (ColourVector vector : toNexus) {
@@ -108,7 +127,9 @@ public class WireComponent extends Component implements Pool.Poolable {
         }
         return outgoingNexusColour;
     }
-
+    private DiscreteColour outgoingNexusColour() {
+        return outgoingNexusColour(-1);
+    }
 
     public ColourVector resultantVector(int port) {
         ColourVector from = fromNexus[port];
