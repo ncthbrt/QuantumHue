@@ -20,6 +20,8 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.List;
+
 /**
  * Copyright Nick Cuthbert, 2014
  */
@@ -116,9 +118,19 @@ public class AgentRenderingSystem  extends EntitySystem implements LevelChangeLi
             AgentComponent agentComponent=agentMapper.get(agent);
 
             Colour colour=discreteColour.toColour();
-            shapeRenderer.setColor(colour.red()/255f,colour.green()/255f,colour.blue()/255f,1f);
+
             Vector2 position=agentComponent.position();
+            List<Colour> componentColours = discreteColour.toComponentColours();
+            float angle=(360f/componentColours.size());
+            for(int i=0; i<componentColours.size(); ++i) {
+                Colour cColour=componentColours.get(i);
+                shapeRenderer.setColor(cColour.red()/255f,cColour.green()/255f,cColour.blue()/255f,1f);
+                shapeRenderer.arc(position.x * Config.TILE_SIZE, position.y * Config.TILE_SIZE, agentComponent.radius + 2,i*angle, angle,100);
+
+            }
+            shapeRenderer.setColor(colour.red()/255f,colour.green()/255f,colour.blue()/255f,1f);
             shapeRenderer.circle(position.x* Config.TILE_SIZE, position.y* Config.TILE_SIZE, agentComponent.radius,100);
+
         }
         private void renderDebugTrail(Entity agent){
             DiscreteColour discreteColour = colourMapper.get(agent).colour();

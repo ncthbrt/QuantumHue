@@ -27,7 +27,7 @@ public class WireComponent extends Component implements Pool.Poolable {
         }
     }
 
-//    public DiscreteColour colourAtPoint(Vector2 point,DVector2 tileLocation){
+//    public DiscreteColour colourAtPoint(float between,DRotation rotation){
 //        Vector2 delta=new Vector2(point.x-tileLocation.x(), point.y-tileLocation.y());
 //
 //        if(delta.x>0){
