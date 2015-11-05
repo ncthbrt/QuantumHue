@@ -22,12 +22,6 @@ public class SystemFactory {
         PowerSystem powerSystem = new PowerSystem();
         PowerRendererSystem powerRendererSystem = new PowerRendererSystem(batch, atlas);
 
-        AgentRenderingSystem agentRenderingSystem=new AgentRenderingSystem(shapeRenderer,batch);
-        AgentSystem agentSystem=new AgentSystem();
-
-        engine.addSystem(agentSystem);
-        engine.addSystem(agentRenderingSystem);
-
         engine.addSystem(portSystem);
 
         engine.addSystem(wirePortSystem);
@@ -37,9 +31,6 @@ public class SystemFactory {
         engine.addSystem(powerSystem);
         engine.addSystem(powerRendererSystem);
 
-        changer.addListener(agentSystem);
-        changer.addListener(agentRenderingSystem);
-
         changer.addListener(portSystem);
 
         changer.addListener(wirePortSystem);
@@ -48,6 +39,5 @@ public class SystemFactory {
 
         changer.addListener(powerSystem);
         changer.addListener(powerRendererSystem);
-
     }
 }

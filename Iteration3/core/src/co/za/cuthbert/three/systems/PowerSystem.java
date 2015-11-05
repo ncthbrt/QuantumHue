@@ -7,6 +7,7 @@ import co.za.cuthbert.three.components.DVector2;
 import co.za.cuthbert.three.components.PortComponent;
 import co.za.cuthbert.three.components.SwitchComponent;
 import co.za.cuthbert.three.Level;
+import co.za.cuthbert.three.value_objects.Colour;
 import co.za.cuthbert.three.value_objects.DiscreteColour;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
@@ -50,7 +51,7 @@ public class PowerSystem extends EntitySystem implements LevelChangeListener {
 
     public void updatePowerPort(Entity powerPort) {
         PortComponent port = portMapper.get(powerPort);
-        DiscreteColour colour = colourMapper.get(powerPort).colour();
+        Colour colour = colourMapper.get(powerPort).colour();
         port.outgoingPortColours(colour);
     }
 }

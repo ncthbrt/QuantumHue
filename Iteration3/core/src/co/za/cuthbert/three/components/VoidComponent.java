@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.Pool;
 /**
  * Copyright Nick Cuthbert, 2014.
  */
-public class VoidComponent extends Component implements Pool.Poolable{
+public class VoidComponent implements Pool.Poolable, Component {
     @Override
     public void reset() {
     }

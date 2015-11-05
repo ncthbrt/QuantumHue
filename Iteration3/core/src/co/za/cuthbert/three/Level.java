@@ -1,10 +1,8 @@
 package co.za.cuthbert.three;
 
 
-import co.za.cuthbert.three.components.AgentComponent;
 import co.za.cuthbert.three.components.DVector2;
 import co.za.cuthbert.three.components.EntityTypeComponent;
-import co.za.cuthbert.three.pathing.AStar;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
@@ -21,75 +19,6 @@ import java.util.*;
  */
 public class Level implements EntityListener, Iterable<Entity>, GestureDetector.GestureListener {
     private Entity[][] level;
-    private ArrayList<ArrayList<ArrayList<Entity>>> agentMap;
-
-    private final ArrayList<Entity> agents;
-
-    /**This method is to be called at the beginning of every frame.
-     * Agents are dynamic, so it is not that inefficient to rebuild
-     * the mapping as opposed to repairing it.
-     */
-    public void resetAgentMapping(){
-            agentMap=new ArrayList<ArrayList<ArrayList<Entity>>>(height);
-            agentMap.ensureCapacity(height);
-            for(int j=0; j<height; ++j){
-                ArrayList<ArrayList<Entity>> row = new ArrayList<ArrayList<Entity>>(width);
-                for(int i=0; i<width; ++i){
-                    row.add(new ArrayList<Entity>());
-                }
-                agentMap.add(row);
-            }
-    }
-
-    public ArrayList<Entity> agents(){
-        return agents;
-    }
-
-    public void addAgent(Entity agent){
-        agents.add(agent);
-    }
-
-    public void removeAgent(Entity agent){
-        agents.remove(agent);
-    }
-
-    public void updateAgentPositions(){
-        resetAgentMapping();
-        for(Entity agent: agents) {
-            AgentComponent agentComponent = agentMapper.get(agent);
-            DVector2 position = agentComponent.currentTile();
-            agentMap.get(position.y()).get(position.x()).add(agent);
-        }
-    }
-
-
-    public HashSet<Entity> nearbyAgents(Entity agent){
-        HashSet<Entity> results=new HashSet<Entity>();
-        AgentComponent agentComponent=agentMapper.get(agent);
-        DVector2 currentTile=agentComponent.currentTile();
-        for(int j=-1; j<=1; ++j){
-            for(int i=-1; i<=1; ++i){
-                if(currentTile.x()+i>=0 && currentTile.x()+i<width
-                   && currentTile.y()+j>=0 && currentTile.y()+j<height){
-                  results.addAll(agentMap.get(currentTile.y()+j).get(currentTile.x()+i));
-                }
-            }
-        }
-        if(agentComponent.nextTile()!=null) {
-            currentTile=agentComponent.nextTile();
-            for (int j = -1; j <= 1; ++j) {
-                for (int i = -1; i <= 1; ++i) {
-                    if (currentTile.x() + i >= 0 && currentTile.x() + i < width
-                            && currentTile.y() + j >= 0 && currentTile.y() + j < height) {
-                        results.addAll(agentMap.get(currentTile.y() + j).get(currentTile.x() + i));
-                    }
-                }
-            }
-        }
-        results.remove(agent);
-        return results;
-    }
-
 
     private int width, height;
 
@@ -113,7 +42,6 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
         stepping = true;
     }
 
-    private static final ComponentMapper<AgentComponent> agentMapper=ComponentMapper.getFor(AgentComponent.class);
     private static final ComponentMapper<EntityTypeComponent> tileTypeMapper = ComponentMapper.getFor(EntityTypeComponent.class);
     private static final ComponentMapper<DVector2> positionMapper = ComponentMapper.getFor(DVector2.class);
 
@@ -149,16 +77,13 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
         this.engine = engine;
         this.width = width;
         this.height = height;
-        resetAgentMapping();
-        agents=new ArrayList<Entity>();
-
     }
 
 
 
 
     public void addTile(Entity entity) {
-        if(EntityType.isTile(entity) && tileTypeMapper.get(entity).tileType()!=EntityType.AGENT) {
+        if(EntityType.isTile(entity)) {
              if (positionMapper.has(entity)){
                 DVector2 position = positionMapper.get(entity);
                 DVector2 newPosition = new DVector2();
@@ -169,7 +94,6 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
                     newPosition.x(0);
                     growMap(position.x() - 1, height);
                     reconcile();
-                    reconcileAgents(-(position.x()), 0);
                     camera.translate(-position.x() * Config.TILE_SIZE, 0);
                 } else {
                     newPosition.x(position.x());
@@ -182,7 +106,6 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
                     newPosition.y(0);
                     growMap(width, position.y() - 1);
                     reconcile();
-                    reconcileAgents(0,-(position.y()));
                     camera.translate(0, -position.y() * Config.TILE_SIZE);
 
                 } else {
@@ -217,21 +140,10 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
         }
     }
 
-    public void reconcileAgents(int deltaWidth, int deltaHeight){
-        for(Entity agent: agents){
-            AgentComponent agentComponent=agentMapper.get(agent);
-            agentComponent.shift(deltaWidth,deltaHeight);
-        }
-        resetAgentMapping();
-    }
-
     @Override
     public void entityRemoved(Entity entity) {
         if (EntityType.isTile(entity)) {
-            if(tileTypeMapper.get(entity).tileType()==EntityType.AGENT){
-                agents.remove(entity);
-            }
-            else if (positionMapper.has(entity)) {
+            if (positionMapper.has(entity)) {
                 DVector2 position = positionMapper.get(entity);
                 level[position.y()][position.x()] = null;
             }
@@ -323,20 +235,6 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
         Vector3 worldCoords =camera().unproject(new Vector3(x, y, 0));
         int worldX = Math.round((worldCoords.x) / Config.TILE_SIZE);
         int worldY = Math.round((worldCoords.y) / Config.TILE_SIZE);
-        if(get(worldX,worldY)!=null) {
-            AStar aStar=new AStar(this);
-            final ComponentMapper<AgentComponent> agentComponentMapper=ComponentMapper.getFor(AgentComponent.class);
-            for (Entity agent : agents) {
-                AgentComponent agentComponent = agentComponentMapper.get(agent);
-                if(agentComponent.followingPath()){ //Only allow agents to follow one route at a time.
-                    return true;
-                }
-            }
-            for (Entity agent : agents){
-                AgentComponent agentComponent=agentComponentMapper.get(agent);
-                agentComponent.path(aStar.route(agentComponent.currentTile(), new DVector2(worldX,worldY),agent));
-            }
-        }
         return true;
     }
 

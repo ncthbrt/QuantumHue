@@ -60,7 +60,7 @@ public class PowerRendererSystem extends EntitySystem implements LevelChangeList
 
     public void renderPowerPort(Entity powerPort) {
         DVector2 position = discretePositionMapper.get(powerPort);
-        Colour colour = colourMapper.get(powerPort).colour().toColour();
+        Colour colour = colourMapper.get(powerPort).colour();
         this.powerPortSprite.setColor(colour.red() / 255f, colour.green() / 255f, colour.blue() / 255f, colour.alpha() / 255f);
         powerPortSprite.setPosition((position.x() - 0.5f) * Config.TILE_SIZE, (position.y() - 0.5f) * Config.TILE_SIZE);
         powerPortSprite.setSize(32, 32);

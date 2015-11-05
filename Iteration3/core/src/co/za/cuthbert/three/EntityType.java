@@ -22,12 +22,11 @@ public enum EntityType {
     MOMENTARY_SWITCH(10),
     SWITCH(11, SwitchComponent.class),
     VOID(13, VoidComponent.class),
-    FILTER(14, ColourComponent.class),
-    AGENT(15, ColourComponent.class, AgentComponent.class, AgentStateComponent.class);
+    FILTER(14, ColourComponent.class);
 
     EntityType(int code, Class<? extends Component>... compulsoryComponents) {
         this.code = code;
-        this.family=Family.getFor(ComponentType.getBitsFor(compulsoryComponents), ComponentType.getBitsFor(DVector2.class, AgentComponent.class),new Bits());
+        this.family=Family.all(compulsoryComponents).one(DVector2.class).get();
         this.requiredComponents=compulsoryComponents;
     }
 

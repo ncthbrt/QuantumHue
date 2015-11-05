@@ -1,6 +1,4 @@
 package co.za.cuthbert.three;
-
-
 import co.za.cuthbert.three.value_objects.Colour;
 import co.za.cuthbert.three.value_objects.HSVColour;
 import com.badlogic.gdx.Game;

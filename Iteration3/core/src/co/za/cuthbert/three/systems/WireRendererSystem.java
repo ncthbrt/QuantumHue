@@ -42,10 +42,10 @@ public class WireRendererSystem extends EntitySystem implements LevelChangeListe
     @Override
     public void update(float deltaTime) {
         if (level != null) {
-            Gdx.gl.glEnable(GL20.GL_BLEND);
-            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            //Gdx.gl.glEnable(GL20.GL_BLEND);
+            //Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
             shapeRenderer.setProjectionMatrix(level.camera().combined);
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             for (Entity entity : level) {
                 if (entity != null && EntityType.WIRE.family.matches(entity)) {
                     processEntity(entity, deltaTime);
@@ -81,22 +81,22 @@ public class WireRendererSystem extends EntitySystem implements LevelChangeListe
                         for (int k = 0; k < vector.line.size() - 1; ++k) {
                             ColourBracket end = vector.line.get(k + 1);
                             ColourBracket start = vector.line.get(k);
-                            if (start.colour== DiscreteColour.ALPHA) {//If black set colour to a grey, so as to allow players to see the line on the dark background
+                            if (start.colour.equals(DiscreteColour.ALPHA.toColour())) {//If black set colour to a grey, so as to allow players to see the line on the dark background
                                 shapeRenderer.setColor(0.4f, 0.4f, 0.4f, 1f);
                             } else {
-                                shapeRenderer.setColor(start.colour.toColour().red() / 255f, start.colour.toColour().green() / 255f, start.colour.toColour().blue() / 255f, 1f);
+                                shapeRenderer.setColor(start.colour.red() / 255f, start.colour.green() / 255f, start.colour.blue() / 255f, 1f);
                             }
                             float point = Interpolation.linear.apply(0, Config.TILE_SIZE / 2f, end.position());
-                            shapeRenderer.line(position.x() * Config.TILE_SIZE + i * lastPoint, position.y() * Config.TILE_SIZE + j * lastPoint, position.x() * Config.TILE_SIZE + i * point, position.y() * Config.TILE_SIZE + j * point);
+                            shapeRenderer.rectLine(position.x() * Config.TILE_SIZE + i * lastPoint, position.y() * Config.TILE_SIZE + j * lastPoint, position.x() * Config.TILE_SIZE + i * point, position.y() * Config.TILE_SIZE + j * point, 1f);
                             lastPoint = point;
                         }
                         ColourBracket last = vector.line.get(vector.line.size() - 1);
-                        if (last.colour==DiscreteColour.ALPHA) {//If black set colour to a grey, so as to allow players to see the line on the dark background
+                        if (last.colour.equals(DiscreteColour.ALPHA.toColour())) {//If black set colour to a grey, so as to allow players to see the line on the dark background
                             shapeRenderer.setColor(0.4f, 0.4f, 0.4f, 1f);
                         } else {
-                            shapeRenderer.setColor(last.colour.toColour().red() / 255f, last.colour.toColour().green() / 255f, last.colour.toColour().blue() / 255f, 1f);
+                            shapeRenderer.setColor(last.colour.red() / 255f, last.colour.green() / 255f, last.colour.blue() / 255f, 1f);
                         }
-                        shapeRenderer.line(position.x() * Config.TILE_SIZE + i * lastPoint, position.y() * Config.TILE_SIZE + j * lastPoint, position.x() * Config.TILE_SIZE + i * Config.TILE_SIZE / 2, position.y() * Config.TILE_SIZE + j * Config.TILE_SIZE / 2);
+                        shapeRenderer.rectLine(position.x() * Config.TILE_SIZE + i * lastPoint, position.y() * Config.TILE_SIZE + j * lastPoint, position.x() * Config.TILE_SIZE + i * Config.TILE_SIZE / 2, position.y() * Config.TILE_SIZE + j * Config.TILE_SIZE / 2,1f);
                         ++attachedPorts;
                     }
                 }

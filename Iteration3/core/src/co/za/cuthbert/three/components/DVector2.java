@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.Pool;
  * A class to store discrete coordinates in three dimensions. Especially useful for tile based games
  * Copyright Nick Cuthbert, 2014.
  */
-public class DVector2 extends Component implements Pool.Poolable{
+public class DVector2 implements Pool.Poolable, Component {
     public static final String TYPE_NAME="discrete-position";
     public String getComponentName() {
         return TYPE_NAME;

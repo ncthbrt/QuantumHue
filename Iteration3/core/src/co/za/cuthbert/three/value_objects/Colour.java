@@ -105,10 +105,16 @@ public class Colour implements Pool.Poolable {
 
 
     public void add(Colour colour) {
-        this.colour += colour.colour;
-        if(this.colour<0) {
-            this.colour=0xFFFFFFFF;
-        }
+        int red=Math.min(255,this.red()+colour.red());
+        int green=Math.min(255,this.green()+colour.green());
+        int blue=Math.min(255,this.blue()+colour.blue());
+        int alpha=Math.min(255,this.alpha()+colour.alpha());
+        this.colour=red<<24|green<<16|blue<<8|alpha;
+
+//        this.colour += colour.colour;
+//        if(this.colour<0) {
+//            this.colour=0xFFFFFFFF;
+//        }
     }
 
     public void subtract(Colour colour) {

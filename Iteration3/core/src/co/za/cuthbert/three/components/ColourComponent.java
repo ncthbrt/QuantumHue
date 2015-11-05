@@ -9,24 +9,24 @@ import com.badlogic.gdx.utils.Pool;
 /**
  * Copyright Nick Cuthbert, 2014.
  */
-public class ColourComponent extends Component implements Pool.Poolable {
-    private DiscreteColour colour;
+public class ColourComponent implements Pool.Poolable, Component {
+    private Colour colour;
 
-    public void colour(DiscreteColour colour) {
+    public void colour(Colour colour) {
         this.colour = colour;
     }
 
-    public DiscreteColour colour() {
+    public Colour colour() {
         return colour;
     }
 
     public ColourComponent() {
-        colour = DiscreteColour.ALPHA;
+        colour = DiscreteColour.ALPHA.toColour();
     }
 
     @Override
     public void reset() {
-        colour=DiscreteColour.ALPHA;
+        colour=DiscreteColour.ALPHA.toColour();
     }
 }
 

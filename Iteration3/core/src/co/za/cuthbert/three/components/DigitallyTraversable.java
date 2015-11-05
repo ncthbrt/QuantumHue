@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Pool;
 /**
  * Copyright Nick Cuthbert, 2014.
  */
-public class DigitallyTraversable extends Component implements Pool.Poolable{
+public class DigitallyTraversable implements Pool.Poolable, Component {
     public boolean traversable;
     public float traversalCost;
     public DigitallyTraversable(){

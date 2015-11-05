@@ -5,7 +5,6 @@ import co.za.cuthbert.three.systems.SystemFactory;
 import co.za.cuthbert.three.ui.actions.NewLevelAction;
 import co.za.cuthbert.three.ui.actions.PlayPauseAction;
 import co.za.cuthbert.three.ui.actions.ShowDialogAction;
-import co.za.cuthbert.three.ui.tools.AgentTool;
 import co.za.cuthbert.three.ui.tools.BrushTool;
 import co.za.cuthbert.three.ui.tools.PanTool;
 import co.za.cuthbert.three.ui.tools.ToggleTool;
@@ -72,7 +71,7 @@ public class LevelEditor implements Screen {
         chooser = new ToolChooser(multiplexer, atlas.createSprite("border_top"), atlas.createSprite("border_bottom"));
         chooser.addTool(new BrushTool(this, EntityType.WIRE), atlas.createSprite("tool_wire"));
         chooser.addTool(new ToggleTool(this, EntityType.POWER_SOURCE), atlas.createSprite("tool_power"));
-        chooser.addTool(new AgentTool(this), atlas.createSprite("tool_agent"));
+        chooser.addTool(new BrushTool(this,EntityType.FILTER), atlas.createSprite("tool_agent"));
         chooser.addTool(new PanTool(this), atlas.createSprite("tool_ground"));
         chooser.addTool(new PanTool(this), atlas.createSprite("tool_pan"));
 

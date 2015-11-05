@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Pool;
 /**
  * Copyright Nick Cuthbert, 2014.
  */
-public class EntityTypeComponent extends Component implements Pool.Poolable {
+public class EntityTypeComponent implements Pool.Poolable, Component {
 
     public EntityTypeComponent(EntityType type){
         this.entityType =type;

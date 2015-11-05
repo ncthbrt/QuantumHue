@@ -13,5 +13,4 @@ public abstract class Tool implements GestureDetector.GestureListener {
         this.editor = editor;
     }
 
-
 }

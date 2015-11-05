@@ -14,8 +14,6 @@ public class EntityFactory {
             return createWire(level, x, y);
         } else if (type == EntityType.POWER_SOURCE) {
             return createPowerSource(level, x, y, currentColour);
-        }else if (type== EntityType.AGENT){
-            return createAgent(level,x,y,currentColour);
         }
         else {
             return createVoid(level, x, y);
@@ -61,7 +59,7 @@ public class EntityFactory {
         powerSource.add(portComponent);
 
         ColourComponent colourComponent = level.engine().createComponent(ColourComponent.class);
-        colourComponent.colour(colour);
+        colourComponent.colour(colour.toColour());
         powerSource.add(colourComponent);
 
         DigitallyTraversable digitallyTraversable=level.engine().createComponent(DigitallyTraversable.class);
@@ -86,22 +84,5 @@ public class EntityFactory {
         voidEntity.add(level.engine().createComponent(VoidComponent.class));
 
         return voidEntity;
-    }
-
-    public static Entity createAgent(Level level, int x, int y, DiscreteColour colour){
-            AgentComponent agentComponent=level.engine().createComponent(AgentComponent.class);
-
-            ColourComponent colourComponent=level.engine().createComponent(ColourComponent.class);
-            colourComponent.colour(colour);
-            agentComponent.position(new DVector2(x,y));
-
-            AgentStateComponent stateComponent=level.engine().createComponent(AgentStateComponent.class);
-
-            Entity entity=level.engine().createEntity();
-            entity.add(colourComponent);
-            entity.add(agentComponent);
-            entity.add(stateComponent);
-
-            return entity;
     }
 }

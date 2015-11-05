@@ -8,7 +8,7 @@ task run(dependsOn: classes, type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
     ignoreExitValue = true
-    workingDir = project.assetsDir
+//    workingDir = project.assetsDir
 }
 
 

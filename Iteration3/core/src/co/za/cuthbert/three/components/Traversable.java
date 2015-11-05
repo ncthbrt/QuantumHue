@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Pool;
 /**
  * Copyright Nick Cuthbert, 2014
  */
-public abstract class Traversable extends Component implements Pool.Poolable {
+public abstract class Traversable implements Pool.Poolable, Component {
     public abstract boolean traversable(Entity entity);
     public abstract float traversalCost(Entity entity);
 }

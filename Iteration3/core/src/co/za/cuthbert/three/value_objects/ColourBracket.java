@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.Pool;
  * Copyright Nick Cuthbert, 2014.
  */
 public class ColourBracket implements Pool.Poolable {
-    public DiscreteColour colour;
+    public Colour colour;
     private float position;
 
     public float position() {
@@ -17,16 +17,16 @@ public class ColourBracket implements Pool.Poolable {
     }
 
     public ColourBracket() {
-        colour = DiscreteColour.ALPHA;
+        colour = DiscreteColour.ALPHA.toColour();
         position = 0;
     }
 
-    public ColourBracket(DiscreteColour colour) {
+    public ColourBracket(Colour colour) {
         this();
         this.colour=colour;
     }
 
-    public ColourBracket(DiscreteColour colour, float position) {
+    public ColourBracket(Colour colour, float position) {
         this();
         this.colour=(colour);
         this.position=position;
@@ -34,7 +34,7 @@ public class ColourBracket implements Pool.Poolable {
 
     @Override
     public void reset() {
-        colour=DiscreteColour.ALPHA;
+        colour=DiscreteColour.ALPHA.toColour();
         position = 0;
     }
 

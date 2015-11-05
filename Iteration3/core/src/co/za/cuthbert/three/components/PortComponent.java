@@ -8,9 +8,9 @@ import com.badlogic.gdx.utils.Pool;
 /**
  * Copyright Nick Cuthbert, 2014
  */
-public class PortComponent extends Component implements Pool.Poolable {
-    private final DiscreteColour[] incomingPortColours;
-    private final DiscreteColour[] outgoingPortColours;
+public class PortComponent implements Pool.Poolable, Component {
+    private final Colour[] incomingPortColours;
+    private final Colour[] outgoingPortColours;
     private final boolean[] portMask;
 
     private boolean cullable = true;
@@ -26,8 +26,8 @@ public class PortComponent extends Component implements Pool.Poolable {
 
 
     public PortComponent() {
-        incomingPortColours = new DiscreteColour[9];
-        outgoingPortColours = new DiscreteColour[9];
+        incomingPortColours = new Colour[9];
+        outgoingPortColours = new Colour[9];
         portMask = new boolean[9];
         reset();
     }
@@ -40,7 +40,7 @@ public class PortComponent extends Component implements Pool.Poolable {
         for (int i = 0; i < 9; ++i) {
             this.portMask[i] = portMask[i];
             if (!portMask[i]) {
-                incomingPortColours[i]=DiscreteColour.ALPHA;
+                incomingPortColours[i]=DiscreteColour.ALPHA.toColour();
             }
         }
     }
@@ -49,48 +49,48 @@ public class PortComponent extends Component implements Pool.Poolable {
     public void mask(int port, boolean active) {
         this.portMask[port] = active;
         if (!portMask[port]) {
-            incomingPortColours[port]=DiscreteColour.ALPHA;
+            incomingPortColours[port]=DiscreteColour.ALPHA.toColour();
         }
     }
 
-    public DiscreteColour[] incomingPortColours() {
+    public Colour[] incomingPortColours() {
         return incomingPortColours;
     }
 
-    public void incomingPortColour(int port, DiscreteColour colour) {
+    public void incomingPortColour(int port, Colour colour) {
         portMask[port] = true;
         this.incomingPortColours[port]=(colour);
     }
 
-    public DiscreteColour incomingPortColour(int port) {
+    public Colour incomingPortColour(int port) {
         return incomingPortColours[port];
     }
 
-    public void incomingPortColours(DiscreteColour[] outgoingPortColours) {
+    public void incomingPortColours(Colour[] outgoingPortColours) {
         for (int i = 0; i < 9; ++i) {
             this.incomingPortColours[i] = outgoingPortColours[i];
         }
     }
 
-    public DiscreteColour[] outgoingPortColours() {
+    public Colour[] outgoingPortColours() {
         return outgoingPortColours;
     }
 
-    public void outgoingPortColour(int port, DiscreteColour colour) {
+    public void outgoingPortColour(int port, Colour colour) {
         this.outgoingPortColours[port]=(colour);
     }
 
-    public DiscreteColour outgoingPortColour(int port) {
+    public Colour outgoingPortColour(int port) {
         return outgoingPortColours[port];
     }
 
-    public void outgoingPortColours(DiscreteColour[] outgoingPortColours) {
+    public void outgoingPortColours(Colour[] outgoingPortColours) {
         for (int i = 0; i < 9; ++i) {
             this.outgoingPortColours[i] = outgoingPortColours[i];
         }
     }
 
-    public void outgoingPortColours(DiscreteColour colour) {
+    public void outgoingPortColours(Colour colour) {
         for (int i = 0; i < 9; ++i) {
             this.outgoingPortColours[i] = colour;
         }
@@ -99,8 +99,8 @@ public class PortComponent extends Component implements Pool.Poolable {
     @Override
     public void reset() {
         for (int i = 0; i < 9; i++) {
-            this.incomingPortColours[i] = DiscreteColour.ALPHA;
-            this.outgoingPortColours[i] = DiscreteColour.ALPHA;
+            this.incomingPortColours[i] = DiscreteColour.ALPHA.toColour();
+            this.outgoingPortColours[i] = DiscreteColour.ALPHA.toColour();
             this.portMask[i] = false;
         }
     }

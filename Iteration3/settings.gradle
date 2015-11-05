@@ -1,2 +1,1 @@
-include 'desktop', 'android', 'ios', 'core', 'pipeline'
-
+include 'pipeline','desktop', 'android', 'html', 'core', 'ios'
