@@ -1,0 +1,23 @@
+package co.za.cuthbert.three.desktop;
+
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+
+import co.za.cuthbert.three.Iteration3Main;
+
+public class DesktopLauncher {
+	public static void main (String[] arg) {
+		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.fullscreen=false;
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		int width = (int)(gd.getDisplayMode().getWidth()*0.9f);
+		int height = (int)(gd.getDisplayMode().getHeight()*0.9f);
+		config.width=width;
+		config.height=height;
+		config.useGL30=true;
+		new LwjglApplication(new Iteration3Main(), config);
+	}
+}
