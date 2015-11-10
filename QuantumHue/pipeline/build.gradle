@@ -2,7 +2,7 @@ apply plugin: "java"
 sourceCompatibility = 1.8
 sourceSets.main.java.srcDirs = ["src/"]
 project.ext.assetsDir = new File("../");
-project.ext.mainClassName = "co.za.cuthbert.pipeline.PipelineMain"
+project.ext.mainClassName = "com.deepwallgames.pipeline.PipelineMain"
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath

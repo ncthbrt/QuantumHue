@@ -7,8 +7,8 @@ gwt {
     minHeapSize="1G"
 
     src = files(file("src/")) // Needs to be in front of "modules" below.
-    modules 'co.za.cuthbert.three.GdxDefinition'
-    devModules 'co.za.cuthbert.three.GdxDefinitionSuperdev'
+    modules 'com.deepwallgames.quantumhue.GdxDefinition'
+    devModules 'com.deepwallgames.quantumhue.GdxDefinitionSuperdev'
     project.webAppDirName = 'webapp'
 
     compiler {

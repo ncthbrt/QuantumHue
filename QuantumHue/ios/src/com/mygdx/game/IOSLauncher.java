@@ -5,13 +5,14 @@ import org.robovm.apple.uikit.UIApplication;
 
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
-import com.mygdx.game.MyGdxGame;
+
+import com.deepwallgames.quantumhue.Iteration3Main;
 
 public class IOSLauncher extends IOSApplication.Delegate {
     @Override
     protected IOSApplication createApplication() {
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
-        return new IOSApplication(new MyGdxGame(), config);
+        return new IOSApplication(new Iteration3Main(), config);
     }
 
     public static void main(String[] argv) {

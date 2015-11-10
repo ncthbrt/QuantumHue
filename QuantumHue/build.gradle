@@ -17,7 +17,7 @@ allprojects {
 
     version = '1.0'
     ext {
-        appName = "quatum-hue"
+        appName = "com.deepwallgames.quatumhue"
         gdxVersion = '1.7.1'
         roboVMVersion = '1.9.0'
         box2DLightsVersion = '1.4'
@@ -64,7 +64,6 @@ project(":html") {
     apply plugin: "gwt"
     apply plugin: "war"
 
-
     dependencies {
         compile project(":core")
         compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
@@ -84,6 +83,9 @@ project(":core") {
         compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
     }
 }
+
+
+
 
 project(":pipeline") {
     apply plugin: "java"

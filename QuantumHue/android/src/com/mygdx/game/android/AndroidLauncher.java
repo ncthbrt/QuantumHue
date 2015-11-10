@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import co.za.cuthbert.three.Iteration3Main;
+import com.deepwallgames.quantumhue.Iteration3Main;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override

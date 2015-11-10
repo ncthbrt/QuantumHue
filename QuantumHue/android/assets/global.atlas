@@ -20,14 +20,14 @@ border_bottom
   index: -1
 border_top
   rotate: false
-  xy: 750, 282
+  xy: 1824, 1477
   size: 125, 205
   orig: 125, 205
   offset: 0, 0
   index: -1
 box
   rotate: false
-  xy: 750, 232
+  xy: 1951, 1634
   size: 41, 48
   split: 20, 18, 30, 17
   orig: 41, 48
@@ -42,14 +42,14 @@ button_create
   index: -1
 button_default_down
   rotate: false
-  xy: 1837, 1771
+  xy: 750, 215
   size: 88, 89
   orig: 88, 89
   offset: 0, 0
   index: -1
 button_default_up
   rotate: false
-  xy: 1927, 1771
+  xy: 945, 483
   size: 88, 89
   orig: 88, 89
   offset: 0, 0
@@ -84,9 +84,16 @@ diagram_new_consequences
   orig: 512, 195
   offset: 0, 0
   index: -1
+ground
+  rotate: false
+  xy: 750, 935
+  size: 359, 359
+  orig: 359, 359
+  offset: 0, 0
+  index: -1
 icon_cancel
   rotate: false
-  xy: 945, 844
+  xy: 840, 215
   size: 88, 89
   orig: 88, 89
   offset: 0, 0
@@ -100,70 +107,70 @@ icon_load
   index: -1
 icon_new
   rotate: false
-  xy: 1035, 844
+  xy: 1035, 483
   size: 88, 89
   orig: 88, 89
   offset: 0, 0
   index: -1
 icon_ok
   rotate: false
-  xy: 928, 753
+  xy: 928, 392
   size: 88, 89
   orig: 88, 89
   offset: 0, 0
   index: -1
 icon_pause
   rotate: false
-  xy: 750, 667
+  xy: 750, 306
   size: 176, 176
   orig: 176, 176
   offset: 0, 0
   index: -1
 icon_play
   rotate: false
-  xy: 750, 489
+  xy: 1837, 1684
   size: 176, 176
   orig: 176, 176
   offset: 0, 0
   index: -1
 icon_redo
   rotate: false
-  xy: 928, 662
+  xy: 1018, 392
   size: 88, 89
   orig: 88, 89
   offset: 0, 0
   index: -1
 icon_rotate_clockwise
   rotate: false
-  xy: 1018, 753
+  xy: 1178, 1278
   size: 88, 89
   orig: 88, 89
   offset: 0, 0
   index: -1
 icon_rotate_counter_clockwise
   rotate: false
-  xy: 928, 571
+  xy: 1268, 1278
   size: 88, 89
   orig: 88, 89
   offset: 0, 0
   index: -1
 icon_save
   rotate: false
-  xy: 1018, 662
+  xy: 1358, 1278
   size: 88, 89
   orig: 88, 89
   offset: 0, 0
   index: -1
 icon_save_saved
   rotate: false
-  xy: 1018, 571
+  xy: 1448, 1278
   size: 88, 89
   orig: 88, 89
   offset: 0, 0
   index: -1
 icon_undo
   rotate: false
-  xy: 928, 480
+  xy: 1538, 1278
   size: 88, 89
   orig: 88, 89
   offset: 0, 0
@@ -177,7 +184,7 @@ logo
   index: -1
 power_source
   rotate: false
-  xy: 750, 935
+  xy: 750, 574
   size: 359, 359
   orig: 359, 359
   offset: 0, 0
@@ -192,7 +199,7 @@ slider
   index: -1
 slider_knob
   rotate: false
-  xy: 1178, 1296
+  xy: 928, 319
   size: 86, 71
   orig: 86, 71
   offset: 0, 0
@@ -213,7 +220,7 @@ tool_ground
   index: -1
 tool_pan
   rotate: false
-  xy: 750, 845
+  xy: 750, 484
   size: 193, 88
   orig: 193, 88
   offset: 0, 0
