@@ -1,5 +1,10 @@
 package com.deepwallgames.quantumhue;
 
+import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Pool;
 import com.deepwallgames.quantumhue.components.ColourComponent;
 import com.deepwallgames.quantumhue.components.DVector2;
 import com.deepwallgames.quantumhue.components.DigitallyTraversable;
@@ -33,27 +38,111 @@ public class EntityFactory {
         else {
             entity=createVoid(level, x, y);
         }
-        EntityTypeComponent tileTypeComponent = level.engine().createComponent(EntityTypeComponent.class);
+        EntityTypeComponent tileTypeComponent;
+
+        if(level.engine() instanceof PooledEngine) {
+            tileTypeComponent = ((PooledEngine)level.engine()).createComponent(EntityTypeComponent.class);
+        }else{
+            tileTypeComponent = new EntityTypeComponent();
+        }
         tileTypeComponent.tileType(type);
         entity.add(tileTypeComponent);
+
         return entity;
     }
 
+    public static Entity createEntity(Level level){
+        if(level.engine() instanceof PooledEngine){
+            return ((PooledEngine)level.engine()).createEntity();
+        }else{
+            Entity entity=new Entity();
+            return entity;
+        }
+    }
+
+
+    public static  DVector2 createDVector2(Class<DVector2> clazzy,Level level){
+        if(level.engine() instanceof PooledEngine){
+            return ((PooledEngine)level.engine()).createComponent(clazzy);
+        }else{
+            return new DVector2();
+        }
+    }
+
+    public static DigitallyTraversable createDigitallyTraversable(Class<DigitallyTraversable> clazzy,Level level){
+        if(level.engine() instanceof PooledEngine){
+            return ((PooledEngine)level.engine()).createComponent(clazzy);
+        }else{
+            return new DigitallyTraversable();
+        }
+    }
+
+    public static  ColourComponent createColourComponent(Class<ColourComponent> clazzy,Level level){
+        if(level.engine() instanceof PooledEngine){
+            return ((PooledEngine)level.engine()).createComponent(clazzy);
+        }else{
+            return new ColourComponent();
+        }
+    }
+
+    public static  WireComponent createWireComponent(Class<WireComponent> clazzy,Level level){
+        if(level.engine() instanceof PooledEngine){
+            return ((PooledEngine)level.engine()).createComponent(clazzy);
+        }else{
+            return new WireComponent();
+        }
+    }
+
+    public static PortComponent createPortComponent(Class<PortComponent> clazzy,Level level){
+        if(level.engine() instanceof PooledEngine){
+            return ((PooledEngine)level.engine()).createComponent(clazzy);
+        }else{
+            return new PortComponent();
+        }
+    }
+
+    public static VoidComponent createVoidComponent(Class<VoidComponent > clazzy,Level level){
+        if(level.engine() instanceof PooledEngine){
+            return ((PooledEngine)level.engine()).createComponent(clazzy);
+        }else{
+            return new VoidComponent();
+        }
+    }
+
+    public static SwitchComponent createSwitchComponent(Class<SwitchComponent> clazzy,Level level){
+        if(level.engine() instanceof PooledEngine){
+            return ((PooledEngine)level.engine()).createComponent(clazzy);
+        }else{
+            return new SwitchComponent();
+        }
+    }
+
+    public static EntityTypeComponent createEntityTypeComponent(Class<EntityTypeComponent> clazzy,Level level){
+        if(level.engine() instanceof PooledEngine){
+            return ((PooledEngine)level.engine()).createComponent(clazzy);
+        }else{
+            return new EntityTypeComponent();
+        }
+    }
+
+
+
+
+
     public static Entity createWire(Level level, int x, int y) {
-        Entity wire = level.engine().createEntity();
+        Entity wire = createEntity(level);
 
-
-        DVector2 position = level.engine().createComponent(DVector2.class);
+        DVector2 position = createDVector2(DVector2.class,level);
         position.set(x, y);
         wire.add(position);
 
-        PortComponent portComponent = level.engine().createComponent(PortComponent.class);
+        PortComponent portComponent = createPortComponent(PortComponent.class,level);
         wire.add(portComponent);
 
-        WireComponent wireComponent = level.engine().createComponent(WireComponent.class);
+        WireComponent wireComponent = createWireComponent(WireComponent.class,level);
         wire.add(wireComponent);
 
-        DigitallyTraversable digitallyTraversable=level.engine().createComponent(DigitallyTraversable.class);
+        DigitallyTraversable digitallyTraversable=createDigitallyTraversable(DigitallyTraversable.class,level);
         digitallyTraversable.traversable=true;
         digitallyTraversable.traversalCost =1;
 
@@ -63,29 +152,29 @@ public class EntityFactory {
     }
 
     public static Entity createPowerSource(Level level, int x, int y, DiscreteColour colour) {
-        Entity powerSource = level.engine().createEntity();
-        EntityTypeComponent tileTypeComponent = level.engine().createComponent(EntityTypeComponent.class);
+        Entity powerSource = createEntity(level);
+        EntityTypeComponent tileTypeComponent = createEntityTypeComponent(EntityTypeComponent.class,level);
         tileTypeComponent.tileType(EntityType.POWER_SOURCE);
         powerSource.add(tileTypeComponent);
 
-        DVector2 position = level.engine().createComponent(DVector2.class);
+        DVector2 position = createDVector2(DVector2.class,level);
         position.set(x, y);
         powerSource.add(position);
 
-        PortComponent portComponent = level.engine().createComponent(PortComponent.class);
+        PortComponent portComponent = createPortComponent(PortComponent.class,level);
         powerSource.add(portComponent);
 
-        ColourComponent colourComponent = level.engine().createComponent(ColourComponent.class);
+        ColourComponent colourComponent = createColourComponent(ColourComponent.class,level);
         colourComponent.colour(colour.toColour());
         powerSource.add(colourComponent);
 
-        DigitallyTraversable digitallyTraversable=level.engine().createComponent(DigitallyTraversable.class);
+        DigitallyTraversable digitallyTraversable=createDigitallyTraversable(DigitallyTraversable.class,level);
         digitallyTraversable.traversable=false;
         digitallyTraversable.traversalCost =0;
 
         powerSource.add(digitallyTraversable);
 
-        SwitchComponent switchComponent=level.engine().createComponent(SwitchComponent.class);
+        SwitchComponent switchComponent=createSwitchComponent(SwitchComponent.class,level);
         switchComponent.on=true;
         powerSource.add(switchComponent);
 
@@ -93,23 +182,23 @@ public class EntityFactory {
     }
 
     public static Entity createGround(Level level, int x, int y, DiscreteColour colour) {
-        Entity powerSource = level.engine().createEntity();
-        EntityTypeComponent tileTypeComponent = level.engine().createComponent(EntityTypeComponent.class);
+        Entity powerSource = createEntity(level);
+        EntityTypeComponent tileTypeComponent = createEntityTypeComponent(EntityTypeComponent.class,level);
         tileTypeComponent.tileType(EntityType.GROUND);
         powerSource.add(tileTypeComponent);
 
-        DVector2 position = level.engine().createComponent(DVector2.class);
+        DVector2 position = createDVector2(DVector2.class,level);
         position.set(x, y);
         powerSource.add(position);
 
-        PortComponent portComponent = level.engine().createComponent(PortComponent.class);
+        PortComponent portComponent = createPortComponent(PortComponent.class,level);
         powerSource.add(portComponent);
 
-        ColourComponent colourComponent = level.engine().createComponent(ColourComponent.class);
+        ColourComponent colourComponent = createColourComponent(ColourComponent.class,level);
         colourComponent.colour(new Colour((int)(255*0.3f),(int)(255*0.3f),(int)(255*0.3f),255));
         powerSource.add(colourComponent);
 
-        DigitallyTraversable digitallyTraversable=level.engine().createComponent(DigitallyTraversable.class);
+        DigitallyTraversable digitallyTraversable=createDigitallyTraversable(DigitallyTraversable.class,level);
         digitallyTraversable.traversable=true;
         digitallyTraversable.traversalCost =1;
 
@@ -118,16 +207,16 @@ public class EntityFactory {
     }
 
     public static Entity createVoid(Level level, int x, int y) {
-        Entity voidEntity = level.engine().createEntity();
-        EntityTypeComponent tileTypeComponent = level.engine().createComponent(EntityTypeComponent.class);
+        Entity voidEntity = createEntity(level);
+        EntityTypeComponent tileTypeComponent = createEntityTypeComponent(EntityTypeComponent.class,level);
         tileTypeComponent.tileType(EntityType.VOID);
         voidEntity.add(tileTypeComponent);
 
-        DVector2 position = level.engine().createComponent(DVector2.class);
+        DVector2 position = createDVector2(DVector2.class,level);
         position.set(x, y);
         voidEntity.add(position);
 
-        voidEntity.add(level.engine().createComponent(VoidComponent.class));
+        voidEntity.add(createVoidComponent(VoidComponent.class,level));
 
         return voidEntity;
     }

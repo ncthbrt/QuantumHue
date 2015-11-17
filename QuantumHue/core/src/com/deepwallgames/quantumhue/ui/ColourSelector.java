@@ -1,5 +1,6 @@
 package com.deepwallgames.quantumhue.ui;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -45,19 +46,38 @@ public class ColourSelector implements GestureDetector.GestureListener{
         camera.position.set(camera.viewportWidth/2f,camera.viewportHeight/2f,0);
         camera.update();
 
-        border=new Sprite(new Texture(Gdx.files.internal("colour_selector_border.png")));
+        boolean notWebgl=Gdx.app.getType()!= Application.ApplicationType.WebGL;
+        Texture borderTex=new Texture(Gdx.files.internal("colour_selector_border.png"),notWebgl);
+        Texture indicatorTex=new Texture(Gdx.files.internal("colour_selector_indicator.png"),notWebgl);
+        Texture colourTex=new Texture(Gdx.files.internal("colour_selector.png"),notWebgl);
+
+
+        //Mipmaps apparently not support in WebGL
+
+        if(notWebgl) {
+            borderTex.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+            indicatorTex.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+            colourTex.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.MipMapLinearLinear);
+        }else{
+            borderTex.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            indicatorTex.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.MipMapLinearLinear);
+            colourTex.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        }
+
+        border=new Sprite(borderTex);
         PixelMaskFactory factory=new PixelMaskFactory();
         colourSelectorIndicatorMask=factory.getPixelMask("colour_selector_indicator.png");
-        indicator=new Sprite(new Texture(Gdx.files.internal("colour_selector_indicator.png")));
+        indicator=new Sprite(indicatorTex);
 
         colourSelectorPixmap=factory.getPixmap("colour_selector.png");
         colourSelectorMask=factory.getPixelMask("colour_selector.png");
-        colourSelector=new Sprite(new Texture(Gdx.files.internal("colour_selector.png"))); //Unfortunate double loading of textures
+        colourSelector=new Sprite(colourTex); //Unfortunate double loading of textures
 
         maximumExposure=border.getHeight();
     }
 
     public void render(SpriteBatch batch,float deltaTime){
+        this.camera.setToOrtho(false,1920,Gdx.graphics.getHeight()/(float)Gdx.graphics.getWidth()*1920);
         batch.setProjectionMatrix(camera.combined);
         if(!panning) {
             if (slide < 1 && selected) {

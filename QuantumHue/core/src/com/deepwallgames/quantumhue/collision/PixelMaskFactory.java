@@ -3,7 +3,7 @@ package com.deepwallgames.quantumhue.collision;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
+//import com.badlogic.gdx.graphics.PixmapIO;
 
 /**
  * Copyright Nick Cuthbert, 2014.
@@ -15,17 +15,20 @@ public class PixelMaskFactory {
     }
 
 
+
+
     public PixelMask getPixelMask(String resourceName){
-        int index=resourceName.lastIndexOf('.');
-        String bitmaskName=resourceName.substring(0,index)+"_bitmask.cim";
-        FileHandle bitmaskHandle= Gdx.files.external(bitmaskName);
-        PixelMask mask;
-        if(bitmaskHandle.exists()){
-            return toPixelMask(PixmapIO.readCIM(bitmaskHandle));
-        }
-        else{
-            return exportMask(resourceName);
-        }
+        return toPixelMask(new Pixmap(Gdx.files.internal(resourceName)));
+//        int index=resourceName.lastIndexOf('.');
+//        String bitmaskName=resourceName.substring(0,index)+"_bitmask.cim";
+//        FileHandle bitmaskHandle= Gdx.files.external(bitmaskName);
+//        PixelMask mask;
+//        if(bitmaskHandle.exists()){
+//            return toPixelMask(PixmapIO.readCIM(bitmaskHandle));
+//        }
+//        else{
+//            return exportMask(resourceName);
+//        }
     }
 
     public  Pixmap getPixmap(String resourceName){
@@ -39,8 +42,8 @@ public class PixelMaskFactory {
         }
         return pixmap;
     }
-
-
+//
+//
     public PixelMask toPixelMask(Pixmap maskPixmap){
         PixelMask mask=new PixelMask(maskPixmap.getWidth(),maskPixmap.getHeight());
         for(int j=0; j<maskPixmap.getHeight(); j++){
@@ -59,25 +62,25 @@ public class PixelMaskFactory {
     }
 
 
-    public PixelMask exportMask(String resourceName){
-        int index=resourceName.lastIndexOf('.');
-        String bitmaskName=resourceName.substring(0, index)+"_bitmask.cim";
-        FileHandle bitmaskHandle= Gdx.files.local(bitmaskName);
-        Pixmap pixmap=new Pixmap(Gdx.files.internal(resourceName));
-        Pixmap maskPixmap=convertToBitmask(pixmap);
-        PixmapIO.writeCIM(bitmaskHandle, maskPixmap);
-        return toPixelMask(maskPixmap);
-    }
-
-    public Pixmap convertToBitmask(Pixmap old){
-        Pixmap.Format format = Pixmap.Format.Alpha;
-        if (old.getFormat()!=format) {
-            Pixmap tmp = new Pixmap(old.getWidth(), old.getHeight(), format);
-            tmp.drawPixmap(old, 0, 0); //copy pix to tmp
-            old.dispose();
-            return tmp;
-        }
-        return old;
-    }
+//    public PixelMask exportMask(String resourceName){
+//        int index=resourceName.lastIndexOf('.');
+//        String bitmaskName=resourceName.substring(0, index)+"_bitmask.cim";
+//        FileHandle bitmaskHandle= Gdx.files.local(bitmaskName);
+//        Pixmap pixmap=new Pixmap(Gdx.files.internal(resourceName));
+//        Pixmap maskPixmap=convertToBitmask(pixmap);
+//        PixmapIO.writeCIM(bitmaskHandle, maskPixmap);
+//        return toPixelMask(maskPixmap);
+//    }
+//
+//    public Pixmap convertToBitmask(Pixmap old){
+//        Pixmap.Format format = Pixmap.Format.Alpha;
+//        if (old.getFormat()!=format) {
+//            Pixmap tmp = new Pixmap(old.getWidth(), old.getHeight(), format);
+//            tmp.drawPixmap(old, 0, 0); //copy pix to tmp
+//            old.dispose();
+//            return tmp;
+//        }
+//        return old;
+//    }
 
 }

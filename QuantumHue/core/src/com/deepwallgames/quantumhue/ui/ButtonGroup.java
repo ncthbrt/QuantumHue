@@ -210,6 +210,7 @@ public class ButtonGroup extends InputAdapter {
 
 
     public void render(SpriteBatch batch) {
+        camera.setToOrtho(false,1920, 1920 * (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
         batch.setProjectionMatrix(camera.combined);
         if(buttons.size()>0) {
             float x = anchorPoint.x ;

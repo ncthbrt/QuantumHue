@@ -1,5 +1,7 @@
 package com.deepwallgames.quantumhue.ui;
 
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.deepwallgames.quantumhue.Config;
@@ -38,10 +40,11 @@ public class LevelEditor implements Screen,GestureDetector.GestureListener,Input
     private final SpriteBatch batch;
     private final Game game;
     private ColourSelector colourSelector;
+    private RotationSelector rotationSelector;
     private ToolChooser chooser;
     private ButtonGroup group;
     private InputMultiplexer multiplexer;
-    private final PooledEngine engine;
+    private final Engine engine;
     private Level currentLevel;
 
     public Level currentLevel() {
@@ -64,13 +67,18 @@ public class LevelEditor implements Screen,GestureDetector.GestureListener,Input
     private RenderLayers layers;
     private LevelChanger changer;
 
-    public LevelEditor(Game game) {
+    public LevelEditor(Game game,SpriteBatch batch) {
         if(Config.DEBUG) {
             fps = new BitmapFont();
         }
-        engine = new PooledEngine();
+        if(Gdx.app.getType()== Application.ApplicationType.WebGL){
+            engine=new Engine();
+        }else{
+            engine = new PooledEngine();
+        }
+
         changer = new LevelChanger();
-        this.batch = new SpriteBatch();
+        this.batch = batch;
         this.atlas = Iteration3Main.textureAtlas();
         layers=new RenderLayers();
         SystemFactory.addToEngine(engine, changer, batch, atlas,layers);
@@ -85,7 +93,9 @@ public class LevelEditor implements Screen,GestureDetector.GestureListener,Input
         chooser.addTool(new ToggleTool(this, EntityType.POWER_SOURCE), atlas.createSprite("tool_power"));
         //chooser.addTool(new BrushTool(this, EntityType.FILTER), atlas.createSprite("tool_agent"));
         chooser.addTool(new ToggleTool(this,EntityType.GROUND), atlas.createSprite("tool_ground"));
-        chooser.addTool(new PanTool(this), atlas.createSprite("tool_pan"));
+        if(Gdx.app.getType()!= Application.ApplicationType.Desktop) {
+            chooser.addTool(new PanTool(this), atlas.createSprite("tool_pan"));
+        }
 
 
         GestureDetector detector = new GestureDetector(chooser);
@@ -93,7 +103,10 @@ public class LevelEditor implements Screen,GestureDetector.GestureListener,Input
         colourSelector = new ColourSelector();
         GestureDetector detector2 = new GestureDetector(colourSelector);
 
+        rotationSelector=new RotationSelector();
+        GestureDetector detector3 = new GestureDetector(rotationSelector);
         NewLevelAction newLevelAction = new NewLevelAction(this, engine);
+
         dialog = new ConfirmDialog(multiplexer, atlas.createSprite("diagram_new_consequences"), newLevelAction, null);
 
 
@@ -113,23 +126,29 @@ public class LevelEditor implements Screen,GestureDetector.GestureListener,Input
         group.addButton("new", atlas.createSprite("icon_new"), new ShowDialogAction(dialog));
 
 
+
+        multiplexer.addProcessor(detector3);
         multiplexer.addProcessor(detector);
         multiplexer.addProcessor(detector2);
+
         multiplexer.addProcessor(group);
         newLevelAction.actionPerformed("Ok");
-
     }
 
     private ConfirmDialog dialog;
     BitmapFont fps;
     @Override
     public void render(float delta) {
+        //Gdx.input.setCursorCatched(true);
+
+
         currentLevel.update(delta);
         batch.begin();
         group.render(batch);
         dialog.render(batch, delta);
         chooser.render(batch, delta);
         colourSelector.render(batch, delta);
+        rotationSelector.render(batch, delta);
         if(Config.DEBUG) {
             OrthographicCamera orthographicCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             orthographicCamera.position.set(Gdx.graphics.getWidth()/2f,Gdx.graphics.getHeight()/2f,0);

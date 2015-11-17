@@ -54,9 +54,9 @@ public class EarthPotentialSystem extends EntitySystem implements LevelChangeLis
     }
 
     private void calculateEarthPotential(Entity ground){
-        HashSet<DijkstraNode> visited= new HashSet<DijkstraNode>();
+        HashMap<DijkstraNode,DijkstraNode> visited= new HashMap<DijkstraNode, DijkstraNode>();
         PriorityQueue<DijkstraNode> nodes=new PriorityQueue<DijkstraNode>();
-        nodes.add(new DijkstraNode(ground,0));
+        nodes.add(new DijkstraNode(ground,0,null));
         DVector2 currentPosition;
 
         while (!nodes.isEmpty()) {
@@ -64,7 +64,7 @@ public class EarthPotentialSystem extends EntitySystem implements LevelChangeLis
             currentPosition=positionMapper.get(node.entity);
             PortComponent currentPort=portComponentMapper.get(node.entity);
 
-            visited.add(node);
+            visited.put(node, node);
 
             for (int i = -1; i<=1 ; ++i) {
 
@@ -75,13 +75,12 @@ public class EarthPotentialSystem extends EntitySystem implements LevelChangeLis
                     if(currentPort.portMask(PortComponent.portNumber(i, j))) {
                         Entity entity = level.get(currentPosition.x() + i, currentPosition.y() + j);
 
-                        if (entity != null && entityTypeMapper.get(entity).tileType() != EntityType.VOID) {
+                        if (entity != null && (node.parent==null ||!node.parent.equals(entity))) {
                             PortComponent portComponent = portComponentMapper.get(entity);
                             int adjPort = PortComponent.adjacentPortNumber(PortComponent.portNumber(i, j));
-
-                            DijkstraNode newNode = new DijkstraNode(entity, node.distanceToGround + 1);
-                            if (!visited.contains(newNode)) {
-                                portComponent.groundDirection(adjPort, true);
+                            DijkstraNode newNode = new DijkstraNode(entity, node.distanceToGround + 1,node.entity);
+                            portComponent.groundDirection(adjPort, true);
+                            if (!visited.containsKey(newNode)) {
                                 nodes.add(newNode);
                             }
                         }

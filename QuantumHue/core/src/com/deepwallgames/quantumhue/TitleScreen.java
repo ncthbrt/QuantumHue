@@ -27,11 +27,11 @@ public class TitleScreen implements Screen {
     float menuWidth;
     float menuHeight;
 
-    public TitleScreen(Iteration3Main game, TextureAtlas atlas) {
-        this.batch = new SpriteBatch();
+    public TitleScreen(Iteration3Main game, TextureAtlas atlas,SpriteBatch batch) {
+        this.batch = batch;
         this.atlas = atlas;
         this.game = game;
-        editor = new LevelEditor(game);
+        editor = new LevelEditor(game,batch);
         createButton = atlas.createSprite("button_create");
 
         playButton = atlas.createSprite(("button_play"));

@@ -7,6 +7,7 @@ import com.deepwallgames.quantumhue.LevelChangeListener;
 import com.deepwallgames.quantumhue.RenderLayers;
 import com.deepwallgames.quantumhue.components.DVector2;
 import com.deepwallgames.quantumhue.components.WireComponent;
+import com.deepwallgames.quantumhue.value_objects.Colour;
 import com.deepwallgames.quantumhue.value_objects.ColourBracket;
 import com.deepwallgames.quantumhue.Level;
 import com.deepwallgames.quantumhue.components.PortComponent;
@@ -39,6 +40,12 @@ public class WireRendererSystem extends EntitySystem implements LevelChangeListe
         this.shapeRenderer = shapeRenderer;
     }
 
+    public WireRendererSystem(ShapeRenderer shapeRenderer){
+        this.layers=null;
+        priority = 4;
+        this.shapeRenderer = shapeRenderer;
+    }
+
     public void level(Level level) {
         this.level = level;
     }
@@ -48,7 +55,9 @@ public class WireRendererSystem extends EntitySystem implements LevelChangeListe
     public void update(float deltaTime) {
 
         if (level != null) {
-            layers.get(RenderLayers.LevelEditorLayer.GLOW_EFFECT).begin();
+            if(layers!=null) {
+                layers.get(RenderLayers.LevelEditorLayer.GLOW_EFFECT).begin();
+            }
             {
                 shapeRenderer.setProjectionMatrix(level.camera().combined);
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -59,9 +68,10 @@ public class WireRendererSystem extends EntitySystem implements LevelChangeListe
                     }
                 shapeRenderer.end();
             }
-            layers.get(RenderLayers.LevelEditorLayer.GLOW_EFFECT).end();
-
-            layers.get(RenderLayers.LevelEditorLayer.BASE).begin();
+            if(layers!=null) {
+                layers.get(RenderLayers.LevelEditorLayer.GLOW_EFFECT).end();
+                layers.get(RenderLayers.LevelEditorLayer.BASE).begin();
+            }
             {
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                 shapeRenderer.setProjectionMatrix(level.camera().combined);
@@ -73,7 +83,9 @@ public class WireRendererSystem extends EntitySystem implements LevelChangeListe
                 }
                 shapeRenderer.end();
             }
-            layers.get(RenderLayers.LevelEditorLayer.BASE).end();
+            if(layers!=null) {
+                layers.get(RenderLayers.LevelEditorLayer.BASE).end();
+            }
         }
     }
 
@@ -84,12 +96,14 @@ public class WireRendererSystem extends EntitySystem implements LevelChangeListe
 
 
     public void processEntity(Entity wire, float deltaTime,boolean drawOnlyColors) {
+
         PortComponent ports = portMapper.get(wire);
         WireComponent wireComponent = wireComponentMapper.get(wire);
         DVector2 position = discretePositionMapper.get(wire);
 
         int attachedPorts = 0;
         float actualLineWidth=lineWidth / level.zoom();
+        Colour centreColour=DiscreteColour.ALPHA.toColour();
         for (int i = -1; i <= 1; ++i) {
             for (int j = -1; j <= 1; j++) {
                 if (j != 0 || i != 0) {
@@ -103,18 +117,18 @@ public class WireRendererSystem extends EntitySystem implements LevelChangeListe
                                 if(!drawOnlyColors) {
                                     shapeRenderer.setColor(0.3f, 0.3f, 0.3f, 1f);
                                 }else{
-                                    shapeRenderer.setColor(0.3f, 0.3f, 0.3f, 0f);
+                                    shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 0f);
                                 }
                             } else {
+                                if(k==0){
+                                    centreColour.add(start.colour);
+                                }
                                 shapeRenderer.setColor(start.colour.red() / 255f, start.colour.green() / 255f, start.colour.blue() / 255f, 1f);
                             }
                             float point = Interpolation.linear.apply(0, Config.TILE_SIZE / 2f, end.position());
                             Vector2 startVec=new Vector2(position.x() * Config.TILE_SIZE + i * lastPoint, position.y() * Config.TILE_SIZE + j * lastPoint);
                             Vector2 endVec=new Vector2(position.x() * Config.TILE_SIZE + i * point, position.y() * Config.TILE_SIZE + j * point);
-                            if(k==0){
-                                shapeRenderer.circle(startVec.x, startVec.y, actualLineWidth / 2f);
-                            }
-                                shapeRenderer.rectLine(startVec.x,startVec.y,endVec.x,endVec.y, actualLineWidth);
+                            shapeRenderer.rectLine(startVec.x,startVec.y,endVec.x,endVec.y, actualLineWidth);
                             lastPoint = point;
                         }
 
@@ -123,17 +137,11 @@ public class WireRendererSystem extends EntitySystem implements LevelChangeListe
                             if(!drawOnlyColors) {
                                 shapeRenderer.setColor(0.3f, 0.3f, 0.3f, 1f);
                             }else{
-                                shapeRenderer.setColor(0.3f, 0.3f, 0.3f, 0f);
+                                shapeRenderer.setColor(0.0f, 0.0f, 0.0f, 0f);
                             }
                         } else {
                             shapeRenderer.setColor(last.colour.red() / 255f, last.colour.green() / 255f, last.colour.blue() / 255f, 1f);
                         }
-                        if(vector.line.size()==1) {
-                            Vector2 xy = new Vector2(position.x() * Config.TILE_SIZE + i * lastPoint, position.y() * Config.TILE_SIZE + j * lastPoint);
-                            shapeRenderer.circle(xy.x,xy.y,actualLineWidth/2f);
-                        }
-
-
                         shapeRenderer.rectLine(position.x() * Config.TILE_SIZE + i * lastPoint, position.y() * Config.TILE_SIZE + j * lastPoint, position.x() * Config.TILE_SIZE + i * (Config.TILE_SIZE / 2f), position.y() * Config.TILE_SIZE + j * (Config.TILE_SIZE / 2f), actualLineWidth);
                         ++attachedPorts;
                     }
@@ -141,9 +149,21 @@ public class WireRendererSystem extends EntitySystem implements LevelChangeListe
 
             }
         }
+
         if (attachedPorts == 0) {
-            shapeRenderer.setColor(0.4f, 0.4f, 0.4f, 1);
-            shapeRenderer.circle(position.x() * Config.TILE_SIZE, position.y() * Config.TILE_SIZE, Config.TILE_SIZE / 2,40);
+            shapeRenderer.setColor(0.3f, 0.3f, 0.3f, 1);
+            shapeRenderer.circle(position.x() * Config.TILE_SIZE, position.y() * Config.TILE_SIZE,Config.TILE_SIZE / 2,40);
+        }else{
+            if(centreColour.equals(DiscreteColour.ALPHA.toColour())){
+                if(!drawOnlyColors){
+                    shapeRenderer.setColor(0.3f, 0.3f, 0.3f, 1f);
+                }else{
+                    shapeRenderer.setColor(0.3f, 0.3f, 0.3f, 0f);
+                }
+            }else{
+                shapeRenderer.setColor(centreColour.red() / 255f, centreColour.green() / 255f, centreColour.blue() / 255f, 1f);
+            }
+            shapeRenderer.circle(position.x() * Config.TILE_SIZE, position.y() * Config.TILE_SIZE, actualLineWidth / 2f);
         }
     }
 

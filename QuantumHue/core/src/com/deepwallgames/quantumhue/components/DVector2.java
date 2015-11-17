@@ -7,10 +7,7 @@ import com.badlogic.gdx.utils.Pool;
  * Copyright Nick Cuthbert, 2014.
  */
 public class DVector2 implements Pool.Poolable, Component {
-    public static final String TYPE_NAME="discrete-position";
-    public String getComponentName() {
-        return TYPE_NAME;
-    }
+
     private int x, y;
 
     public DVector2(int x, int y) {
@@ -66,10 +63,6 @@ public class DVector2 implements Pool.Poolable, Component {
 
     public static DVector2 delta(DVector2 vector1, DVector2 vector2){
         return new DVector2(vector1.x-vector2.x,vector1.y-vector2.y);
-    }
-
-    public static int chebyshevDistance(DVector2 delta){
-        return delta.x()>delta.y()? delta.x(): delta.y();
     }
 
     @Override

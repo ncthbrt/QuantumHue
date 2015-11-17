@@ -1,12 +1,10 @@
 package com.deepwallgames.quantumhue;
 
 
+import com.badlogic.ashley.core.*;
+import com.badlogic.gdx.Gdx;
 import com.deepwallgames.quantumhue.components.DVector2;
 import com.deepwallgames.quantumhue.components.EntityTypeComponent;
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntityListener;
-import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
@@ -48,13 +46,15 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
 
     private final OrthographicCamera camera;
 
-    private final PooledEngine engine;
+    private final Engine engine;
 
-    public PooledEngine engine() {
+    public Engine engine() {
         return engine;
     }
 
     public OrthographicCamera camera() {
+        camera.viewportHeight=Config.TILE_SIZE*(int) (initialWidth* Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth());
+        camera.update();
         return camera;
     }
 
@@ -64,13 +64,18 @@ public class Level implements EntityListener, Iterable<Entity>, GestureDetector.
 
     public Entity get(int x, int y) {
         if (x >= 0 && x < width && y >= 0 && y < height) {
+            if(level[y][x]==null || tileTypeMapper.get(level[y][x]).tileType()==EntityType.VOID){
+                return null;
+            }
             return level[y][x];
         }
         return null;
     }
 
+    private int initialWidth;
+    public Level(Engine engine, int width, int height) {
 
-    public Level(PooledEngine engine, int width, int height) {
+        initialWidth=width;
         camera = new OrthographicCamera(width * Config.TILE_SIZE, height * Config.TILE_SIZE);
         level = new Entity[height][width];
         this.engine = engine;

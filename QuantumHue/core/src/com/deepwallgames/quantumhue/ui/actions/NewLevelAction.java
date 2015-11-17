@@ -1,5 +1,6 @@
 package com.deepwallgames.quantumhue.ui.actions;
 
+import com.badlogic.ashley.core.Engine;
 import com.deepwallgames.quantumhue.Level;
 import com.deepwallgames.quantumhue.ui.LevelEditor;
 
@@ -11,10 +12,10 @@ import com.badlogic.gdx.Gdx;
  */
 public class NewLevelAction extends ButtonAction {
     private final LevelEditor editor;
-    private final PooledEngine engine;
+    private final Engine engine;
     private static final int defaultWidth = 30;
 
-    public NewLevelAction(LevelEditor editor, PooledEngine engine) {
+    public NewLevelAction(LevelEditor editor, Engine engine) {
         this.editor = editor;
         this.engine = engine;
     }

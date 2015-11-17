@@ -1,4 +1,4 @@
-#version 150
+#version 100
 //combined projection and view matrix
 uniform mat4 u_projTrans;
 

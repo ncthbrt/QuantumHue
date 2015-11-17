@@ -98,8 +98,15 @@ public class RenderLayers implements Collection<FrameBuffer> {
     }
 
     public void resize(int width, int height){
-        for(int i=0; i< LevelEditorLayer.values().length; ++i){
-            layerBuffers.add(new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false));
+        if(layerBuffers.size==0){
+            for(int i=0; i< LevelEditorLayer.values().length; ++i){
+                layerBuffers.add(new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false));
+            }
+        }else{
+            for(int i=0; i< LevelEditorLayer.values().length; ++i){
+                layerBuffers.get(i).dispose();
+                layerBuffers.set(i,new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false));
+            }
         }
     }
 }

@@ -1,1 +1,1 @@
-include 'pipeline','desktop', 'android', 'html', 'core', 'ios'
+include 'pipeline', 'desktop', 'android', 'html', 'core', 'ios'

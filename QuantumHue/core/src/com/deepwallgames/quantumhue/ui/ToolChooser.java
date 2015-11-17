@@ -96,6 +96,8 @@ public class ToolChooser implements GestureDetector.GestureListener{
     }
 
     public void render(SpriteBatch batch, float delta) {
+        this.camera.setToOrtho(false,1920, 1920*(Gdx.graphics.getHeight()/(float)Gdx.graphics.getWidth()));
+
         batch.setProjectionMatrix(camera.combined);
         float currentHeight = (camera.viewportHeight + toolHeight) / 2f - borderTop.getRegionHeight();
         Colour colour = Iteration3Main.currentColour();

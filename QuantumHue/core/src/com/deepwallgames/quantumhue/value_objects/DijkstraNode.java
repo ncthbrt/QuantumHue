@@ -10,9 +10,11 @@ import com.badlogic.ashley.core.Entity;
 public class DijkstraNode  implements Comparable<DijkstraNode>{
     public Entity entity;
     public float distanceToGround;
-    public DijkstraNode(Entity entity, float distanceToGround){
+    public Entity parent;
+    public DijkstraNode(Entity entity, float distanceToGround,Entity parent){
         this.entity=entity;
         this.distanceToGround=distanceToGround;
+        this.parent=parent;
 
     }
     @Override

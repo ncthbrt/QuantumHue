@@ -1,4 +1,4 @@
-#version 150
+#version 100
 #ifdef GL_ES
 #define LOWP lowp
 precision mediump float;
@@ -59,5 +59,5 @@ void main() {
     sum += v9.rgb*v9.a * 0.0162162162;
     float a=(v1.a+v9.a)*0.0162162162+(v2.a+v8.a)*0.0540540541+(v3.a+v7.a)*0.1216216216+(v4.a+v6.a)*0.1945945946+0.2270270270*v5.a;
 
-    gl_FragColor = vec4(sum,a*4);
+    gl_FragColor = vec4(sum,a*4.0);
 }

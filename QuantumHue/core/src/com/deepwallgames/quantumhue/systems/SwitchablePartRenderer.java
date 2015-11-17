@@ -38,8 +38,17 @@ public class SwitchablePartRenderer extends EntitySystem implements LevelChangeL
     private final String[] switchablePartSpriteNames={"power_source","ground"};
     private final Sprite[] sprites= new Sprite[switchableParts.length];
     private final RenderLayers layers;
-    public SwitchablePartRenderer(SpriteBatch batch, TextureAtlas atlas, RenderLayers layers) {
+    public SwitchablePartRenderer(SpriteBatch batch, TextureAtlas atlas, RenderLayers layers){
         this.layers=layers;
+        priority = 4;
+        this.batch = batch;
+        for (int i=0; i<switchablePartSpriteNames.length; ++i){
+            sprites[i]=atlas.createSprite(switchablePartSpriteNames[i]);
+        }
+    }
+
+    public SwitchablePartRenderer(SpriteBatch batch, TextureAtlas atlas){
+        this.layers=null;
         priority = 4;
         this.batch = batch;
         for (int i=0; i<switchablePartSpriteNames.length; ++i){
@@ -62,7 +71,10 @@ public class SwitchablePartRenderer extends EntitySystem implements LevelChangeL
         if (level != null) {
             batch.begin();
             {
-                layers.get(LevelEditorLayer.BASE).begin();
+                if(layers!=null) {
+                    layers.get(LevelEditorLayer.BASE).begin();
+                }
+
                 {
                     batch.setProjectionMatrix(level.camera().combined);
                     for (int i = 0; i < sprites.length; ++i) {
@@ -79,8 +91,10 @@ public class SwitchablePartRenderer extends EntitySystem implements LevelChangeL
                     }
                     batch.flush();
                 }
-                layers.get(LevelEditorLayer.BASE).end();
-                layers.get(LevelEditorLayer.GLOW_EFFECT).begin();
+                if(layers!=null) {
+                    layers.get(LevelEditorLayer.BASE).end();
+                    layers.get(LevelEditorLayer.GLOW_EFFECT).begin();
+                }
                 {
                     batch.setProjectionMatrix(level.camera().combined);
                     for (int i = 0; i < sprites.length; ++i) {
@@ -99,7 +113,9 @@ public class SwitchablePartRenderer extends EntitySystem implements LevelChangeL
                     }
                     batch.flush();
                 }
-                layers.get(LevelEditorLayer.GLOW_EFFECT).end();
+                if(layers!=null) {
+                    layers.get(LevelEditorLayer.GLOW_EFFECT).end();
+                }
             }
             batch.end();
         }

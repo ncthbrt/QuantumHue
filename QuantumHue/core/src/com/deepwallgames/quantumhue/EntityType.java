@@ -17,23 +17,23 @@ import com.deepwallgames.quantumhue.components.WireComponent;
 public enum EntityType {
 
     WIRE(0, PortComponent.class, WireComponent.class, DigitallyTraversable.class,EntityTypeComponent.class),
-    INVERTER(1,EntityTypeComponent.class),
-    TERMINATOR(2,EntityTypeComponent.class),
-    EXIT(3,EntityTypeComponent.class),
-    TURN_TABLE(4,EntityTypeComponent.class),
-    SLIDER(5,EntityTypeComponent.class),
-    POWER_SOURCE(6, ColourComponent.class, PortComponent.class, DigitallyTraversable.class, SwitchComponent.class),
-    ISOLATOR(7,EntityTypeComponent.class),
-    TRANSISTOR(8,EntityTypeComponent.class),
-    GROUND(9, ColourComponent.class,PortComponent.class,DigitallyTraversable.class,EntityTypeComponent.class),
-    MOMENTARY_SWITCH(10,EntityTypeComponent.class),
-    SWITCH(11, SwitchComponent.class,EntityTypeComponent.class),
-    VOID(13, VoidComponent.class,EntityTypeComponent.class),
-    FILTER(14, ColourComponent.class,EntityTypeComponent.class);
+    INVERTER(1,EntityTypeComponent.class,DVector2.class),
+    TERMINATOR(2,EntityTypeComponent.class,DVector2.class),
+    EXIT(3,EntityTypeComponent.class,DVector2.class),
+    TURN_TABLE(4,EntityTypeComponent.class,DVector2.class),
+    SLIDER(5,EntityTypeComponent.class,DVector2.class),
+    POWER_SOURCE(6, ColourComponent.class, PortComponent.class, DigitallyTraversable.class, SwitchComponent.class,DVector2.class),
+    ISOLATOR(7,EntityTypeComponent.class,DVector2.class),
+    TRANSISTOR(8,EntityTypeComponent.class,DVector2.class),
+    GROUND(9, ColourComponent.class,PortComponent.class,DigitallyTraversable.class,EntityTypeComponent.class,DVector2.class),
+    MOMENTARY_SWITCH(10,EntityTypeComponent.class,DVector2.class),
+    SWITCH(11, SwitchComponent.class,EntityTypeComponent.class,DVector2.class),
+    VOID(13, VoidComponent.class,EntityTypeComponent.class,DVector2.class),
+    FILTER(14, ColourComponent.class,EntityTypeComponent.class,DVector2.class);
 
     EntityType(int code, Class<? extends Component>... compulsoryComponents) {
         this.code = code;
-        this.family=Family.all(compulsoryComponents).one(DVector2.class).get();
+        this.family=Family.all(compulsoryComponents).get();
         this.requiredComponents=compulsoryComponents;
     }
 
