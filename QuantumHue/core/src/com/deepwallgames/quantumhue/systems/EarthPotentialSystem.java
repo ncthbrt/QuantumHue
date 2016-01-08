@@ -12,10 +12,8 @@ import com.deepwallgames.quantumhue.components.DigitallyTraversable;
 import com.deepwallgames.quantumhue.components.EntityTypeComponent;
 import com.deepwallgames.quantumhue.components.PortComponent;
 import com.deepwallgames.quantumhue.value_objects.DijkstraNode;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.PriorityQueue;
-import java.util.Stack;
+
+import java.util.*;
 
 /**
  * Created by nick_000 on 09/11/2015.
@@ -55,7 +53,7 @@ public class EarthPotentialSystem extends EntitySystem implements LevelChangeLis
 
     private void calculateEarthPotential(Entity ground){
         HashMap<DijkstraNode,DijkstraNode> visited= new HashMap<DijkstraNode, DijkstraNode>();
-        PriorityQueue<DijkstraNode> nodes=new PriorityQueue<DijkstraNode>();
+        Queue<DijkstraNode> nodes=new PriorityQueue<DijkstraNode>();
         nodes.add(new DijkstraNode(ground,0,null));
         DVector2 currentPosition;
 
@@ -80,7 +78,7 @@ public class EarthPotentialSystem extends EntitySystem implements LevelChangeLis
                             int adjPort = PortComponent.adjacentPortNumber(PortComponent.portNumber(i, j));
                             DijkstraNode newNode = new DijkstraNode(entity, node.distanceToGround + 1,node.entity);
                             portComponent.groundDirection(adjPort, true);
-                            if (!visited.containsKey(newNode)) {
+                            if (!visited.containsKey(newNode) && !nodes.contains(newNode)) {
                                 nodes.add(newNode);
                             }
                         }

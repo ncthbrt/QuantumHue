@@ -123,7 +123,7 @@ public class HSVColour {
         }else {
             float hTemp;
             if(hue()>=1){//Hue must be less than 1
-                hTemp=0;
+                hTemp=(hue()%1)*6;
             }else {
                 hTemp = hue() * 6;
             }
@@ -163,9 +163,6 @@ public class HSVColour {
                     blue=p2;
                     break;
             }
-
-
-
         }
         return new Colour((int)(red *255),(int)(green *255),(int)(blue *255),alpha);
     }

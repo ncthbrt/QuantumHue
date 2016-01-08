@@ -40,8 +40,6 @@ public class PortSystem extends EntitySystem implements LevelChangeListener {
             for (Entity entity : level) { //Cull ports
                 cullPort(entity);
             }
-
-
         }
     }
 

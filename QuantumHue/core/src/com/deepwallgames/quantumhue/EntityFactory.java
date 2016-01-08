@@ -1,31 +1,19 @@
 package com.deepwallgames.quantumhue;
 
-import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.Pool;
-import com.deepwallgames.quantumhue.components.ColourComponent;
-import com.deepwallgames.quantumhue.components.DVector2;
-import com.deepwallgames.quantumhue.components.DigitallyTraversable;
-import com.deepwallgames.quantumhue.components.EntityTypeComponent;
-import com.deepwallgames.quantumhue.components.SwitchComponent;
-import com.deepwallgames.quantumhue.components.VoidComponent;
-import com.deepwallgames.quantumhue.components.WireComponent;
+import com.deepwallgames.quantumhue.components.*;
 import com.deepwallgames.quantumhue.value_objects.Colour;
+import com.deepwallgames.quantumhue.value_objects.DRotation;
 import com.deepwallgames.quantumhue.value_objects.DiscreteColour;
-import com.deepwallgames.quantumhue.components.PortComponent;
 
 import com.badlogic.ashley.core.Entity;
-
-import java.awt.Color;
 
 /**
  * Copyright Nick Cuthbert, 2014.
  */
 public class EntityFactory {
 
-    public static Entity createEntity(Level level, int x, int y, EntityType type, DiscreteColour currentColour) {
+    public static Entity createEntity(Level level, int x, int y, EntityType type, DiscreteColour currentColour, DRotation currentRotation) {
         Entity entity;
         if (type == EntityType.WIRE) {
             entity=createWire(level, x, y);
@@ -34,6 +22,9 @@ public class EntityFactory {
         }
         else if (type == EntityType.GROUND) {
             entity=createGround(level, x, y, currentColour);
+        }
+        else if(type==EntityType.INVERTER){
+            entity= createInverter(level, x, y, currentColour,currentRotation);
         }
         else {
             entity=createVoid(level, x, y);
@@ -68,6 +59,8 @@ public class EntityFactory {
             return new DVector2();
         }
     }
+
+
 
     public static DigitallyTraversable createDigitallyTraversable(Class<DigitallyTraversable> clazzy,Level level){
         if(level.engine() instanceof PooledEngine){
@@ -180,6 +173,40 @@ public class EntityFactory {
 
         return powerSource;
     }
+
+    public static Entity createInverter(Level level, int x, int y, DiscreteColour colour, DRotation rotation){
+        Entity inverter=createEntity(level);
+
+        EntityTypeComponent tileTypeComponent = createEntityTypeComponent(EntityTypeComponent.class,level);
+        tileTypeComponent.tileType(EntityType.INVERTER);
+        inverter.add(tileTypeComponent);
+
+        DVector2 position = createDVector2(DVector2.class,level);
+        position.set(x, y);
+        inverter.add(position);
+
+        PortComponent portComponent = createPortComponent(PortComponent.class,level);
+        inverter.add(portComponent);
+
+        ColourComponent colourComponent = createColourComponent(ColourComponent.class,level);
+        colourComponent.colour(new Colour(255,255,255,255));
+        inverter.add(colourComponent);
+
+        DRotationComponent rotationComponent=createRotationComponent(level);
+        rotationComponent.rotation=rotation;
+        inverter.add(rotationComponent);
+
+        return inverter;
+    }
+
+    public static DRotationComponent createRotationComponent(Level level){
+        if(level.engine() instanceof PooledEngine){
+            return ((PooledEngine)level.engine()).createComponent(DRotationComponent.class);
+        }else{
+            return new DRotationComponent();
+        }
+    }
+
 
     public static Entity createGround(Level level, int x, int y, DiscreteColour colour) {
         Entity powerSource = createEntity(level);

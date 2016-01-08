@@ -10,8 +10,11 @@ public class Config {
     public static final float BUTTON_Y_MARGIN = 10f;
     public static final float BUTTON_DOWN_OFFSET = 13f;
 
+
+    public static final int COLOR_SELECTOR_DEPTH= 0;
+    public static final int ROTATION_SELECTOR_DEPTH= 1;
     public static final int TOOL_CHOOSER_DEPTH = 2;
-    public static final int LEVEL_EDITOR_DEPTH = 0;
-    public static final int LEVEL_EDITOR_DEPTH2 = 1;
+    public static final int LEVEL_EDITOR_DEPTH = 3;
+    public static final int LEVEL_EDITOR_DEPTH2 = 3;
 
 }

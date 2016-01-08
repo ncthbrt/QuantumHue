@@ -13,11 +13,11 @@ import com.deepwallgames.quantumhue.ui.LevelEditor;
 /**
  * Copyright Nick Cuthbert, 2014
  */
-public class BrushTool extends Tool {
+public class BrushTool extends ToggleTool {
     private EntityType type;
 
     public BrushTool(LevelEditor editor, EntityType type) {
-        super(editor);
+        super(editor,type);
         this.type = type;
     }
 
@@ -26,22 +26,22 @@ public class BrushTool extends Tool {
         return false;
     }
 
-    @Override
-    public boolean tap(float x, float y, int count, int button) {
-        if (editor.currentLevel() != null && x > 20 && x < Gdx.graphics.getWidth() - 20 && y > 20 && y < Gdx.graphics.getHeight() - 20) {
-            Vector3 worldCoords = editor.currentLevel().camera().unproject(new Vector3(x, y, 0));
-            int worldX = Math.round((worldCoords.x) / Config.TILE_SIZE);
-            int worldY = Math.round((worldCoords.y) / Config.TILE_SIZE);
-            Entity tile = editor.currentLevel().get(worldX, worldY);
-            if (tile != null) {
-                editor.currentLevel().removeTile(tile);
-            } else {
-                editor.currentLevel().addTile(EntityFactory.createEntity(editor.currentLevel(), worldX, worldY, type, editor.colour()));
-            }
-            return true;
-        }
-        return false;
-    }
+//    @Override
+//    public boolean tap(float x, float y, int count, int button) {
+//        if (editor.currentLevel() != null && x > 20 && x < Gdx.graphics.getWidth() - 20 && y > 20 && y < Gdx.graphics.getHeight() - 20) {
+//            Vector3 worldCoords = editor.currentLevel().camera().unproject(new Vector3(x, y, 0));
+//            int worldX = Math.round((worldCoords.x) / Config.TILE_SIZE);
+//            int worldY = Math.round((worldCoords.y) / Config.TILE_SIZE);
+//            Entity tile = editor.currentLevel().get(worldX, worldY);
+//            if (tile != null) {
+//                editor.currentLevel().removeTile(tile);
+//            } else {
+//                editor.currentLevel().addTile(EntityFactory.createEntity(editor.currentLevel(), worldX, worldY, type, editor.colour(),editor.rotation()));
+//            }
+//            return true;
+//        }
+//        return false;
+//    }
 
     @Override
     public boolean longPress(float x, float y) {
@@ -65,7 +65,7 @@ public class BrushTool extends Tool {
             int worldY = Math.round((worldCoords.y) / Config.TILE_SIZE);
             Entity tile = editor.currentLevel().get(worldX, worldY);
             if (tile == null) {
-                editor.currentLevel().addTile(EntityFactory.createEntity(editor.currentLevel(), worldX, worldY, type, editor.colour()));
+                editor.currentLevel().addTile(EntityFactory.createEntity(editor.currentLevel(), worldX, worldY, type, editor.colour(),editor.rotation()));
             }
             return true;
         }

@@ -16,6 +16,7 @@ import com.deepwallgames.quantumhue.Iteration3Main;
 import com.deepwallgames.quantumhue.collision.PixelMask;
 import com.deepwallgames.quantumhue.collision.PixelMaskFactory;
 import com.deepwallgames.quantumhue.value_objects.Colour;
+import com.deepwallgames.quantumhue.value_objects.DRotation;
 import com.deepwallgames.quantumhue.value_objects.HSVColour;
 
 /**
@@ -44,13 +45,17 @@ public class RotationSelector  implements GestureDetector.GestureListener{
 
     private PixelMask indicatorMask;
     private PixelMask handlePixmask;
+    private PixelMask faceMask;
     private int colourSelectorWidth;
     private float handleAngle=90;
-    private float targetAngle=0;
+    private float targetAngle=90;
     private float transitionProgress=1;
     private float transitionTime=0.4f;
 
 
+    public DRotation rotation(){
+        return DRotation.fromAngle((targetAngle%360));
+    }
     public RotationSelector(){
         this.camera=new OrthographicCamera(1920, Gdx.graphics.getHeight()/(float)Gdx.graphics.getWidth()*1920);
         camera.position.set(camera.viewportWidth/2f,camera.viewportHeight/2f,0);
@@ -82,7 +87,6 @@ public class RotationSelector  implements GestureDetector.GestureListener{
             armTex.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
         }
 
-
         background=new Sprite(back);
 
         handle=new Sprite(handleTex);
@@ -96,6 +100,7 @@ public class RotationSelector  implements GestureDetector.GestureListener{
         PixelMaskFactory factory=new PixelMaskFactory();
         indicatorMask =factory.getPixelMask("rotation_indicator.png");
         handlePixmask=factory.getPixelMask("rotation_handle.png");
+        faceMask=factory.getPixelMask("rotation_background.png");
         maximumExposure=background.getHeight();
     }
 
@@ -152,7 +157,7 @@ public class RotationSelector  implements GestureDetector.GestureListener{
 
 
 
-
+        faceMask.setPosition((int)x,(int)y);
         background.setPosition(x,y);
         background.draw(batch);
 
@@ -246,6 +251,8 @@ public class RotationSelector  implements GestureDetector.GestureListener{
             handlePosX=world.x;
             handlePosY=world.y;
             return true;
+        }else if(faceMask.isAt((int)world.x,(int)world.y)){
+            return true;
         }
         return false;
     }
@@ -262,6 +269,8 @@ public class RotationSelector  implements GestureDetector.GestureListener{
             handleTurning=false;
             targetAngle=handleAngle-45;
             transitionProgress=0;
+        }else if(faceMask.isAt((int)world.x,(int)world.y)){
+            return true;
         }
 
         return false;
@@ -314,7 +323,7 @@ public class RotationSelector  implements GestureDetector.GestureListener{
                 slide = slide > 1.0f ? 1.0f : slide;
                 slide = slide < 0 ? 0 : slide;
         }
-        return handleTurning|| selectorPanning;
+        return handleTurning|| selectorPanning || faceMask.isAt((int)worldXY.x,(int)worldXY.y);
     }
 
     @Override
@@ -325,7 +334,6 @@ public class RotationSelector  implements GestureDetector.GestureListener{
             return true;
         }
         if(handleTurning){
-
             handleTurning=false;
             handleReset=true;
             return true;

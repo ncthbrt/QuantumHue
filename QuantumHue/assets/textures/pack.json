@@ -12,8 +12,8 @@
     useIndexes: true,
     limitMemory: true,
     grid: false,
-    filterMin: Linear,
-    filterMag: Linear,
+    filterMin: MipMapLinearLinear,
+    filterMag: MipMapLinearLinear,
     scale: [ 1 ],
     scaleSuffix: [ "" ]
 }

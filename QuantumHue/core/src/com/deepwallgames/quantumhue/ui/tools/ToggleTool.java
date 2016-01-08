@@ -35,7 +35,7 @@ public class ToggleTool extends Tool {
             if (tile != null) {
                 editor.currentLevel().removeTile(tile);
             } else {
-                editor.currentLevel().addTile(EntityFactory.createEntity(editor.currentLevel(), worldX, worldY, type, editor.colour()));
+                editor.currentLevel().addTile(EntityFactory.createEntity(editor.currentLevel(), worldX, worldY, type, editor.colour(),editor.rotation()));
             }
             return true;
         }

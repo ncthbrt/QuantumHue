@@ -1,14 +1,11 @@
 package com.deepwallgames.quantumhue.systems;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.utils.Logger;
 import com.deepwallgames.quantumhue.ImmediateModeShader30;
 import com.deepwallgames.quantumhue.LevelChanger;
 import com.deepwallgames.quantumhue.RenderLayers;
@@ -52,13 +49,12 @@ public class SystemFactory {
 
 
         WireRendererSystem wireRendererSystem;
-        SwitchablePartRenderer switchablePartRenderer;
-//        if(Gdx.app.getType()!= Application.ApplicationType.WebGL) {
-            GlowRenderer glowRenderer = new GlowRenderer(batch, blurShader, layers);
-            engine.addSystem(glowRenderer);
-            changer.addListener(glowRenderer);
-            wireRendererSystem = new WireRendererSystem(shapeRenderer,layers);
-            switchablePartRenderer= new SwitchablePartRenderer(batch, atlas, layers);
+        PartRenderer partRenderer;
+        GlowRenderer glowRenderer = new GlowRenderer(batch, blurShader, layers);
+        engine.addSystem(glowRenderer);
+        changer.addListener(glowRenderer);
+        wireRendererSystem = new WireRendererSystem(shapeRenderer,layers);
+        partRenderer = new PartRenderer(batch, atlas, layers);
 
 
 
@@ -72,7 +68,7 @@ public class SystemFactory {
         engine.addSystem(wireRendererSystem);
 
         engine.addSystem(powerSystem);
-        engine.addSystem(switchablePartRenderer);
+        engine.addSystem(partRenderer);
 
 
         changer.addListener(portSystem);
@@ -82,6 +78,6 @@ public class SystemFactory {
         changer.addListener(wireRendererSystem);
 
         changer.addListener(powerSystem);
-        changer.addListener(switchablePartRenderer);
+        changer.addListener(partRenderer);
     }
 }

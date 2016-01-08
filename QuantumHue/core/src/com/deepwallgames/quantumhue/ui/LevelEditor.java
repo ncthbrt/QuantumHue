@@ -13,6 +13,7 @@ import com.deepwallgames.quantumhue.ui.actions.PlayPauseAction;
 import com.deepwallgames.quantumhue.ui.tools.BrushTool;
 import com.deepwallgames.quantumhue.ui.tools.PanTool;
 import com.deepwallgames.quantumhue.ui.tools.ToggleTool;
+import com.deepwallgames.quantumhue.value_objects.DRotation;
 import com.deepwallgames.quantumhue.value_objects.DiscreteColour;
 import com.deepwallgames.quantumhue.Level;
 import com.deepwallgames.quantumhue.LevelChanger;
@@ -86,25 +87,24 @@ public class LevelEditor implements Screen,GestureDetector.GestureListener,Input
         this.game = game;
         group = new ButtonGroup(new Vector2(1910, 0), ButtonGroup.Direction.UP, ButtonGroup.Anchor.BOTTOM_RIGHT);
         multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(Config.LEVEL_EDITOR_DEPTH, new GestureDetector(this));
-        multiplexer.addProcessor(Config.LEVEL_EDITOR_DEPTH2,this);
+
         chooser = new ToolChooser(multiplexer, atlas.createSprite("border_top"), atlas.createSprite("border_bottom"),this);
         chooser.addTool(new BrushTool(this, EntityType.WIRE), atlas.createSprite("tool_wire"));
         chooser.addTool(new ToggleTool(this, EntityType.POWER_SOURCE), atlas.createSprite("tool_power"));
-        //chooser.addTool(new BrushTool(this, EntityType.FILTER), atlas.createSprite("tool_agent"));
-        chooser.addTool(new ToggleTool(this,EntityType.GROUND), atlas.createSprite("tool_ground"));
+        chooser.addTool(new ToggleTool(this, EntityType.INVERTER), atlas.createSprite("tool_inverter"));
+        chooser.addTool(new ToggleTool(this,EntityType.GROUND), atlas.createSprite("tool_ground")) ;
         if(Gdx.app.getType()!= Application.ApplicationType.Desktop) {
             chooser.addTool(new PanTool(this), atlas.createSprite("tool_pan"));
         }
 
 
-        GestureDetector detector = new GestureDetector(chooser);
+        GestureDetector toolChooserDetector = new GestureDetector(chooser);
 
         colourSelector = new ColourSelector();
-        GestureDetector detector2 = new GestureDetector(colourSelector);
+        GestureDetector colorSelectorChooser = new GestureDetector(colourSelector);
 
         rotationSelector=new RotationSelector();
-        GestureDetector detector3 = new GestureDetector(rotationSelector);
+        GestureDetector rotationDetector = new GestureDetector(rotationSelector);
         NewLevelAction newLevelAction = new NewLevelAction(this, engine);
 
         dialog = new ConfirmDialog(multiplexer, atlas.createSprite("diagram_new_consequences"), newLevelAction, null);
@@ -126,10 +126,12 @@ public class LevelEditor implements Screen,GestureDetector.GestureListener,Input
         group.addButton("new", atlas.createSprite("icon_new"), new ShowDialogAction(dialog));
 
 
+        multiplexer.addProcessor(rotationDetector);
+        multiplexer.addProcessor(toolChooserDetector);
+        multiplexer.addProcessor(colorSelectorChooser);
+        multiplexer.addProcessor(new GestureDetector(this));
+        multiplexer.addProcessor(this);
 
-        multiplexer.addProcessor(detector3);
-        multiplexer.addProcessor(detector);
-        multiplexer.addProcessor(detector2);
 
         multiplexer.addProcessor(group);
         newLevelAction.actionPerformed("Ok");
@@ -230,6 +232,10 @@ public class LevelEditor implements Screen,GestureDetector.GestureListener,Input
             return currentLevel().panStop(x, y, pointer, button);
         }
         return false;
+    }
+
+    public DRotation rotation(){
+        return rotationSelector.rotation();
     }
 
 

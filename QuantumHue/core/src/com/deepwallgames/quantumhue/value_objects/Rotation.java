@@ -1,7 +1,9 @@
 package com.deepwallgames.quantumhue.value_objects;
 
 
-public class Rotation {
+import java.io.Serializable;
+
+public class Rotation implements Serializable {
 
 
     /**
@@ -29,9 +31,14 @@ public class Rotation {
         this(angle, (float) Math.cos(angle), (float) -Math.sin(angle), (float) Math.sin(angle), (float) Math.cos(angle));
     }
 
+
     private final float[][] _rotationMatrix;
 
     private final float _angle;
+
+    public Rotation() {
+        this(0);
+    }
 
     public float angle() {
         return _angle;

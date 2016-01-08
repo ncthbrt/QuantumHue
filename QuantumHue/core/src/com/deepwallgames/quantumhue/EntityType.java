@@ -1,15 +1,9 @@
 package com.deepwallgames.quantumhue;
 
 import com.badlogic.ashley.core.*;
-import com.deepwallgames.quantumhue.components.PortComponent;
+import com.deepwallgames.quantumhue.components.*;
 
-import com.deepwallgames.quantumhue.components.ColourComponent;
-import com.deepwallgames.quantumhue.components.DVector2;
-import com.deepwallgames.quantumhue.components.DigitallyTraversable;
-import com.deepwallgames.quantumhue.components.EntityTypeComponent;
-import com.deepwallgames.quantumhue.components.SwitchComponent;
-import com.deepwallgames.quantumhue.components.VoidComponent;
-import com.deepwallgames.quantumhue.components.WireComponent;
+import com.deepwallgames.quantumhue.value_objects.DRotation;
 
 /**
  * Copyright Nick Cuthbert, 2014.
@@ -17,7 +11,7 @@ import com.deepwallgames.quantumhue.components.WireComponent;
 public enum EntityType {
 
     WIRE(0, PortComponent.class, WireComponent.class, DigitallyTraversable.class,EntityTypeComponent.class),
-    INVERTER(1,EntityTypeComponent.class,DVector2.class),
+    INVERTER(1,EntityTypeComponent.class,DVector2.class, DRotationComponent.class),
     TERMINATOR(2,EntityTypeComponent.class,DVector2.class),
     EXIT(3,EntityTypeComponent.class,DVector2.class),
     TURN_TABLE(4,EntityTypeComponent.class,DVector2.class),
